@@ -89,7 +89,7 @@
     </Bscmake>
     <Lib />
     <PostBuildEvent>
-      <Command>xcopy /Y "C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library\AUDIO_ENGINE.dll" "C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\OSC_UI\bin\Debug\net9.0-windows7.0"</Command>
+      <Command>xcopy /Y "$(SolutionDir)SpectralDynaLab_GUI\bin\Debug\net9.0-windows10.0.19041.0\win10-x64"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,7 +138,7 @@
     </Bscmake>
     <Lib />
     <PostBuildEvent>
-      <Command>xcopy /Y "C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library\AUDIO_ENGINE.dll" "C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\OSC_UI\bin\Debug\net9.0-windows7.0"</Command>
+      <Command>xcopy /Y "$(SolutionDir)SpectralDynaLab_GUI\bin\Debug\net9.0-windows10.0.19041.0\win10-x64"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
