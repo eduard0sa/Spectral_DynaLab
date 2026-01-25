@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SDLab_GUI.MainPage"
+             Title="">
+
+    <FlexLayout Direction="Column" JustifyContent="Start" VerticalOptions="Fill" HorizontalOptions="Fill" BackgroundColor="#101413">
+        <FlexLayout FlexLayout.Grow="0.07" Direction="Row" JustifyContent="Center" AlignItems="Center" BackgroundColor="#21242b">
+            <Label Text="SPECTRAL DYNALab" StyleClass="LightGrayBodyText" TextColor="#fbc371"></Label>
+        </FlexLayout>
+
+        <FlexLayout FlexLayout.Grow="0.13" Direction="Row" JustifyContent="Center" AlignItems="Center">
+            <FlexLayout FlexLayout.Grow="0.33" Direction="Row" JustifyContent="Center" AlignItems="Center">
+                <Label StyleClass="LightGrayBodyText" Text="0%"></Label>
+                <Slider StyleClass="AudioAttributeSlider" Focused="SliderAutoUnfocusEvent"/>
+                <Label StyleClass="LightGrayBodyText" Text="100%"></Label>
+            </FlexLayout>
+
+            <FlexLayout FlexLayout.Grow="0.34" Direction="Row" JustifyContent="Center" AlignItems="Center">
+                <ImageButton Source="prev_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                <ImageButton x:Name="mainPlayBTN" Source="play_solid_full.png" Clicked="PlayPauseMixerEvent" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                <ImageButton Source="for_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+            </FlexLayout>
+
+            <FlexLayout FlexLayout.Grow="0.33" Direction="Row" JustifyContent="Center" AlignItems="Center">
+                <Label StyleClass="LightGrayBodyText" Text="1 BPM"></Label>
+                <Slider StyleClass="AudioAttributeSlider" Focused="SliderAutoUnfocusEvent"/>
+                <Label StyleClass="LightGrayBodyText" Text="100 BPM"></Label>
+            </FlexLayout>
+        </FlexLayout>
+
+        <FlexLayout FlexLayout.Grow="0.1" Direction="Row" JustifyContent="SpaceBetween" AlignItems="Center">
+            <Button Text="+ Add Oscillator Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelYellow}"/>
+            <Button Text="+ Add Audio File Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultManaGreen}"/>
+        </FlexLayout>
+
+        <ScrollView FlexLayout.Grow="0.70" HorizontalOptions="Fill" BackgroundColor="#0d0c16">
+            <VerticalStackLayout HorizontalOptions="Fill" Padding="5, 0, 0, 0">
+                <FlexLayout HorizontalOptions="Fill" Direction="Row" JustifyContent="SpaceBetween" HeightRequest="100" BackgroundColor="#14141d">
+
+                    <FlexLayout FlexLayout.Grow="0.05" JustifyContent="Center" AlignItems="Center">
+                        <ImageButton Source="triangle_mark.png" WidthRequest="5" HeightRequest="5" Padding="10" BackgroundColor="#14141d"/>
+                    </FlexLayout>
+
+                    <FlexLayout FlexLayout.Grow="0.25" JustifyContent="Center" AlignItems="Center">
+                        <Label Text="OSCILLATOR" StyleClass="GreenTitle"/>
+                    </FlexLayout>
+                    
+                    <FlexLayout FlexLayout.Grow="0.25" Direction="Column" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
+                        <FlexLayout Direction="Row" FlexLayout.Grow="0.5" JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0, 0, 0">
+                            <Label FlexLayout.Grow="0.3" Text="Frequency:"/>
+                            <Slider FlexLayout.Grow="0.7" Minimum="1" Maximum="20000" Focused="SliderAutoUnfocusEvent" StyleClass="AudioAttributeSlider"/>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" FlexLayout.Grow="0.5" JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0, 0, 0">
+                            <Label FlexLayout.Grow="0.3" Text="Gain:"/>
+                            <Slider FlexLayout.Grow="0.7" Minimum="1" Maximum="20000" Focused="SliderAutoUnfocusEvent" StyleClass="AudioAttributeSlider"/>
+                        </FlexLayout>
+                    </FlexLayout>
+
+                    <FlexLayout FlexLayout.Grow="0.25" Direction="Row" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
+                        <ImageButton Source="sine_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="{StaticResource DefaultPastelYellow}" CornerRadius="5"/>
+                        <ImageButton Source="digital_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                        <ImageButton Source="triangle_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                    </FlexLayout>
+
+                    <FlexLayout FlexLayout.Grow="0.25" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
+                        <Button Text="Open SFX" FontSize="Subtitle" FontAttributes="Bold" FontFamily="Orbitron" FlexLayout.Grow="1" HeightRequest="100" CornerRadius="0" BackgroundColor="{StaticResource DefaultPastelYellow}"/>
+                    </FlexLayout>
+                    
+                </FlexLayout>
+
+                <FlexLayout HorizontalOptions="Fill" Direction="Row" JustifyContent="SpaceBetween" HeightRequest="100" Margin="0, 10, 0, 0" BackgroundColor="#14141d">
+
+                    <FlexLayout FlexLayout.Grow="0.05" JustifyContent="Center" AlignItems="Center">
+                        <ImageButton Source="triangle_mark.png" WidthRequest="5" HeightRequest="5" Padding="10" BackgroundColor="#14141d"/>
+                    </FlexLayout>
+
+                    <FlexLayout FlexLayout.Grow="0.25" JustifyContent="Center" AlignItems="Center">
+                        <Label Text="OSCILLATOR" StyleClass="GreenTitle"/>
+                    </FlexLayout>
+
+                    <FlexLayout FlexLayout.Grow="0.25" Direction="Column" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
+                        <FlexLayout Direction="Row" FlexLayout.Grow="0.5" JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0, 0, 0">
+                            <Label FlexLayout.Grow="0.3" Text="Frequency:"/>
+                            <Slider FlexLayout.Grow="0.7" Minimum="1" Maximum="20000" Focused="SliderAutoUnfocusEvent" StyleClass="AudioAttributeSlider"/>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" FlexLayout.Grow="0.5" JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0, 0, 0">
+                            <Label FlexLayout.Grow="0.3" Text="Gain:"/>
+                            <Slider FlexLayout.Grow="0.7" Minimum="1" Maximum="20000" Focused="SliderAutoUnfocusEvent" StyleClass="AudioAttributeSlider"/>
+                        </FlexLayout>
+                    </FlexLayout>
+
+                    <FlexLayout FlexLayout.Grow="0.25" Direction="Row" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
+                        <ImageButton Source="sine_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="{StaticResource DefaultPastelYellow}" CornerRadius="5"/>
+                        <ImageButton Source="digital_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                        <ImageButton Source="triangle_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                    </FlexLayout>
+
+                    <FlexLayout FlexLayout.Grow="0.25" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
+                        <Button Text="Open SFX" FontSize="Subtitle" FontAttributes="Bold" FontFamily="Orbitron" FlexLayout.Grow="1" HeightRequest="100" CornerRadius="0" BackgroundColor="{StaticResource DefaultPastelYellow}"/>
+                    </FlexLayout>
+
+                </FlexLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </FlexLayout>
+
+</ContentPage>

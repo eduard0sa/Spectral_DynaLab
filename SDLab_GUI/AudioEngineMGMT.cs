@@ -2,7 +2,7 @@
 using NAudio.Wave.SampleProviders;
 using SDLab_InteropWrapper;
 
-namespace SpectralDynaLab_GUI
+namespace SDLab_GUI
 {
     internal class AudioEngineMGMT
     {
@@ -23,10 +23,19 @@ namespace SpectralDynaLab_GUI
             };
         }
 
-        public void PlayMixer()
+        public void initMixer()
         {
             output.Init(mixer);
+        }
+
+        public void PlayMixer()
+        {
             output.Play();
+        }
+
+        public void PauseMixer()
+        {
+            output.Pause();
         }
 
         public JuceAudioProvider LaunchAudioEngine()
@@ -34,8 +43,8 @@ namespace SpectralDynaLab_GUI
             AudioEngineOsc = _AudioEngineRef.CreateEngine();
             JuceAudioProvider provider = new JuceAudioProvider(AudioEngineOsc, _AudioEngineRef, 44100, 1);
 
-            _AudioEngineRef.ChangeFrequency(provider.Engine, defaultFrequency);
-            _AudioEngineRef.ChangeGain(provider.Engine, defaultGain);
+            //_AudioEngineRef.ChangeFrequency(provider.Engine, defaultFrequency);
+            //_AudioEngineRef.ChangeGain(provider.Engine, defaultGain);
             mixer.AddMixerInput(provider);
 
             oscillators.Add(provider);

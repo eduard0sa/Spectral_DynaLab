@@ -17,8 +17,9 @@ class _Oscillator
 {
 public:
 	//PARAMETERS
-	float gain = 0.2f;
+	float gain = 0.1f;
 	float frequency = 50.0f; // Frequency in Hz
+	float distortionDrive = 1000.0f;
 
 	unique_ptr<Struct_DSP_Effects> DSP_EFFECTS = make_unique<Struct_DSP_Effects>();
 
@@ -32,6 +33,7 @@ public:
 
 	void changeFrequency(float newFrequency);
 	void changeGain(float newGain);
+	void changeDistortionDrive(float newDrive);
 
 private:
 	

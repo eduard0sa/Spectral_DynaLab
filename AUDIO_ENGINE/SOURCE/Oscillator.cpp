@@ -9,8 +9,8 @@ _Oscillator::~_Oscillator() {}
 void _Oscillator::prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain)
 {
     _sampleRate = sampleRate;
-    changeFrequency(initFrequency);
-    changeGain(initGain);
+    changeFrequency(frequency);
+    //changeGain(initGain);
 
     juce::dsp::ProcessSpec spec;
     spec.sampleRate = sampleRate;
@@ -19,8 +19,8 @@ void _Oscillator::prepareToPlay(int samplesPerBlockExpected, double sampleRate, 
 
     DSP_EFFECTS->inputGain->prepare(spec);
     DSP_EFFECTS->outputGain->prepare(spec);
-    DSP_EFFECTS->inputGain->setGainLinear(500.0f);
-    DSP_EFFECTS->outputGain->setGainLinear(0.1f);
+    DSP_EFFECTS->inputGain->setGainLinear(gain + distortionDrive);
+    DSP_EFFECTS->outputGain->setGainLinear(gain);
     DSP_EFFECTS->distortion->prepare(spec);
 
     DSP_EFFECTS->distortion->functionToUse = [](float sample)
@@ -70,6 +70,12 @@ void _Oscillator::changeFrequency(float newFrequency)
 
 void _Oscillator::changeGain(float newGain) {
     gain = newGain;
+}
+
+void _Oscillator::changeDistortionDrive(float newDrive) {
+    distortionDrive = newDrive;
+    DSP_EFFECTS->inputGain->setGainLinear(gain + distortionDrive);
+    DSP_EFFECTS->outputGain->setGainLinear(gain);
 }
 
 #pragma endregion
