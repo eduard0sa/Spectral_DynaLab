@@ -11,9 +11,8 @@
 
         <FlexLayout FlexLayout.Grow="0.13" Direction="Row" JustifyContent="Center" AlignItems="Center">
             <FlexLayout FlexLayout.Grow="0.33" Direction="Row" JustifyContent="Center" AlignItems="Center">
-                <Label StyleClass="LightGrayBodyText" Text="0%"></Label>
-                <Slider StyleClass="AudioAttributeSlider" Focused="SliderAutoUnfocusEvent"/>
-                <Label StyleClass="LightGrayBodyText" Text="100%"></Label>
+                <Slider x:Name="masterVolumeSlider" Minimum="0" Maximum="100" StyleClass="AudioAttributeSlider" Focused="SliderAutoUnfocusEvent" ValueChanged="masterVolumeValueChangedEvent"/>
+                <Label x:Name="masterVolumeSliderValueLabel" StyleClass="LightGrayBodyText" Text="100%" Margin="0, 0, 10, 0"></Label>
             </FlexLayout>
 
             <FlexLayout FlexLayout.Grow="0.34" Direction="Row" JustifyContent="Center" AlignItems="Center">

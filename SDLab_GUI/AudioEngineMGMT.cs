@@ -13,6 +13,7 @@ namespace SDLab_GUI
         public IntPtr AudioEngineOsc;
         public List<JuceAudioProvider> oscillators = new List<JuceAudioProvider>();
         public MixingSampleProvider mixer;
+        public VolumeSampleProvider vsp;
         public WaveOutEvent output = new WaveOutEvent();
 
         public AudioEngineMGMT()
@@ -21,11 +22,15 @@ namespace SDLab_GUI
             {
                 ReadFully = true
             };
+
+            vsp = new VolumeSampleProvider(mixer);
+
+            vsp.Volume = 1.0f;
         }
 
         public void initMixer()
         {
-            output.Init(mixer);
+            output.Init(vsp);
         }
 
         public void PlayMixer()

@@ -1,4 +1,5 @@
-﻿using SDLab_InteropWrapper;
+﻿using NAudio.Wave.SampleProviders;
+using SDLab_InteropWrapper;
 
 namespace SDLab_GUI
 {
@@ -19,6 +20,9 @@ namespace SDLab_GUI
             audioManager.initMixer();
             audioManager.PlayMixer();
             audioManager.PauseMixer();
+
+            masterVolumeSlider.Value = audioManager.vsp.Volume * 100;
+            masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
         }
 
         private void SliderAutoUnfocusEvent(object? sender, FocusEventArgs e)
@@ -29,19 +33,25 @@ namespace SDLab_GUI
 
         private void PlayPauseMixerEvent(object? sender, EventArgs e)
         {
-            switch(audioManager.output.PlaybackState)
+            switch(mainPlayBTN.Source.ToString().Split(" ")[1])
             {
-                case NAudio.Wave.PlaybackState.Paused:
-                    audioManager.PlayMixer();
+                case "pause_button.png":
+                    audioManager.PauseMixer();
                     mainPlayBTN.Source = "play_solid_full.png";
                     break;
 
-                case NAudio.Wave.PlaybackState.Playing:
-                    audioManager.PauseMixer();
+                case "play_solid_full.png":
+                    audioManager.PlayMixer();
                     mainPlayBTN.Source = "pause_button.png";
                     break;
             }
-            
+        }
+
+        private void masterVolumeValueChangedEvent(object sender, ValueChangedEventArgs e)
+        {
+            Slider masterVolumeSlider = sender as Slider;
+            audioManager.vsp.Volume = (float)(masterVolumeSlider.Value / 100);
+            masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
         }
     }
 }
