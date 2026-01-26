@@ -86,11 +86,11 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\AUDIO_ENGINE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)AUDIO_ENGINE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>AUDIO_ENGINE.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
