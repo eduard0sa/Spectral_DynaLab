@@ -4,12 +4,19 @@
              x:Class="SDLab_GUI.MainPage"
              Title="">
 
-    <FlexLayout Direction="Column" JustifyContent="Start" VerticalOptions="Fill" HorizontalOptions="Fill" BackgroundColor="#101413">
-        <FlexLayout FlexLayout.Grow="0.07" Direction="Row" JustifyContent="Center" AlignItems="Center" BackgroundColor="#21242b">
+    <Grid VerticalOptions="Fill" HorizontalOptions="Fill" BackgroundColor="#101413">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="70*"/>
+        </Grid.RowDefinitions>
+
+        <FlexLayout Grid.Row="0" Direction="Row" JustifyContent="Center" AlignItems="Center" BackgroundColor="#21242b">
             <Label Text="SPECTRAL DYNALab" StyleClass="LightGrayBodyText" TextColor="#fbc371"></Label>
         </FlexLayout>
 
-        <FlexLayout FlexLayout.Grow="0.13" Direction="Row" JustifyContent="Center" AlignItems="Center">
+        <FlexLayout Grid.Row="1" Direction="Row" JustifyContent="Center" AlignItems="Center">
             <FlexLayout FlexLayout.Grow="0.33" Direction="Row" JustifyContent="Center" AlignItems="Center">
                 <Slider x:Name="masterVolumeSlider" Minimum="0" Maximum="100" StyleClass="AudioAttributeSlider" Focused="SliderAutoUnfocusEvent" ValueChanged="masterVolumeValueChangedEvent"/>
                 <Label x:Name="masterVolumeSliderValueLabel" StyleClass="LightGrayBodyText" Text="100%" Margin="0, 0, 10, 0"></Label>
@@ -28,52 +35,13 @@
             </FlexLayout>
         </FlexLayout>
 
-        <FlexLayout FlexLayout.Grow="0.1" Direction="Row" JustifyContent="SpaceBetween" AlignItems="Center">
-            <Button Text="+ Add Oscillator Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelYellow}"/>
+        <FlexLayout Grid.Row="2" Direction="Row" JustifyContent="SpaceBetween" AlignItems="Center">
+            <Button Text="+ Add Oscillator Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelYellow}" Clicked="addOscillatorBTNClickedEvent"/>
             <Button Text="+ Add Audio File Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultManaGreen}"/>
         </FlexLayout>
 
-        <ScrollView FlexLayout.Grow="0.70" HorizontalOptions="Fill" BackgroundColor="#0d0c16">
-            <VerticalStackLayout HorizontalOptions="Fill" Padding="5, 0, 0, 0">
-                <FlexLayout HorizontalOptions="Fill" Direction="Row" JustifyContent="SpaceBetween" HeightRequest="100" BackgroundColor="#14141d">
-
-                    <FlexLayout FlexLayout.Grow="0.05" JustifyContent="Center" AlignItems="Center">
-                        <ImageButton Source="triangle_mark.png" WidthRequest="5" HeightRequest="5" Padding="10" BackgroundColor="#14141d"/>
-                    </FlexLayout>
-
-                    <FlexLayout FlexLayout.Grow="0.16" JustifyContent="Center" AlignItems="Center">
-                        <Label Text="OSCILLATOR" StyleClass="GreenTitle"/>
-                    </FlexLayout>
-
-                    <FlexLayout FlexLayout.Grow="0.16" Direction="Column" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
-                        <FlexLayout Direction="Row" FlexLayout.Grow="0.5" JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0, 0, 0">
-                            <Label FlexLayout.Grow="0.3" Text="Frequency:"/>
-                            <Slider FlexLayout.Grow="0.7" Minimum="1" Maximum="20000" Focused="SliderAutoUnfocusEvent" StyleClass="AudioAttributeSlider"/>
-                        </FlexLayout>
-                        <FlexLayout Direction="Row" FlexLayout.Grow="0.5" JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0, 0, 0">
-                            <Label FlexLayout.Grow="0.3" Text="Gain:"/>
-                            <Slider FlexLayout.Grow="0.7" Minimum="1" Maximum="20000" Focused="SliderAutoUnfocusEvent" StyleClass="AudioAttributeSlider"/>
-                        </FlexLayout>
-                    </FlexLayout>
-
-                    <FlexLayout FlexLayout.Grow="0.16" Direction="Row" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
-                        <ImageButton Source="sine_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="{StaticResource DefaultPastelYellow}" CornerRadius="5"/>
-                        <ImageButton Source="digital_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
-                        <ImageButton Source="triangle_wave.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
-                    </FlexLayout>
-
-                    <FlexLayout FlexLayout.Grow="0.16" JustifyContent="Center" AlignItems="Center" VerticalOptions="Fill">
-                        <Button Text="Open SFX" FontSize="Subtitle" FontAttributes="Bold" FontFamily="Orbitron" FlexLayout.Grow="1" HeightRequest="100" CornerRadius="0" BackgroundColor="{StaticResource DefaultPastelYellow}"/>
-                    </FlexLayout>
-
-                    <GraphicsView FlexLayout.Grow="0.16" x:Name="WaveView" HeightRequest="100" Drawable="{Binding SineDrawable}" BackgroundColor="{StaticResource Gray100}">
-
-                    </GraphicsView>
-
-                </FlexLayout>
-            </VerticalStackLayout>
+        <ScrollView Grid.Row="3" HorizontalOptions="Fill" BackgroundColor="#0d0c16">
+            <VerticalStackLayout x:Name="trackStackLayout" Padding="5, 0, 0, 0"/>
         </ScrollView>
-        
-    </FlexLayout>
-
+    </Grid>
 </ContentPage>

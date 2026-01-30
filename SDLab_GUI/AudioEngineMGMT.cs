@@ -7,7 +7,7 @@ namespace SDLab_GUI
     internal class AudioEngineMGMT
     {
         private float defaultFrequency = 38.0f;
-        private float defaultGain = 50f;
+        private float defaultGain = 20f;
 
         public AudioEngineWrapper _AudioEngineRef = new AudioEngineWrapper();
         public IntPtr AudioEngineOsc;
@@ -48,8 +48,9 @@ namespace SDLab_GUI
             AudioEngineOsc = _AudioEngineRef.CreateEngine();
             JuceAudioProvider provider = new JuceAudioProvider(AudioEngineOsc, _AudioEngineRef, 44100, 1);
 
-            //_AudioEngineRef.ChangeFrequency(provider.Engine, defaultFrequency);
-            //_AudioEngineRef.ChangeGain(provider.Engine, defaultGain);
+            provider.changeFrequency(defaultFrequency);
+            provider.changeGain(defaultGain);
+
             mixer.AddMixerInput(provider);
 
             oscillators.Add(provider);
@@ -61,9 +62,14 @@ namespace SDLab_GUI
     {
         private readonly IntPtr engine;
         private readonly AudioEngineWrapper engineBridgeRef;
+        private float currentFrequency;
+        private float currentGain;
+
         public WaveFormat WaveFormat { get; }
 
         public IntPtr Engine { get => engine; }
+        public float CurrentFrequency { get => currentFrequency; }
+        public float CurrentGain { get => currentGain; }
 
         public JuceAudioProvider(IntPtr engine, AudioEngineWrapper engineBridgeRef, int sampleRate, int channels)
         {
@@ -77,6 +83,18 @@ namespace SDLab_GUI
         {
             engineBridgeRef.EngineProcessWave(Engine, buffer, count, offset);
             return count;
+        }
+
+        public void changeFrequency(float frequency)
+        {
+            currentFrequency = frequency;
+            engineBridgeRef.ChangeFrequency(engine, frequency);
+        }
+
+        public void changeGain(float frequency)
+        {
+            currentGain = frequency;
+            engineBridgeRef.ChangeGain(engine, frequency);
         }
     }
 }

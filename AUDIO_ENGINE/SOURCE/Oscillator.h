@@ -15,32 +15,32 @@ struct Struct_DSP_Effects {
 
 class _Oscillator
 {
-public:
-	//PARAMETERS
-	float gain = 0.1f;
-	float frequency = 50.0f; // Frequency in Hz
-	float distortionDrive = 1000.0f;
+	public:
+		//PARAMETERS
+		float gain = 0.1f;
+		float frequency = 50.0f; // Frequency in Hz
+		float distortionDrive = 0;
 
-	unique_ptr<Struct_DSP_Effects> DSP_EFFECTS = make_unique<Struct_DSP_Effects>();
+		unique_ptr<Struct_DSP_Effects> DSP_EFFECTS = make_unique<Struct_DSP_Effects>();
 
-	//METHODS
-	_Oscillator();
-	~_Oscillator();
+		//METHODS
+		_Oscillator();
+		~_Oscillator();
 
-	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain);
-	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
-	void releaseResources();
+		void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain);
+		void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
+		void releaseResources();
 
-	void changeFrequency(float newFrequency);
-	void changeGain(float newGain);
-	void changeDistortionDrive(float newDrive);
+		void changeFrequency(float newFrequency);
+		void changeGain(float newGain);
+		void changeDistortionDrive(float newDrive);
 
-private:
+	private:
 	
-	float phase = 0;
-	float phaseIncrement = 0.1f;
-	double _sampleRate = 44100.0;
-	int numChannels = 1;
+		float phase = 0;
+		float phaseIncrement = 0.1f;
+		double _sampleRate = 44100.0;
+		int numChannels = 1;
 
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_Oscillator)
+		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_Oscillator)
 };

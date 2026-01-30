@@ -1,5 +1,4 @@
-﻿using NAudio.Wave.SampleProviders;
-using SDLab_InteropWrapper;
+﻿using SDLab_InteropWrapper;
 
 namespace SDLab_GUI
 {
@@ -15,11 +14,7 @@ namespace SDLab_GUI
             AudioEngineWrapper audioEngineWrapper = new AudioEngineWrapper();
             audioManager = new AudioEngineMGMT();
 
-            JuceAudioProvider provider2 = audioManager.LaunchAudioEngine();
-
             audioManager.initMixer();
-            audioManager.PlayMixer();
-            audioManager.PauseMixer();
 
             masterVolumeSlider.Value = audioManager.vsp.Volume * 100;
             masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
@@ -52,6 +47,13 @@ namespace SDLab_GUI
             Slider masterVolumeSlider = sender as Slider;
             audioManager.vsp.Volume = (float)(masterVolumeSlider.Value / 100);
             masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
+        }
+
+        private void addOscillatorBTNClickedEvent(object sender, EventArgs e)
+        {
+            OscillatorItem newOscillator = new OscillatorItem(audioManager);
+
+            trackStackLayout.Children.Add(newOscillator);
         }
     }
 }

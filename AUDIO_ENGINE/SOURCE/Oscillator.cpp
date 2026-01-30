@@ -6,11 +6,13 @@ _Oscillator::~_Oscillator() {}
 
 #pragma region Juce_Overriden_methods
 
+float test(float sample) {
+    return tanh(sample);
+}
+
 void _Oscillator::prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain)
 {
     _sampleRate = sampleRate;
-    changeFrequency(frequency);
-    //changeGain(initGain);
 
     juce::dsp::ProcessSpec spec;
     spec.sampleRate = sampleRate;
@@ -22,10 +24,11 @@ void _Oscillator::prepareToPlay(int samplesPerBlockExpected, double sampleRate, 
     DSP_EFFECTS->inputGain->setGainLinear(gain + distortionDrive);
     DSP_EFFECTS->outputGain->setGainLinear(gain);
     DSP_EFFECTS->distortion->prepare(spec);
+    DSP_EFFECTS->outputGain->setRampDurationSeconds(0.02); // super important
 
     DSP_EFFECTS->distortion->functionToUse = [](float sample)
     {
-        return tanh(sample);
+        return test(sample);
     };
 }
 
@@ -40,7 +43,7 @@ void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
 
         for (int sample = 0; sample < bufferToFill.numSamples; ++sample)
         {
-            buffer[sample] = gain * std::sin(phase);
+            buffer[sample] = std::sin(phase);
             phase = fmod(phase + phaseIncrement, MathConstants<float>::twoPi);
         }
     }
@@ -70,6 +73,8 @@ void _Oscillator::changeFrequency(float newFrequency)
 
 void _Oscillator::changeGain(float newGain) {
     gain = newGain;
+    DSP_EFFECTS->inputGain->setGainLinear(1 + distortionDrive);
+    DSP_EFFECTS->outputGain->setGainLinear(gain);
 }
 
 void _Oscillator::changeDistortionDrive(float newDrive) {
