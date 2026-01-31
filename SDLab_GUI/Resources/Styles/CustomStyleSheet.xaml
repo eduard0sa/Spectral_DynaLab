@@ -59,4 +59,6 @@
         <Setter Property="MinimumTrackColor" Value="{StaticResource DefaultPastelYellow}"/>
         <Setter Property="MaximumTrackColor" Value="{StaticResource Gray600}"/>
     </Style>
+    
+    
 </ResourceDictionary>

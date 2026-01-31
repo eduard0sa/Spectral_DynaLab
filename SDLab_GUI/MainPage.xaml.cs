@@ -1,4 +1,5 @@
 ﻿using SDLab_InteropWrapper;
+using CommunityToolkit.Maui;
 
 namespace SDLab_GUI
 {
@@ -6,6 +7,8 @@ namespace SDLab_GUI
     {
         int count = 0;
         private AudioEngineMGMT audioManager;
+
+        bool isUpdatingMasterVolumeSlider = false;
 
         public MainPage()
         {
@@ -42,11 +45,34 @@ namespace SDLab_GUI
             }
         }
 
-        private void masterVolumeValueChangedEvent(object sender, ValueChangedEventArgs e)
+        private void masterVolumeSliderValueChangedEvent(object sender, ValueChangedEventArgs e)
         {
             Slider masterVolumeSlider = sender as Slider;
             audioManager.vsp.Volume = (float)(masterVolumeSlider.Value / 100);
-            masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
+        }
+
+        private void masterVolumeSliderDragCompletedEvent(object sender, EventArgs e)
+        {
+            masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value.ToString("n2")}%";
+            isUpdatingMasterVolumeSlider = true;
+        }
+
+        private void masterVolumeEntryValueChangedEvent(object sender, TextChangedEventArgs e)
+        {
+            Entry masterVolumeEntry = sender as Entry;
+            if(float.TryParse(masterVolumeEntry.Text.Substring(0, masterVolumeEntry.Text.Length - 2), out float newVolume) && isUpdatingMasterVolumeSlider == false)
+            {
+                if(newVolume >= 0 && newVolume <= 100)
+                {
+                    audioManager.vsp.Volume = newVolume / 100;
+                    masterVolumeSlider.Value = newVolume;
+                    masterVolumeSliderValueLabel.Text = $"{newVolume.ToString("n2")}%";
+                }
+            }
+            else
+            {
+                isUpdatingMasterVolumeSlider = false;
+            }
         }
 
         private void addOscillatorBTNClickedEvent(object sender, EventArgs e)

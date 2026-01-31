@@ -5,6 +5,7 @@ namespace SDLab_GUI
     internal class OscillatorItem : FlexLayout
     {
         private JuceAudioProvider oscAudioProvider;
+        private AudioEngineMGMT audioEngineMGMT;
 
         private OscillatorItemTriangleMark OscillatorTriangleMark;
         private OscillatorItemHeader OscillatorItemHeader;
@@ -18,7 +19,7 @@ namespace SDLab_GUI
 
         public OscillatorItem(AudioEngineMGMT audioManager)
         {
-            OscillatorTriangleMark = new OscillatorItemTriangleMark(this);
+            OscillatorTriangleMark = new OscillatorItemTriangleMark(this, deleteOscillatorEvent);
             OscillatorItemHeader = new OscillatorItemHeader(this);
             OscillatorItemSliderControls = new OscillatorItemSliderControlGroup(this);
             OscillatorItemWaveShapeControls = new OscillatorItemWaveShapeControl(this);
@@ -26,17 +27,20 @@ namespace SDLab_GUI
             OscillatorItemWaveVizualizerArea = new OscillatorItemWaveVizualizerArea(this);
 
             oscAudioProvider = audioManager.LaunchAudioEngine();
+            audioEngineMGMT = audioManager;
 
             frequencySliderData = new Global.structSliderData() {
                 minVal = 20f,
                 maxVal = 2000f,
-                defVal = oscAudioProvider.CurrentFrequency
+                defVal = oscAudioProvider.CurrentFrequency,
+                numDisplayDecPlaces = 0
             };
 
             gainSliderData = new Global.structSliderData() {
                 minVal = 0f,
-                maxVal = 50f,
-                defVal = oscAudioProvider.CurrentGain
+                maxVal = 0.5f,
+                defVal = oscAudioProvider.CurrentGain,
+                numDisplayDecPlaces = 2
             };
 
             UIPaint();
@@ -68,10 +72,17 @@ namespace SDLab_GUI
             float newFrequency = (float)(e.NewValue);
             oscAudioProvider.changeFrequency(newFrequency);
         }
+
         private void gainChangeEvent(object? sender, ValueChangedEventArgs e)
         {
             float newGain = (float)(e.NewValue);
             oscAudioProvider.changeGain(newGain);
+        }
+
+        private void deleteOscillatorEvent(object? sender, EventArgs e)
+        {
+            audioEngineMGMT.removeAudioEngine(oscAudioProvider);
+            (this.Parent as VerticalStackLayout).Children.Remove(this);
         }
     }
 
@@ -80,9 +91,11 @@ namespace SDLab_GUI
     internal class OscillatorItemTriangleMark : FlexLayout
     {
         ImageButton triangleMarkBTN = new ImageButton();
+        ImageButton deleteOscillatorBTN = new ImageButton();
 
-        public OscillatorItemTriangleMark(FlexLayout parentFLNode)
+        public OscillatorItemTriangleMark(FlexLayout parentFLNode, EventHandler clickEventHandler)
         {
+            Direction = Microsoft.Maui.Layouts.FlexDirection.Column;
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
             AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             parentFLNode.SetGrow(this, 0.05f);
@@ -93,7 +106,15 @@ namespace SDLab_GUI
             triangleMarkBTN.Padding = 10;
             triangleMarkBTN.BackgroundColor = Color.FromArgb("#14141d");
 
+            deleteOscillatorBTN.Source = "trash_bin.png";
+            deleteOscillatorBTN.WidthRequest = 5;
+            deleteOscillatorBTN.HeightRequest = 5;
+            deleteOscillatorBTN.Padding = 10;
+            deleteOscillatorBTN.BackgroundColor = Color.FromArgb("#14141d");
+            deleteOscillatorBTN.Clicked += clickEventHandler;
+
             Children.Add(triangleMarkBTN);
+            Children.Add(deleteOscillatorBTN);
         }
     }
 
@@ -104,7 +125,7 @@ namespace SDLab_GUI
         {
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
             AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
-            parentFLNode.SetGrow(this, 0.16f);
+            parentFLNode.SetGrow(this, 0.10f);
 
             HeaderLabel.Text = "OSCILLATOR";
             HeaderLabel.StyleClass = new List<string> { "GreenTitle" };
@@ -125,7 +146,7 @@ namespace SDLab_GUI
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
             AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             VerticalOptions = LayoutOptions.Fill;
-            parentFLNode.SetGrow(this, 0.16f);
+            parentFLNode.SetGrow(this, 0.26f);
         }
 
         public void addSliderControl(string sliderLabel, Global.structSliderData numericSliderData, EventHandler<ValueChangedEventArgs> _valueChangedEvent)
@@ -152,18 +173,22 @@ namespace SDLab_GUI
     {
         Label sliderControlLabel = new Label();
         Slider sliderControlSlider = new Slider();
+        Entry sliderControlEntry = new Entry();
+        Global.structSliderData _numericSliderData_;
+
+        bool isUpdatingEntry = false;
 
         public OscillatorItemSliderControl(string controlLabel, Global.structSliderData numericSliderData, EventHandler<ValueChangedEventArgs> _valueChangedEvent)
         {
+            _numericSliderData_ = numericSliderData;
+
             Direction = Microsoft.Maui.Layouts.FlexDirection.Row;
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Start;
             AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             Padding = new Thickness(20, 0, 0, 0);
 
-            //this.SetGrow(sliderControlLabel, 0.3f);
             sliderControlLabel.Text = controlLabel;
 
-            //this.SetGrow(sliderControlSlider, 0.8f);
             sliderControlSlider.WidthRequest = 200;
             sliderControlSlider.Focused += SliderAutoUnfocusEvent;
             sliderControlSlider.StyleClass = new List<string> { "AudioAttributeSlider" };
@@ -172,15 +197,45 @@ namespace SDLab_GUI
             sliderControlSlider.Maximum = numericSliderData.maxVal;
             sliderControlSlider.Value = numericSliderData.defVal;
             sliderControlSlider.ValueChanged += _valueChangedEvent;
+            sliderControlSlider.DragCompleted += sliderDragCompletedEvent;
+
+            sliderControlEntry.WidthRequest = 100;
+            sliderControlEntry.HeightRequest = 1;
+            sliderControlEntry.Text = sliderControlSlider.Value.ToString($"n{numericSliderData.numDisplayDecPlaces}");
+            sliderControlEntry.BackgroundColor = Color.FromArgb("#14141d");
+            sliderControlEntry.TextColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
+            sliderControlEntry.TextChanged += entryValueChangedEvent;
 
             Children.Add(sliderControlLabel);
             Children.Add(sliderControlSlider);
+            Children.Add(sliderControlEntry);
         }
 
         private void SliderAutoUnfocusEvent(object? sender, FocusEventArgs e)
         {
             Slider originSlider = sender as Slider;
             originSlider.Unfocus();
+        }
+
+        private void sliderDragCompletedEvent(object? sender, EventArgs e)
+        {
+            sliderControlEntry.Text = sliderControlSlider.Value.ToString($"n{_numericSliderData_.numDisplayDecPlaces}");
+            isUpdatingEntry = true;
+        }
+
+        private void entryValueChangedEvent(object? sender, TextChangedEventArgs e)
+        {
+            if (float.TryParse(e.NewTextValue, out float newValue) && isUpdatingEntry == false)
+            {
+                if (newValue >= _numericSliderData_.minVal && newValue <= _numericSliderData_.maxVal)
+                {
+                    sliderControlSlider.Value = newValue;
+                }
+            }
+            else
+            {
+                isUpdatingEntry = false;
+            }
         }
     }
 
@@ -240,7 +295,7 @@ namespace SDLab_GUI
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
             AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             VerticalOptions = LayoutOptions.Fill;
-            parentFLNode.SetGrow(this, 0.16f);
+            parentFLNode.SetGrow(this, 0.12f);
 
             openSFXBTN.Text = "Open SFX";
             openSFXBTN.FontSize = Device.GetNamedSize(NamedSize.Subtitle, typeof(Label));

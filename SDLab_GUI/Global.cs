@@ -7,6 +7,7 @@
             public float minVal;
             public float maxVal;
             public float defVal;
+            public int numDisplayDecPlaces;
         }
     }
 }

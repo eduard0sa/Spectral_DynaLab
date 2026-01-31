@@ -7,7 +7,7 @@ namespace SDLab_GUI
     internal class AudioEngineMGMT
     {
         private float defaultFrequency = 38.0f;
-        private float defaultGain = 20f;
+        private float defaultGain = 0.5f;
 
         public AudioEngineWrapper _AudioEngineRef = new AudioEngineWrapper();
         public IntPtr AudioEngineOsc;
@@ -41,6 +41,13 @@ namespace SDLab_GUI
         public void PauseMixer()
         {
             output.Pause();
+        }
+
+        public void removeAudioEngine(JuceAudioProvider provider)
+        {
+            mixer.RemoveMixerInput(provider);
+            oscillators.Remove(provider);
+            _AudioEngineRef.DestroyEngine(provider.Engine);
         }
 
         public JuceAudioProvider LaunchAudioEngine()

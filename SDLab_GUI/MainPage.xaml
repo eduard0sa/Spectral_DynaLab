@@ -18,8 +18,8 @@
 
         <FlexLayout Grid.Row="1" Direction="Row" JustifyContent="Center" AlignItems="Center">
             <FlexLayout FlexLayout.Grow="0.33" Direction="Row" JustifyContent="Center" AlignItems="Center">
-                <Slider x:Name="masterVolumeSlider" Minimum="0" Maximum="100" StyleClass="AudioAttributeSlider" Focused="SliderAutoUnfocusEvent" ValueChanged="masterVolumeValueChangedEvent"/>
-                <Label x:Name="masterVolumeSliderValueLabel" StyleClass="LightGrayBodyText" Text="100%" Margin="0, 0, 10, 0"></Label>
+                <Slider x:Name="masterVolumeSlider" Minimum="0" Maximum="100" StyleClass="AudioAttributeSlider" Focused="SliderAutoUnfocusEvent" ValueChanged="masterVolumeSliderValueChangedEvent" DragCompleted="masterVolumeSliderDragCompletedEvent"/>
+                <Entry x:Name="masterVolumeSliderValueLabel" Text="100%" WidthRequest="100" HeightRequest="1" Margin="0, 0, 10, 0" BackgroundColor="#14141d" TextColor="{StaticResource DefaultPastelYellow}" TextChanged="masterVolumeEntryValueChangedEvent"/>
             </FlexLayout>
 
             <FlexLayout FlexLayout.Grow="0.34" Direction="Row" JustifyContent="Center" AlignItems="Center">
@@ -43,5 +43,20 @@
         <ScrollView Grid.Row="3" HorizontalOptions="Fill" BackgroundColor="#0d0c16">
             <VerticalStackLayout x:Name="trackStackLayout" Padding="5, 0, 0, 0"/>
         </ScrollView>
+
+        <Grid WidthRequest="600" HeightRequest="500" HorizontalOptions="Center" Margin="0, 50, 0, 0" ZIndex="10" BackgroundColor="#0d0c16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="90*"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="1" BackgroundColor="{StaticResource Gray900}" Padding="10, 5, 0, 5">
+                <Label Text="Track SFX" TextColor="{StaticResource DefaultPastelYellow}"/>
+            </StackLayout>
+
+            <ScrollView Grid.Row="2">
+                <Label Text="SFX Options go here..." TextColor="{StaticResource White}"/>
+            </ScrollView>
+        </Grid>
     </Grid>
 </ContentPage>
