@@ -32,3 +32,15 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeFrequency(IntPtr engine, float newF
 void AUDIOPROCBRIDGE::AudioEngineRef::_changeGain(IntPtr engine, float newGain) {
 	changeGain((void*)engine, newGain);
 }
+
+IntPtr AUDIOPROCBRIDGE::AudioEngineRef::_addDistortionDSPEffect(IntPtr engine) {
+	return IntPtr(addDistortionDSPEffect((void*)engine));
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_removeDSPEffect(IntPtr engine, IntPtr effectDSPProcessor) {
+	removeDSPEffect((void*)engine, (void*)effectDSPProcessor);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive) {
+	changeDistortionDrive((void*)distortionDSPProcessor, newDrive);
+}

@@ -5,22 +5,26 @@
         private JuceAudioProvider oscAudioProvider;
         private MainPage mainPageOBJ;
         T dspProcessor;
+        Global.enumDSPType dSPType;
 
         private DSPEffectItemTriangleMark DSPEffectTriangleMark;
         private DSPEffectItemHeader DSPEffectHeader;
         private DSPEffectItemControlGroup DSPEffectSliderControls;
         private DSPEffectItemWaveVizualizerArea DSPEffectWaveVizualizerArea;
 
-        public DSPEffectItem(JuceAudioProvider audioProvider, Global.enumDSPType dspType, T _dspProcessor)
+        public T DspProcessor { get => dspProcessor; }
+
+        public DSPEffectItem(JuceAudioProvider audioProvider, Global.enumDSPType _dspType, T _dspProcessor)
         {
             DSPEffectTriangleMark = new DSPEffectItemTriangleMark(this);
             DSPEffectTriangleMark.ClickEventHandler = deleteDSPEvent;
-            DSPEffectHeader = new DSPEffectItemHeader(this, dspType);
+            DSPEffectHeader = new DSPEffectItemHeader(this, _dspType);
             DSPEffectSliderControls = new DSPEffectItemControlGroup(this);
             DSPEffectWaveVizualizerArea = new DSPEffectItemWaveVizualizerArea(this);
 
             oscAudioProvider = audioProvider;
             dspProcessor = _dspProcessor;
+            dSPType = _dspType;
 
             UIPaint();
         }
@@ -54,8 +58,19 @@
 
         private void deleteDSPEvent(object? sender, EventArgs e)
         {
-            //oscAudioProvider.removeDSPEffect(oscAudioProvider);
             (this.Parent as VerticalStackLayout).Children.Remove(this);
+
+            Global.structVariableDataTypeUnit dataTypeUnit = new Global.structVariableDataTypeUnit();
+            dataTypeUnit.dataUnit = this;
+
+            switch (dSPType)
+            {
+                case Global.enumDSPType.DISTORTION:
+                    dataTypeUnit.dataType = Global.enumVariableDataType.TYPE_DISTORTION_DSP_CLASS;
+                    break;
+            }
+
+            oscAudioProvider.removeDSPEffect(dataTypeUnit);
         }
     }
 

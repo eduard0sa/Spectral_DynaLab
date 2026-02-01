@@ -14,5 +14,8 @@ namespace AUDIOPROCBRIDGE {
 
 		void _changeFrequency(IntPtr engine, float newFrequency);
 		void _changeGain(IntPtr engine, float newGain);
+		IntPtr _addDistortionDSPEffect(IntPtr engine);
+		void _removeDSPEffect(IntPtr engine, IntPtr effectDSPProcessor);
+		void _changeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive);
 	};
 }

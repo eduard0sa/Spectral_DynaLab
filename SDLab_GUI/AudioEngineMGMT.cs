@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using SDLab_InteropWrapper;
+using System.Threading.Channels;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI
@@ -80,6 +81,7 @@ namespace SDLab_GUI
         public IntPtr Engine { get => engine; }
         public float CurrentFrequency { get => currentFrequency; }
         public float CurrentGain { get => currentGain; }
+        public List<structVariableDataTypeUnit> DspProcessors { get => dspProcessors; }
 
         public JuceAudioProvider(IntPtr engine, AudioEngineWrapper engineBridgeRef, int sampleRate, int channels)
         {
@@ -114,7 +116,7 @@ namespace SDLab_GUI
             switch (dspEffectType)
             {
                 case Global.enumDSPType.DISTORTION:
-                    DistortionDSP newDistortionProcessor = new DistortionDSP();
+                    DistortionDSP newDistortionProcessor = new DistortionDSP(engine, engineBridgeRef);
                     DSPEffectItem<DistortionDSP> newDistortionDSP = new DSPEffectItem<DistortionDSP>(this, dspEffectType, newDistortionProcessor);
 
                     newDistortionDSP.addSliderControl("Drive:", newDistortionProcessor.DistortionDriveSliderData, newDistortionProcessor.distortionDriveChangeEvent);
@@ -126,7 +128,7 @@ namespace SDLab_GUI
                         dataUnit = newDistortionDSP
                     };
 
-                    dspProcessors.Add(dspUnit);
+                    DspProcessors.Add(dspUnit);
 
                     return dspUnit;
 
@@ -135,14 +137,23 @@ namespace SDLab_GUI
             }
         }
 
-        public void removeDSPEffect(int effectID)
+        public void removeDSPEffect(Global.structVariableDataTypeUnit effectData)
         {
-            //engineBridgeRef.AddDSPEffect(engine, effectID);
+            switch (effectData.dataType)
+            {
+                case enumVariableDataType.TYPE_DISTORTION_DSP_CLASS:
+                    engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<DistortionDSP>)effectData.dataUnit).DspProcessor.DistortionDSPProcessor);
+                    dspProcessors.Remove(effectData);
+                    break;
+            }
         }
     }
 
     public class DistortionDSP
     {
+        private readonly AudioEngineWrapper engineBridgeRef;
+        private IntPtr distortionDSPProcessor;
+
         enum enum_distortionType
         {
             SoftClip,
@@ -173,14 +184,19 @@ namespace SDLab_GUI
         private enum_distortionType DistortionType { get => distortionType; set => distortionType = value; }
         internal Global.structSliderData DistortionDriveSliderData { get => distortionDriveSliderData; set => distortionDriveSliderData = value; }
         internal Global.structPickerData DistortionTypePickerData { get => distortionTypePickerData; set => distortionTypePickerData = value; }
+        public IntPtr DistortionDSPProcessor { get => distortionDSPProcessor; }
 
-        public DistortionDSP(){}
+        public DistortionDSP(IntPtr engine, AudioEngineWrapper engineBridgeRef)
+        {
+            this.engineBridgeRef = engineBridgeRef;
+            distortionDSPProcessor = engineBridgeRef.AddDistortionDSPEffect(engine);
+        }
 
         public void distortionDriveChangeEvent(object? sender, ValueChangedEventArgs e)
         {
             Slider originSlider = sender as Slider;
             drive = (float)originSlider.Value;
-            //Call Juce Functions Here
+            engineBridgeRef.ChangeDistortionDrive(distortionDSPProcessor, drive);
         }
 
         public void distortionTypeChangeEvent(object? sender, EventArgs e)

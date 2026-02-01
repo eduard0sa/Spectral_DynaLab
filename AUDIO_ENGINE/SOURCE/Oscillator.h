@@ -2,6 +2,7 @@
 
 #include<../JuceLibraryCode/JuceHeader.h>
 #include<juce_dsp/juce_dsp.h>
+#include <stdlib.h>
 using namespace juce;
 using namespace std;
 
@@ -22,32 +23,90 @@ enum enum_EffectType {
 	Gain
 };
 
-struct DSPEffect {
-	virtual ~DSPEffect() = default;
-	virtual void prepare(juce::dsp::ProcessSpec&) = 0;
-	virtual void process(juce::dsp::ProcessContextReplacing<float>) = 0;
+
+class DSPEffect
+{
+	public:
+		virtual int getEffectID() = 0;
+		virtual ~DSPEffect() = default;
+		virtual void prepare(juce::dsp::ProcessSpec&) = 0;
+		virtual void process(juce::dsp::ProcessContextReplacing<float>) = 0;
 };
 
-struct DSPGainEffect : DSPEffect {
-	unique_ptr<dsp::Gain<float>> effectPtr;
+class DSPGainEffect : public DSPEffect
+{
+	private:
+		dsp::Gain<float> gainSFX;
 
-	void prepare(juce::dsp::ProcessSpec& spec) override {
-		effectPtr->prepare(spec);
-	}
-	void process(juce::dsp::ProcessContextReplacing<float> context) override {
-		effectPtr->process(context);
-	}
+	public:
+		int id;
+
+		DSPGainEffect() {
+			gainSFX = dsp::Gain<float>();
+		}
+
+		void prepare(juce::dsp::ProcessSpec& spec) override {
+			gainSFX.prepare(spec);
+		}
+		void process(juce::dsp::ProcessContextReplacing<float> context) override {
+			gainSFX.process(context);
+		}
+
+		~DSPGainEffect() {}
+
+		int getEffectID() {
+			return id;
+		}
+
+		void setGainLinear(float newGain) {
+			gainSFX.setGainLinear(newGain);
+		}
 };
 
-struct DSPDistortionEffect : DSPEffect {
-	unique_ptr<dsp::WaveShaper<float>> effectPtr;
+class DSPDistortionEffect : public DSPEffect
+{
+	private:
+		dsp::Gain<float> inputGain;
+		dsp::WaveShaper<float> distortionSFX;
+		float distortionDrive = 500;
 
-	void prepare(juce::dsp::ProcessSpec& spec) override {
-		effectPtr->prepare(spec);
-	}
-	void process(juce::dsp::ProcessContextReplacing<float> context) override {
-		effectPtr->process(context);
-	}
+	public:
+		int id;
+
+		DSPDistortionEffect() {
+			inputGain = dsp::Gain<float>();
+			distortionSFX = dsp::WaveShaper<float>();
+		}
+
+		void prepare(juce::dsp::ProcessSpec& spec) override {
+			inputGain.prepare(spec);
+			distortionSFX.prepare(spec);
+
+			changeDistortionDrive(distortionDrive);
+			changeFunctionToUse([](float sample)
+			{
+				return tanh(sample);
+			});
+		}
+		void process(juce::dsp::ProcessContextReplacing<float> context) override {
+			inputGain.process(context);
+			distortionSFX.process(context);
+		}
+
+		~DSPDistortionEffect() {}
+
+		int getEffectID() {
+			return id;
+		}
+
+		void changeFunctionToUse(float(*newFunctionToUse)(float)) {
+			distortionSFX.functionToUse = newFunctionToUse;
+		}
+
+		void changeDistortionDrive(float newDrive) {
+			distortionDrive = newDrive;
+			inputGain.setGainLinear(1 + distortionDrive);
+		}
 };
 
 class _Oscillator
@@ -56,7 +115,6 @@ class _Oscillator
 		//PARAMETERS
 		float gain = 0.1f;
 		float frequency = 50.0f; // Frequency in Hz
-		float distortionDrive = 500;
 
 		unique_ptr<Struct_DSP_Effects> DSP_EFFECTS = make_unique<Struct_DSP_Effects>();
 
@@ -70,22 +128,24 @@ class _Oscillator
 
 		void changeFrequency(float newFrequency);
 		void changeGain(float newGain);
-		void changeDistortionDrive(float newDrive);
 
-		void addDistortionDSPEffect();
+		DSPEffect* addDistortionDSPEffect();
+		void removeDSPEffect(void* effect);
 
 	private:
-		juce::dsp::ProcessSpec spec;
+		juce::dsp::ProcessSpec spec = juce::dsp::ProcessSpec();
 
 		float phase = 0;
 		float phaseIncrement = 0.1f;
 		double _sampleRate = 44100.0;
 		int numChannels = 1;
 
-		int DSPEffectChainLength = 0;
-		unique_ptr<DSPEffect> DSPEffectChain[100];
-		dsp::Gain<float> inputGain = dsp::Gain<float>();
 		unique_ptr<dsp::Gain<float>> outputGain = make_unique<dsp::Gain<float>>();
+
+		int DSPEffectChainLength = 0;
+		DSPEffect* DSPEffectChain[100];
+
+		bool checkExistantEffectID(int id);
 
 		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_Oscillator)
 };

@@ -14,7 +14,6 @@ void _Oscillator::prepareToPlay(int samplesPerBlockExpected, double sampleRate, 
     spec.maximumBlockSize = (juce::uint32)samplesPerBlockExpected;
     spec.numChannels = this->numChannels;
 
-    addDistortionDSPEffect();
     outputGain->prepare(spec);
     outputGain->setGainLinear(gain);
     outputGain->setRampDurationSeconds(0.02); // super important
@@ -43,8 +42,6 @@ void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
         DSPEffectChain[i]->process(context);
     }
 
-    /*DSP_EFFECTS->inputGain->process(context);
-    DSP_EFFECTS->distortion->process(context);*/
     outputGain->process(context);
 }
 
@@ -65,39 +62,52 @@ void _Oscillator::changeFrequency(float newFrequency)
 
 void _Oscillator::changeGain(float newGain) {
     gain = newGain;
-    DSP_EFFECTS->inputGain->setGainLinear(1 + distortionDrive);
     outputGain->setGainLinear(gain);
 }
 
-void _Oscillator::changeDistortionDrive(float newDrive) {
-    distortionDrive = newDrive;
-    DSP_EFFECTS->inputGain->setGainLinear(gain + distortionDrive);
-    outputGain->setGainLinear(gain);
+DSPEffect* _Oscillator::addDistortionDSPEffect() {
+    DSPDistortionEffect* distortionEffectHEAP = (class DSPDistortionEffect*)malloc(sizeof(class DSPDistortionEffect));
+    DSPDistortionEffect* distortionEffectSTACK = new (distortionEffectHEAP) DSPDistortionEffect(); //Stack reference of the memory allocated at the last row, used to call the DSPDistortionEffect's class constructor.
+    
+    Random randomizer = Random();
+    int distortionEffectID;
+
+    do {
+        distortionEffectID = randomizer.nextInt(200);
+    } while (checkExistantEffectID(distortionEffectID));
+
+    distortionEffectHEAP->prepare(spec);
+    distortionEffectHEAP->id = distortionEffectID;
+
+    DSPEffectChain[DSPEffectChainLength] = distortionEffectHEAP;
+    DSPEffectChainLength++;
+
+    return distortionEffectHEAP;
 }
 
-void _Oscillator::addDistortionDSPEffect() {
-    unique_ptr<dsp::Gain<float>> inputGain = make_unique<dsp::Gain<float>>();
-	unique_ptr<dsp::WaveShaper<float>> distortionEffect = make_unique<dsp::WaveShaper<float>>();
-    
-    inputGain->prepare(spec);
-    inputGain->setGainLinear(1 + distortionDrive);
-    distortionEffect->prepare(spec);
+void _Oscillator::removeDSPEffect(void* effect) {
+    for (int i = 0; i < DSPEffectChainLength; i++) {
+        if (DSPEffectChain[i]->getEffectID() == ((DSPEffect*)effect)->getEffectID()) {
+            free(DSPEffectChain[i]);
+            DSPEffectChain[i] = NULL;
 
-    distortionEffect->functionToUse = [](float sample)
-    {
-        return tanh(sample);
-    };
+            for (int j = i; j < DSPEffectChainLength; j++) {
+                DSPEffectChain[j] = DSPEffectChain[j + 1];
+            }
 
-    unique_ptr<DSPGainEffect> inputGainEffect = make_unique<DSPGainEffect>();
-    inputGainEffect->effectPtr = std::move(inputGain);
-    
-    unique_ptr<DSPDistortionEffect> distortionDSPEffect = make_unique<DSPDistortionEffect>();
-	distortionDSPEffect->effectPtr = std::move(distortionEffect);
+            DSPEffectChainLength--;
+            break;
+        }
+    }
+}
 
-	DSPEffectChain[DSPEffectChainLength] = std::move(inputGainEffect);
-    DSPEffectChainLength++;
-    DSPEffectChain[DSPEffectChainLength] = std::move(distortionDSPEffect);
-    DSPEffectChainLength++;
+bool _Oscillator::checkExistantEffectID(int id) {
+    for (int i = 0; i < DSPEffectChainLength; i++) {
+        if (DSPEffectChain[i]->getEffectID() == id) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #pragma endregion

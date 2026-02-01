@@ -17,3 +17,6 @@ extern "C" AUDIO_ENGINE_API void destroyEngine(void* engine);
 
 extern "C" AUDIO_ENGINE_API void changeFrequency(void* engine, float newFrequency);
 extern "C" AUDIO_ENGINE_API void changeGain(void* engine, float newGain);
+extern "C" AUDIO_ENGINE_API void* addDistortionDSPEffect(void* engine);
+extern "C" AUDIO_ENGINE_API void removeDSPEffect(void* engine, void* effectDSPProcessor);
+extern "C" AUDIO_ENGINE_API void changeDistortionDrive(void* distortionDSPProcessor, float newDrive);

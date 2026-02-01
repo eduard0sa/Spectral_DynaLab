@@ -14,32 +14,23 @@ public partial class DSPModalEditor : ContentPage
         audioEngineMGMT = audioManager;
         audioProviderOBJ = audioProvider;
 
-        addDistortionDSPBTN.Clicked += (s, e) =>
-        {
-            Global.structVariableDataTypeUnit distortionDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.DISTORTION);
+        dspChainStackLayout.Children.Clear();
 
-            dspChainStackLayout.Children.Add(distortionDSPUnit.dataUnit as DSPEffectItem<DistortionDSP>);
-        };
-        addCompressorDSPBTN.Clicked += (s, e) =>
+        for (int i = 0; i < audioProvider.DspProcessors.Count; i++)
         {
-            /*DSPEffectItem compressorItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.COMPRESSOR);
-            dspChainStackLayout.Children.Add(compressorItem);*/
-        };
-        addReverbDSPBTN.Clicked += (s, e) =>
-        {
-            /*DSPEffectItem reverbItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.REVERB);
-            dspChainStackLayout.Children.Add(reverbItem);*/
-        };
-        addEQDSPBTN.Clicked += (s, e) =>
-        {
-            /*DSPEffectItem equalizerItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.EQ);
-            dspChainStackLayout.Children.Add(equalizerItem);*/
-        };
-        addFilterDSPBTN.Clicked += (s, e) =>
-        {
-            /*DSPEffectItem filterItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.FILTER);
-            dspChainStackLayout.Children.Add(filterItem);*/
-        };
+            switch (audioProvider.DspProcessors[i].dataType)
+            {
+                case Global.enumVariableDataType.TYPE_DISTORTION_DSP_CLASS:
+                    dspChainStackLayout.Children.Add(audioProvider.DspProcessors[i].dataUnit as DSPEffectItem<DistortionDSP>);
+                    break;
+            }
+        }
+
+        addDistortionDSPBTN.Clicked += addDistortionDSPBTNEvent;
+        addCompressorDSPBTN.Clicked += addCompressorDSPBTNEvent;
+        addReverbDSPBTN.Clicked += addReverbDSPBTNEvent;
+        addEQDSPBTN.Clicked += addEQDSPBTNEvent;
+        addFilterDSPBTN.Clicked += addFilterDSPBTNEvent;
     }
 
     public EventHandler ModalBoxCloseEvent {
@@ -57,5 +48,36 @@ public partial class DSPModalEditor : ContentPage
     {
         Slider originSlider = sender as Slider;
         originSlider.Unfocus();
+    }
+
+    private void addDistortionDSPBTNEvent(object? sender, EventArgs e)
+    {
+        Global.structVariableDataTypeUnit distortionDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.DISTORTION);
+
+        dspChainStackLayout.Children.Add(distortionDSPUnit.dataUnit as DSPEffectItem<DistortionDSP>);
+    }
+
+    private void addCompressorDSPBTNEvent(object? sender, EventArgs e)
+    {
+        /*DSPEffectItem compressorItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.COMPRESSOR);
+        dspChainStackLayout.Children.Add(compressorItem);*/
+    }
+
+    private void addReverbDSPBTNEvent(object? sender, EventArgs e)
+    {
+        /*DSPEffectItem reverbItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.REVERB);
+        dspChainStackLayout.Children.Add(reverbItem);*/
+    }
+
+    private void addEQDSPBTNEvent(object? sender, EventArgs e)
+    {
+        /*DSPEffectItem equalizerItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.EQ);
+        dspChainStackLayout.Children.Add(equalizerItem);*/
+    }
+
+    private void addFilterDSPBTNEvent(object? sender, EventArgs e)
+    {
+        /*DSPEffectItem filterItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.FILTER);
+        dspChainStackLayout.Children.Add(filterItem);*/
     }
 }

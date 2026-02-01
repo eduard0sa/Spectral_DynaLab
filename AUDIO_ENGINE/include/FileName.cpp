@@ -31,4 +31,16 @@ extern "C" {
     void changeGain(void* engine, float newGain) {
         ((_Oscillator*)engine)->changeGain(newGain);
 	}
+
+    void* addDistortionDSPEffect(void* engine) {
+        return ((_Oscillator*)engine)->addDistortionDSPEffect();
+    }
+
+    void removeDSPEffect(void* engine, void* effectDSPProcessor) {
+        ((_Oscillator*)engine)->removeDSPEffect(effectDSPProcessor);
+    }
+
+    void changeDistortionDrive(void* distortionDSPProcessor, float newDrive) {
+        ((DSPDistortionEffect*)distortionDSPProcessor)->changeDistortionDrive(newDrive);
+    }
 }

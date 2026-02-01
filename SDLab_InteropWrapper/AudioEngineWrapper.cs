@@ -45,5 +45,20 @@ namespace SDLab_InteropWrapper
         {
             audioEngineRef._changeGain(engine, newGain);
         }
+
+        public IntPtr AddDistortionDSPEffect(IntPtr engine)
+        {
+            return audioEngineRef._addDistortionDSPEffect(engine);
+        }
+
+        public void RemoveDSPEffect(IntPtr engine, IntPtr effectDSPProcessor)
+        {
+            audioEngineRef._removeDSPEffect(engine, effectDSPProcessor);
+        }
+
+        public void ChangeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive)
+        {
+            audioEngineRef._changeDistortionDrive(distortionDSPProcessor, newDrive);
+        }
     }
 }
