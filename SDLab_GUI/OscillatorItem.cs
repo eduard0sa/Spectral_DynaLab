@@ -1,11 +1,10 @@
-﻿using SDLab_InteropWrapper;
-
-namespace SDLab_GUI
+﻿namespace SDLab_GUI
 {
     internal class OscillatorItem : FlexLayout
     {
         private JuceAudioProvider oscAudioProvider;
         private AudioEngineMGMT audioEngineMGMT;
+        private MainPage mainPageOBJ;
 
         private OscillatorItemTriangleMark OscillatorTriangleMark;
         private OscillatorItemHeader OscillatorItemHeader;
@@ -17,17 +16,20 @@ namespace SDLab_GUI
         private Global.structSliderData frequencySliderData;
         private Global.structSliderData gainSliderData;
 
-        public OscillatorItem(AudioEngineMGMT audioManager)
+        public OscillatorItem(AudioEngineMGMT audioManager, MainPage mainPage)
         {
-            OscillatorTriangleMark = new OscillatorItemTriangleMark(this, deleteOscillatorEvent);
+            OscillatorTriangleMark = new OscillatorItemTriangleMark(this);
+            OscillatorTriangleMark.ClickEventHandler = deleteOscillatorEvent;
             OscillatorItemHeader = new OscillatorItemHeader(this);
             OscillatorItemSliderControls = new OscillatorItemSliderControlGroup(this);
             OscillatorItemWaveShapeControls = new OscillatorItemWaveShapeControl(this);
             OscillatorItemSFXButtonArea = new OscillatorItemSFXButtonArea(this);
+            OscillatorItemSFXButtonArea.OpenSFXEditorEvent = openSFXEditorEvent;
             OscillatorItemWaveVizualizerArea = new OscillatorItemWaveVizualizerArea(this);
 
             oscAudioProvider = audioManager.LaunchAudioEngine();
             audioEngineMGMT = audioManager;
+            mainPageOBJ = mainPage;
 
             frequencySliderData = new Global.structSliderData() {
                 minVal = 20f,
@@ -84,16 +86,43 @@ namespace SDLab_GUI
             audioEngineMGMT.removeAudioEngine(oscAudioProvider);
             (this.Parent as VerticalStackLayout).Children.Remove(this);
         }
+
+        private void openSFXEditorEvent(object? sender, EventArgs e)
+        {
+            DSPModalEditor OscSFXDSPEditor = new DSPModalEditor(audioEngineMGMT, oscAudioProvider);
+            mainPageOBJ.Navigation.PushModalAsync(OscSFXDSPEditor);
+            OscSFXDSPEditor.ModalBoxCloseEvent += closeSFXEditorEvent;
+        }
+
+        private void closeSFXEditorEvent(object? sender, EventArgs e)
+        {
+            mainPageOBJ.Navigation.PopModalAsync();
+        }
     }
 
     #region Headers
 
     internal class OscillatorItemTriangleMark : FlexLayout
     {
-        ImageButton triangleMarkBTN = new ImageButton();
-        ImageButton deleteOscillatorBTN = new ImageButton();
+        private ImageButton triangleMarkBTN = new ImageButton();
+        private ImageButton deleteOscillatorBTN = new ImageButton();
+        private EventHandler clickEventHandler;
 
-        public OscillatorItemTriangleMark(FlexLayout parentFLNode, EventHandler clickEventHandler)
+        public EventHandler ClickEventHandler
+        {
+            get
+            {
+                return clickEventHandler;
+            }
+            set
+            {
+                deleteOscillatorBTN.Clicked -= ClickEventHandler;
+                clickEventHandler = value;
+                deleteOscillatorBTN.Clicked += value;
+            }
+        }
+
+        public OscillatorItemTriangleMark(FlexLayout parentFLNode)
         {
             Direction = Microsoft.Maui.Layouts.FlexDirection.Column;
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
@@ -111,7 +140,6 @@ namespace SDLab_GUI
             deleteOscillatorBTN.HeightRequest = 5;
             deleteOscillatorBTN.Padding = 10;
             deleteOscillatorBTN.BackgroundColor = Color.FromArgb("#14141d");
-            deleteOscillatorBTN.Clicked += clickEventHandler;
 
             Children.Add(triangleMarkBTN);
             Children.Add(deleteOscillatorBTN);
@@ -289,7 +317,22 @@ namespace SDLab_GUI
 
     internal class OscillatorItemSFXButtonArea : FlexLayout
     {
-        Button openSFXBTN = new Button();
+        private Button openSFXBTN = new Button();
+        private EventHandler openSFXEditorEvent = delegate{};
+
+        public EventHandler OpenSFXEditorEvent {
+            get
+            {
+                return openSFXEditorEvent;
+            }
+            set
+            {
+                openSFXBTN.Clicked -= openSFXEditorEvent;
+                openSFXEditorEvent = value;
+                openSFXBTN.Clicked += openSFXEditorEvent;
+            }
+        }
+
         public OscillatorItemSFXButtonArea(FlexLayout parentFLNode)
         {
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
@@ -303,7 +346,7 @@ namespace SDLab_GUI
             openSFXBTN.FontFamily = "Orbitron";
             openSFXBTN.CornerRadius = 0;
             openSFXBTN.HeightRequest = 100;
-            openSFXBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
+            openSFXBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelRed"];
             this.SetGrow(openSFXBTN, 1.0f);
 
             Children.Add(openSFXBTN);

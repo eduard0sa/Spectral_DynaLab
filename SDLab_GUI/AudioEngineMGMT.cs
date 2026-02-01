@@ -1,10 +1,11 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using SDLab_InteropWrapper;
+using static SDLab_GUI.Global;
 
 namespace SDLab_GUI
 {
-    internal class AudioEngineMGMT
+    public class AudioEngineMGMT
     {
         private float defaultFrequency = 38.0f;
         private float defaultGain = 0.5f;
@@ -65,12 +66,14 @@ namespace SDLab_GUI
         }
     }
 
-    internal class JuceAudioProvider : ISampleProvider
+    public class JuceAudioProvider : ISampleProvider
     {
         private readonly IntPtr engine;
         private readonly AudioEngineWrapper engineBridgeRef;
         private float currentFrequency;
         private float currentGain;
+
+        private List<Global.structVariableDataTypeUnit> dspProcessors = new List<Global.structVariableDataTypeUnit>();
 
         public WaveFormat WaveFormat { get; }
 
@@ -102,6 +105,90 @@ namespace SDLab_GUI
         {
             currentGain = frequency;
             engineBridgeRef.ChangeGain(engine, frequency);
+        }
+
+        public structVariableDataTypeUnit addDSPEffect(Global.enumDSPType dspEffectType)
+        {
+            Global.structVariableDataTypeUnit dspUnit = new structVariableDataTypeUnit();
+
+            switch (dspEffectType)
+            {
+                case Global.enumDSPType.DISTORTION:
+                    DistortionDSP newDistortionProcessor = new DistortionDSP();
+                    DSPEffectItem<DistortionDSP> newDistortionDSP = new DSPEffectItem<DistortionDSP>(this, dspEffectType, newDistortionProcessor);
+
+                    newDistortionDSP.addSliderControl("Drive:", newDistortionProcessor.DistortionDriveSliderData, newDistortionProcessor.distortionDriveChangeEvent);
+                    newDistortionDSP.addPickerControl("Distortion Type:", newDistortionProcessor.DistortionTypePickerData, newDistortionProcessor.distortionTypeChangeEvent);
+
+                    dspUnit = new Global.structVariableDataTypeUnit()
+                    {
+                        dataType = Global.enumVariableDataType.TYPE_DISTORTION_DSP_CLASS,
+                        dataUnit = newDistortionDSP
+                    };
+
+                    dspProcessors.Add(dspUnit);
+
+                    return dspUnit;
+
+                default:
+                    return dspUnit;
+            }
+        }
+
+        public void removeDSPEffect(int effectID)
+        {
+            //engineBridgeRef.AddDSPEffect(engine, effectID);
+        }
+    }
+
+    public class DistortionDSP
+    {
+        enum enum_distortionType
+        {
+            SoftClip,
+            HardClip,
+            Foldback
+        }
+
+        private float drive = 2;
+        private enum_distortionType distortionType = enum_distortionType.SoftClip;
+        private Global.structSliderData distortionDriveSliderData = new Global.structSliderData()
+        {
+            minVal = 1.0f,
+            maxVal = 500.0f,
+            defVal = 2.0f,
+            numDisplayDecPlaces = 2
+        };
+        private Global.structPickerData distortionTypePickerData = new Global.structPickerData()
+        {
+            defValIndex = 0,
+            items = new List<string>() {
+                "Soft Clip",
+                "Hard Clip",
+                "Foldback"
+            }
+        };
+
+        public float Drive { get => drive; set => drive = value; }
+        private enum_distortionType DistortionType { get => distortionType; set => distortionType = value; }
+        internal Global.structSliderData DistortionDriveSliderData { get => distortionDriveSliderData; set => distortionDriveSliderData = value; }
+        internal Global.structPickerData DistortionTypePickerData { get => distortionTypePickerData; set => distortionTypePickerData = value; }
+
+        public DistortionDSP(){}
+
+        public void distortionDriveChangeEvent(object? sender, ValueChangedEventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            drive = (float)originSlider.Value;
+            //Call Juce Functions Here
+        }
+
+        public void distortionTypeChangeEvent(object? sender, EventArgs e)
+        {
+            Picker originPicker = sender as Picker;
+
+            if(!Enum.TryParse<enum_distortionType>((string)originPicker.SelectedItem, out distortionType)) return;
+            //Call Juce Functions Here
         }
     }
 }

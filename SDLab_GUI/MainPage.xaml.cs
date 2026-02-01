@@ -1,11 +1,9 @@
 ﻿using SDLab_InteropWrapper;
-using CommunityToolkit.Maui;
 
 namespace SDLab_GUI
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
         private AudioEngineMGMT audioManager;
 
         bool isUpdatingMasterVolumeSlider = false;
@@ -31,7 +29,7 @@ namespace SDLab_GUI
 
         private void PlayPauseMixerEvent(object? sender, EventArgs e)
         {
-            switch(mainPlayBTN.Source.ToString().Split(" ")[1])
+            switch (mainPlayBTN.Source.ToString().Split(" ")[1])
             {
                 case "pause_button.png":
                     audioManager.PauseMixer();
@@ -77,7 +75,7 @@ namespace SDLab_GUI
 
         private void addOscillatorBTNClickedEvent(object sender, EventArgs e)
         {
-            OscillatorItem newOscillator = new OscillatorItem(audioManager);
+            OscillatorItem newOscillator = new OscillatorItem(audioManager, this);
 
             trackStackLayout.Children.Add(newOscillator);
         }

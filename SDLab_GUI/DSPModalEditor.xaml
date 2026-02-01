@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="SDLab_GUI.DSPModalEditor"
+             BackgroundColor="Transparent">
+
+    <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#aa101413">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="1" BackgroundColor="#101413">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="61*"/>
+            </Grid.RowDefinitions>
+
+            <FlexLayout Grid.Row="0" Padding="50, 5, 20, 20" JustifyContent="SpaceBetween" AlignItems="Center" BackgroundColor="{StaticResource DarkPastelRed}">
+                <Label Text="DSP/SFX Editor" FontFamily="Orbitron" FontSize="Medium" FontAttributes="Bold" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
+                <ImageButton x:Name="modalBoxCloseBTN" Source="close_xmark.png" WidthRequest="3" HeightRequest="3" BackgroundColor="Transparent"/>
+            </FlexLayout>
+
+            <Grid Grid.Row="1" BackgroundColor="{StaticResource DarkPastelRed}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="20*"/>
+                </Grid.ColumnDefinitions>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Button x:Name="addDistortionDSPBTN" Text="Distortion" StyleClass="DSPTypeButton" BorderColor="{StaticResource DefaultPastelRed}" TextColor="{StaticResource DefaultPastelRed}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                    <Button x:Name="addCompressorDSPBTN" Text="Compressor" StyleClass="DSPTypeButton" BorderColor="{StaticResource DefaultPastelYellow}" TextColor="{StaticResource DefaultPastelYellow}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="2">
+                    <Button x:Name="addReverbDSPBTN" Text="Reverb" StyleClass="DSPTypeButton" BorderColor="{StaticResource DefaultManaGreen}" TextColor="{StaticResource DefaultManaGreen}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="3">
+                    <Button x:Name="addEQDSPBTN" Text="EQ" StyleClass="DSPTypeButton"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="4">
+                    <Button x:Name="addFilterDSPBTN" Text="Filter" StyleClass="DSPTypeButton"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <StackLayout Grid.Row="2" StyleClass="HorizontalBar"/>
+            
+            <FlexLayout Grid.Row="3" Padding="20, 0, 0, 0" VerticalOptions="Fill" AlignItems="Center" BackgroundColor="{StaticResource Gray950}">
+                <Label Text="Effect Chain" VerticalOptions="Center" FontFamily="Orbitron" FontAttributes="Bold" FontSize="Subtitle" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
+            </FlexLayout>
+
+            <StackLayout Grid.Row="4" StyleClass="HorizontalBar"/>
+
+            <ScrollView Grid.Row="5">
+                <VerticalStackLayout x:Name="dspChainStackLayout" BackgroundColor="#0d0c16"></VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>
