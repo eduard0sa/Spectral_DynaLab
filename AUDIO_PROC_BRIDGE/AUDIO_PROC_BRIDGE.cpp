@@ -44,3 +44,7 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_removeDSPEffect(IntPtr engine, IntPtr eff
 void AUDIOPROCBRIDGE::AudioEngineRef::_changeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive) {
 	changeDistortionDrive((void*)distortionDSPProcessor, newDrive);
 }
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeDistortionFunctionToUse(IntPtr distortionDSPProcessor, float newFunctionIndex) {
+	changeDistortionFunctionToUse((void*)distortionDSPProcessor, newFunctionIndex);
+}

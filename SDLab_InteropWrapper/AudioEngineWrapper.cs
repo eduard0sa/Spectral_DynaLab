@@ -60,5 +60,10 @@ namespace SDLab_InteropWrapper
         {
             audioEngineRef._changeDistortionDrive(distortionDSPProcessor, newDrive);
         }
+
+        public void ChangeDistortionFunctionToUse(IntPtr distortionDSPProcessor, float newFunctionIndex)
+        {
+            audioEngineRef._changeDistortionDrive(distortionDSPProcessor, newFunctionIndex);
+        }
     }
 }

@@ -23,6 +23,11 @@ enum enum_EffectType {
 	Gain
 };
 
+enum enum_DistortionFunctionType {
+	Softclip,
+	HardClip,
+	FoldBack
+};
 
 class DSPEffect
 {

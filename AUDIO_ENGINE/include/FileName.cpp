@@ -43,4 +43,41 @@ extern "C" {
     void changeDistortionDrive(void* distortionDSPProcessor, float newDrive) {
         ((DSPDistortionEffect*)distortionDSPProcessor)->changeDistortionDrive(newDrive);
     }
+
+    void changeDistortionFunctionToUse(void* distortionDSPProcessor, int newFunctionIndex) {
+        switch (newFunctionIndex) {
+            case 0:
+                ((DSPDistortionEffect*)distortionDSPProcessor)->changeFunctionToUse([](float sample)
+                    {
+                        return tanh(sample);
+                    });
+                break;
+            case 1:
+                ((DSPDistortionEffect*)distortionDSPProcessor)->changeFunctionToUse([](float sample)
+                    {
+                        float limit = 1;
+
+                        if (sample > limit) {
+                            return limit;
+                        }
+                        else {
+                            return sample;
+                        }
+                    });
+                break;
+            case 2:
+                ((DSPDistortionEffect*)distortionDSPProcessor)->changeFunctionToUse([](float sample)
+                    {
+                        float limit = 1;
+
+                        if (sample > limit) {
+                            return sample - limit;
+                        }
+                        else {
+                            return sample;
+                        }
+                    });
+                break;
+        }
+    }
 }

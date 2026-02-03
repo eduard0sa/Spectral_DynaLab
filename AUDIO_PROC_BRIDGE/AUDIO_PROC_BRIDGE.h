@@ -17,5 +17,6 @@ namespace AUDIOPROCBRIDGE {
 		IntPtr _addDistortionDSPEffect(IntPtr engine);
 		void _removeDSPEffect(IntPtr engine, IntPtr effectDSPProcessor);
 		void _changeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive);
+		void _changeDistortionFunctionToUse(IntPtr distortionDSPProcessor, float newFunctionIndex);
 	};
 }
