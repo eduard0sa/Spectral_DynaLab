@@ -25,5 +25,12 @@ namespace AUDIOPROCBRIDGE {
 		void _changeCompressorRatio(IntPtr compressorDSPProcessor, float newRatio);
 		void _changeCompressorAttack(IntPtr compressorDSPProcessor, float newAttack);
 		void _changeCompressorRelease(IntPtr compressorDSPProcessor, float newRelease);
+
+		void _changeReverbRoomSize(IntPtr reverbDSPProcessor, float newRoomSize);
+		void _changeReverbDamping(IntPtr reverbDSPProcessor, float newDamping);
+		void _changeReverbWetLevel(IntPtr reverbDSPProcessor, float newWetLevel);
+		void _changeReverbDryLevel(IntPtr reverbDSPProcessor, float newDryLevel);
+		void _changeReverbWidth(IntPtr reverbDSPProcessor, float newWidth);
+		void _changeReverbFreezeMode(IntPtr reverbDSPProcessor, bool newFreezeMode);
 	};
 }

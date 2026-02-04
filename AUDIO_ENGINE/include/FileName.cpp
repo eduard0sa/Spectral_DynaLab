@@ -44,6 +44,8 @@ extern "C" {
                 return ((_Oscillator*)engine)->addDSPEffect<DSPDistortionEffect>();
             case enum_EffectType::Compressor:
                 return ((_Oscillator*)engine)->addDSPEffect<DSPCompressorEffect>();
+            case enum_EffectType::Reverb:
+                return ((_Oscillator*)engine)->addDSPEffect<DSPReverbEffect>();
             default:
                 return NULL;
         }
@@ -117,6 +119,34 @@ extern "C" {
     }
 
     #pragma endregion CompressorDSP
+
+    #pragma region ReverbDSP
+
+    void changeReverbRoomSize(void* reverbDSPProcessor, float newRoomSize) {
+        ((DSPReverbEffect*)reverbDSPProcessor)->changeReverbRoomSize(newRoomSize);
+    }
+
+    void changeReverbDamping(void* reverbDSPProcessor, float newDamping) {
+        ((DSPReverbEffect*)reverbDSPProcessor)->changeReverbDamping(newDamping);
+    }
+
+    void changeReverbWetLevel(void* reverbDSPProcessor, float newWetLevel) {
+        ((DSPReverbEffect*)reverbDSPProcessor)->changeReverbWetLevel(newWetLevel);
+    }
+
+    void changeReverbDryLevel(void* reverbDSPProcessor, float newDryLevel) {
+        ((DSPReverbEffect*)reverbDSPProcessor)->changeReverbDryLevel(newDryLevel);
+    }
+
+    void changeReverbWidth(void* reverbDSPProcessor, float newWidth) {
+        ((DSPReverbEffect*)reverbDSPProcessor)->changeReverbWidth(newWidth);
+    }
+
+    void changeReverbFreezeMode(void* reverbDSPProcessor, bool newFreezeMode) {
+        ((DSPReverbEffect*)reverbDSPProcessor)->changeReverbFreezeMode(newFreezeMode);
+    }
+
+    #pragma endregion ReverbDSP
 
     #pragma endregion DSPs
 }

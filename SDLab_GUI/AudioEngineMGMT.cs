@@ -46,6 +46,11 @@ namespace SDLab_GUI
 
         public void removeAudioEngine(JuceAudioProvider provider)
         {
+            for(int i = 0; i < provider.DspProcessors.Count; i++)
+            {
+                provider.removeDSPEffect(provider.DspProcessors[i]);
+            }
+
             mixer.RemoveMixerInput(provider);
             oscillators.Remove(provider);
             _AudioEngineRef.DestroyEngine(provider.Engine);
@@ -150,6 +155,27 @@ namespace SDLab_GUI
 
                     return dspUnit;
 
+                case Global.enumDSPType.REVERB:
+                    ReverbDSP newReverbProcessor = new ReverbDSP(engine, engineBridgeRef);
+                    DSPEffectItem<ReverbDSP> newReverbDSP = new DSPEffectItem<ReverbDSP>(this, dspEffectType, newReverbProcessor);
+
+                    newReverbDSP.addSliderControl("Room Size:", newReverbProcessor.ReverbRoomSizeSliderData, newReverbProcessor.reverbRoomSizeChangeEvent);
+                    newReverbDSP.addSliderControl("Damping:", newReverbProcessor.ReverbDampingSliderData, newReverbProcessor.reverbDampingChangeEvent);
+                    newReverbDSP.addSliderControl("Wet Level:", newReverbProcessor.ReverbWetLevelSliderData, newReverbProcessor.reverbWetLevelChangeEvent);
+                    newReverbDSP.addSliderControl("Dry Level:", newReverbProcessor.ReverbDryLevelSliderData, newReverbProcessor.reverbDryLevelChangeEvent);
+                    newReverbDSP.addSliderControl("Width:", newReverbProcessor.ReverbWidthSliderData, newReverbProcessor.reverbWidthChangeEvent);
+                    newReverbDSP.addSwitchControl("Freeze Mode:", newReverbProcessor.ReverbFreezeModeSliderData, newReverbProcessor.reverbFreezeModeChangeEvent);
+
+                    dspUnit = new Global.structVariableDataTypeUnit()
+                    {
+                        dataType = Global.enumVariableDataType.TYPE_REVERB_DSP_CLASS,
+                        dataUnit = newReverbDSP
+                    };
+
+                    DspProcessors.Add(dspUnit);
+
+                    return dspUnit;
+
                 default:
                     return dspUnit;
             }
@@ -161,13 +187,16 @@ namespace SDLab_GUI
             {
                 case enumVariableDataType.TYPE_DISTORTION_DSP_CLASS:
                     engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<DistortionDSP>)effectData.dataUnit).DspProcessor.DistortionDSPProcessor);
-                    dspProcessors.Remove(effectData);
                     break;
                 case enumVariableDataType.TYPE_COMPRESSOR_DSP_CLASS:
                     engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<CompressorDSP>)effectData.dataUnit).DspProcessor.CompressorDSPProcessor);
-                    dspProcessors.Remove(effectData);
+                    break;
+                case enumVariableDataType.TYPE_REVERB_DSP_CLASS:
+                    engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<ReverbDSP>)effectData.dataUnit).DspProcessor.ReverbDSPProcessor);
                     break;
             }
+
+            dspProcessors.Remove(effectData);
         }
     }
 
@@ -318,6 +347,131 @@ namespace SDLab_GUI
             Slider originSlider = sender as Slider;
             release = (float)originSlider.Value;
             engineBridgeRef.ChangeCompressorRelease(compressorDSPProcessor, release);
+        }
+    }
+
+    public class ReverbDSP
+    {
+        private readonly AudioEngineWrapper engineBridgeRef;
+        private IntPtr reverbDSPProcessor;
+
+        private float roomSize = 0.5f;
+        private float damping = 0.5f;
+        private float wetLevel = 0.5f;
+        private float dryLevel = 1.0f;
+        private float width = 0.5f;
+        private bool freezeMode = false;
+
+        private Global.structSliderData reverbRoomSizeSliderData = new Global.structSliderData()
+        {
+            minVal = 0f,
+            maxVal = 1f,
+            defVal = 0.5f,
+            numDisplayDecPlaces = 2
+        };
+
+        private Global.structSliderData reverbDampingSliderData = new Global.structSliderData()
+        {
+            minVal = 0f,
+            maxVal = 1f,
+            defVal = 0.5f,
+            numDisplayDecPlaces = 2
+        };
+
+        private Global.structSliderData reverbWetLevelSliderData = new Global.structSliderData()
+        {
+            minVal = 0f,
+            maxVal = 1f,
+            defVal = 0.5f,
+            numDisplayDecPlaces = 2
+        };
+
+        private Global.structSliderData reverbDryLevelSliderData = new Global.structSliderData()
+        {
+            minVal = 0f,
+            maxVal = 1f,
+            defVal = 1.0f,
+            numDisplayDecPlaces = 2
+        };
+
+        private Global.structSliderData reverbWidthSliderData = new Global.structSliderData()
+        {
+            minVal = 0f,
+            maxVal = 1f,
+            defVal = 0.5f,
+            numDisplayDecPlaces = 2
+        };
+
+        private Global.structSliderData reverbFreezeModeSliderData = new Global.structSliderData()
+        {
+            minVal = 0f,
+            maxVal = 1f,
+            defVal = 0.5f,
+            numDisplayDecPlaces = 0
+        };
+
+
+        public IntPtr ReverbDSPProcessor { get => reverbDSPProcessor; }
+        public float RoomSize { get => roomSize; set => roomSize = value; }
+        public float Damping { get => damping; set => damping = value; }
+        public float WetLevel { get => wetLevel; set => wetLevel = value; }
+        public float DryLevel { get => dryLevel; set => dryLevel = value; }
+        public float Width { get => width; set => width = value; }
+        public bool FreezeMode { get => freezeMode; set => freezeMode = value; }
+
+        internal structSliderData ReverbRoomSizeSliderData { get => reverbRoomSizeSliderData; set => reverbRoomSizeSliderData = value; }
+        internal structSliderData ReverbDampingSliderData { get => reverbDampingSliderData; set => reverbDampingSliderData = value; }
+        internal structSliderData ReverbWetLevelSliderData { get => reverbWetLevelSliderData; set => reverbWetLevelSliderData = value; }
+        internal structSliderData ReverbDryLevelSliderData { get => reverbDryLevelSliderData; set => reverbDryLevelSliderData = value; }
+        internal structSliderData ReverbWidthSliderData { get => reverbWidthSliderData; set => reverbWidthSliderData = value; }
+        internal structSliderData ReverbFreezeModeSliderData { get => reverbFreezeModeSliderData; set => reverbFreezeModeSliderData = value; }
+
+        public ReverbDSP(IntPtr engine, AudioEngineWrapper engineBridgeRef)
+        {
+            this.engineBridgeRef = engineBridgeRef;
+            reverbDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)Global.enumDSPType.REVERB);
+        }
+
+        public void reverbRoomSizeChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            roomSize = (float)originSlider.Value;
+            engineBridgeRef.ChangeReverbRoomSize(reverbDSPProcessor, roomSize);
+        }
+
+        public void reverbDampingChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            damping = (float)originSlider.Value;
+            engineBridgeRef.ChangeReverbDamping(reverbDSPProcessor, damping);
+        }
+
+        public void reverbWetLevelChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            wetLevel = (float)originSlider.Value;
+            engineBridgeRef.ChangeReverbWetLevel(reverbDSPProcessor, wetLevel);
+        }
+
+        public void reverbDryLevelChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            dryLevel = (float)originSlider.Value;
+            engineBridgeRef.ChangeReverbDryLevel(reverbDSPProcessor, dryLevel);
+        }
+
+        public void reverbWidthChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            width = (float)originSlider.Value;
+            engineBridgeRef.ChangeReverbWidth(reverbDSPProcessor, width);
+        }
+
+        public void reverbFreezeModeChangeEvent(object? sender, EventArgs e)
+        {
+            Switch originSwitchBTN = sender as Switch;
+            FreezeMode = originSwitchBTN.IsToggled;
+            engineBridgeRef.ChangeReverbFreezeMode(reverbDSPProcessor, freezeMode);
         }
     }
 }

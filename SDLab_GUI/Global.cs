@@ -10,8 +10,10 @@
             TYPE_STRING,
             TYPE_SLIDER,
             TYPE_PICKER,
+            TYPE_SWITCH,
             TYPE_DISTORTION_DSP_CLASS,
-            TYPE_COMPRESSOR_DSP_CLASS
+            TYPE_COMPRESSOR_DSP_CLASS,
+            TYPE_REVERB_DSP_CLASS
         }
 
         public enum enumDSPType

@@ -120,6 +120,14 @@ class DSPReverbEffect : public DSPEffect
 private:
 	dsp::Reverb reverbSFX;
 
+	dsp::Reverb::Parameters reverbSFXParams = dsp::Reverb::Parameters();
+
+	float roomSize = 0.5f; // 0 - 1
+	float damping = 0.5f; // 0 - 1
+	float wetLevel = 0.5f; // 0 - 1
+	float dryLevel = 1.0f; // 0 - 1
+	float width = 0.5f; // 0 - 1
+	float freezeMode = 0.0f; // 0 - 1
 
 public:
 	int id;
@@ -133,4 +141,11 @@ public:
 	~DSPReverbEffect();
 
 	int getEffectID();
+
+	void changeReverbRoomSize(float newRoomSize);
+	void changeReverbDamping(float newDamping);
+	void changeReverbWetLevel(float newWetLevel);
+	void changeReverbDryLevel(float newDryLevel);
+	void changeReverbWidth(float newWidth);
+	void changeReverbFreezeMode(bool newFreezeMode);
 };

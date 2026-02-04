@@ -21,6 +21,21 @@ namespace SDLab_GUI
             masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
         }
 
+        /*protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            Window_Destroying();
+        }
+
+        public void Window_Destroying()
+        {
+            for(int i = 0; i < audioManager.oscillators.Count; i++)
+            {
+                audioManager.removeAudioEngine(audioManager.oscillators[i]);
+            }
+        }*/
+
         private void SliderAutoUnfocusEvent(object? sender, FocusEventArgs e)
         {
             Slider originSlider = sender as Slider;

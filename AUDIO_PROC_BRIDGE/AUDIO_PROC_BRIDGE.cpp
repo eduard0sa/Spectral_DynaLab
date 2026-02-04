@@ -78,4 +78,33 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeCompressorRelease(IntPtr compressor
 }
 
 #pragma endregion CompressorDSP
+
+#pragma region ReverbDSP
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeReverbRoomSize(IntPtr reverbDSPProcessor, float newRoomSize) {
+	changeReverbRoomSize((void*)reverbDSPProcessor, newRoomSize);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeReverbDamping(IntPtr reverbDSPProcessor, float newDamping) {
+	changeReverbDamping((void*)reverbDSPProcessor, newDamping);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeReverbWetLevel(IntPtr reverbDSPProcessor, float newWetLevel) {
+	changeReverbWetLevel((void*)reverbDSPProcessor, newWetLevel);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeReverbDryLevel(IntPtr reverbDSPProcessor, float newDryLevel) {
+	changeReverbDryLevel((void*)reverbDSPProcessor, newDryLevel);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeReverbWidth(IntPtr reverbDSPProcessor, float newWidth) {
+	changeReverbWidth((void*)reverbDSPProcessor, newWidth);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeReverbFreezeMode(IntPtr reverbDSPProcessor, bool newFreezeMode) {
+	changeReverbFreezeMode((void*)reverbDSPProcessor, newFreezeMode);
+}
+
+#pragma endregion ReverbDSP
+
 #pragma endregion DSPs

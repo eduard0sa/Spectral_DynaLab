@@ -49,9 +49,14 @@
             DSPEffectSliderControls.addSliderControl(sliderLabel, numericSliderData, _valueChangedEvent);
         }
 
-        public void addPickerControl(string sliderLabel, Global.structPickerData numericSliderData, EventHandler _valueChangedEvent)
+        public void addPickerControl(string pickerLabel, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
         {
-            DSPEffectSliderControls.addPickerControl(sliderLabel, numericSliderData, _valueChangedEvent);
+            DSPEffectSliderControls.addPickerControl(pickerLabel, numericPickerData, _valueChangedEvent);
+        }
+
+        public void addSwitchControl(string switchLabel, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        {
+            DSPEffectSliderControls.addSwitchControl(switchLabel, numericSwitchData, _valueChangedEvent);
         }
 
         //Events
@@ -70,6 +75,9 @@
                     break;
                 case Global.enumDSPType.COMPRESSOR:
                     dataTypeUnit.dataType = Global.enumVariableDataType.TYPE_COMPRESSOR_DSP_CLASS;
+                    break;
+                case Global.enumDSPType.REVERB:
+                    dataTypeUnit.dataType = Global.enumVariableDataType.TYPE_REVERB_DSP_CLASS;
                     break;
             }
 
@@ -206,6 +214,23 @@
             Children.Add(pickerControl);
         }
 
+        public void addSwitchControl(string switchLabel, Global.structSliderData switchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        {
+            DSPEffectItemSwitchControl switchControl = new DSPEffectItemSwitchControl(switchLabel, switchData, _valueChangedEvent);
+
+            Global.structVariableDataTypeUnit switchControlDataUnit = new Global.structVariableDataTypeUnit()
+            {
+                dataUnit = switchControl,
+                dataType = Global.enumVariableDataType.TYPE_SWITCH
+            };
+
+            controlList.Add(switchControlDataUnit);
+
+            updateControlsFlexGrow();
+
+            Children.Add(switchControl);
+        }
+
         private void updateControlsFlexGrow()
         {
             for (int i = 0; i < controlList.Count; i++)
@@ -217,6 +242,9 @@
                         break;
                     case Global.enumVariableDataType.TYPE_PICKER:
                         this.SetGrow(controlList[i].dataUnit as DSPEffectItemPickerControl, 1.0f / controlList.Count);
+                        break;
+                    case Global.enumVariableDataType.TYPE_SWITCH:
+                        this.SetGrow(controlList[i].dataUnit as DSPEffectItemSwitchControl, 1.0f / controlList.Count);
                         break;
                 }
             }
@@ -299,9 +327,9 @@
         Picker pickerControlPicker = new Picker();
         Global.structPickerData _numericSliderData_;
 
-        public DSPEffectItemPickerControl(string controlLabel, Global.structPickerData numericSliderData, EventHandler _valueChangedEvent)
+        public DSPEffectItemPickerControl(string controlLabel, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
         {
-            _numericSliderData_ = numericSliderData;
+            _numericSliderData_ = numericPickerData;
 
             Padding = new Thickness(20, 0, 0, 0);
 
@@ -317,11 +345,40 @@
                 pickerControlPicker.Items.Add(item);
             }
 
-            pickerControlPicker.SelectedIndex = numericSliderData.defValIndex;
+            pickerControlPicker.SelectedIndex = numericPickerData.defValIndex;
             pickerControlPicker.SelectedIndexChanged += _valueChangedEvent;
 
             Children.Add(pickerControlLabel);
             Children.Add(pickerControlPicker);
+        }
+    }
+
+    public class DSPEffectItemSwitchControl : HorizontalStackLayout
+    {
+        Label switchControlLabel = new Label();
+        Switch switchControlSwitch = new Switch();
+        Global.structSliderData _numericSwitchData_;
+
+        public DSPEffectItemSwitchControl(string controlLabel, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        {
+            _numericSwitchData_ = numericSwitchData;
+
+            Padding = new Thickness(20, 0, 0, 0);
+
+            switchControlLabel.Text = controlLabel;
+            switchControlLabel.VerticalOptions = LayoutOptions.Center;
+
+            switchControlSwitch.WidthRequest = 50;
+            switchControlSwitch.VerticalOptions = LayoutOptions.Center;
+            switchControlSwitch.OnColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+            switchControlSwitch.ThumbColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+            switchControlSwitch.Margin = new Thickness(20, 0, 0, 0);
+
+            switchControlSwitch.IsToggled = false;
+            switchControlSwitch.Toggled += _valueChangedEvent;
+
+            Children.Add(switchControlLabel);
+            Children.Add(switchControlSwitch);
         }
     }
 

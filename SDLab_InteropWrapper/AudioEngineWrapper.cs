@@ -98,6 +98,36 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeCompressorRelease(compressorDSPProcessor, newRelease);
         }
 
+        public void ChangeReverbRoomSize(IntPtr reverbDSPProcessor, float newRoomSize)
+        {
+            audioEngineRef._changeReverbRoomSize(reverbDSPProcessor, newRoomSize);
+        }
+
+        public void ChangeReverbDamping(IntPtr reverbDSPProcessor, float newDamping)
+        {
+            audioEngineRef._changeReverbDamping(reverbDSPProcessor, newDamping);
+        }
+
+        public void ChangeReverbWetLevel(IntPtr reverbDSPProcessor, float newWetLevel)
+        {
+            audioEngineRef._changeReverbWetLevel(reverbDSPProcessor, newWetLevel);
+        }
+
+        public void ChangeReverbDryLevel(IntPtr reverbDSPProcessor, float newDryLevel)
+        {
+            audioEngineRef._changeReverbDryLevel(reverbDSPProcessor, newDryLevel);
+        }
+
+        public void ChangeReverbWidth(IntPtr reverbDSPProcessor, float newWidth)
+        {
+            audioEngineRef._changeReverbWidth(reverbDSPProcessor, newWidth);
+        }
+
+        public void ChangeReverbFreezeMode(IntPtr reverbDSPProcessor, bool newFreezeMode)
+        {
+            audioEngineRef._changeReverbFreezeMode(reverbDSPProcessor, newFreezeMode);
+        }
+
         #endregion CompressorDSP
         #endregion DSPs
     }

@@ -114,12 +114,19 @@ void DSPCompressorEffect::changeCompressorRelease(float newRelease) {
 
 #pragma region REVERB
 
-DSPReverbEffect::DSPReverbEffect() {
-	reverbSFX = dsp::Reverb();
-}
+DSPReverbEffect::DSPReverbEffect() {}
 
 void DSPReverbEffect::prepare(juce::dsp::ProcessSpec& spec) {
 	reverbSFX.prepare(spec);
+
+	reverbSFXParams.roomSize = roomSize;
+	reverbSFXParams.damping = damping;
+	reverbSFXParams.wetLevel = wetLevel;
+	reverbSFXParams.dryLevel = dryLevel;
+	reverbSFXParams.width = width;
+	reverbSFXParams.freezeMode = freezeMode;
+
+	reverbSFX.setParameters(reverbSFXParams);
 }
 
 void DSPReverbEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
@@ -130,6 +137,36 @@ DSPReverbEffect::~DSPReverbEffect() {}
 
 int DSPReverbEffect::getEffectID() {
 	return id;
+}
+
+void DSPReverbEffect::changeReverbRoomSize(float newRoomSize) {
+	reverbSFXParams.roomSize = newRoomSize;
+	reverbSFX.setParameters(reverbSFXParams);
+}
+
+void DSPReverbEffect::changeReverbDamping(float newDamping) {
+	reverbSFXParams.damping = newDamping;
+	reverbSFX.setParameters(reverbSFXParams);
+}
+
+void DSPReverbEffect::changeReverbWetLevel(float newWetLevel) {
+	reverbSFXParams.wetLevel = newWetLevel;
+	reverbSFX.setParameters(reverbSFXParams);
+}
+
+void DSPReverbEffect::changeReverbDryLevel(float newDryLevel) {
+	reverbSFXParams.dryLevel = dryLevel;
+	reverbSFX.setParameters(reverbSFXParams);
+}
+
+void DSPReverbEffect::changeReverbWidth(float newWidth) {
+	reverbSFXParams.width = newWidth;
+	reverbSFX.setParameters(reverbSFXParams);
+}
+
+void DSPReverbEffect::changeReverbFreezeMode(bool newFreezeMode) {
+	reverbSFXParams.freezeMode = newFreezeMode == true ? 1.0f : 0.0f;
+	reverbSFX.setParameters(reverbSFXParams);
 }
 
 #pragma endregion REVERB
