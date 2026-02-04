@@ -68,6 +68,9 @@
                 case Global.enumDSPType.DISTORTION:
                     dataTypeUnit.dataType = Global.enumVariableDataType.TYPE_DISTORTION_DSP_CLASS;
                     break;
+                case Global.enumDSPType.COMPRESSOR:
+                    dataTypeUnit.dataType = Global.enumVariableDataType.TYPE_COMPRESSOR_DSP_CLASS;
+                    break;
             }
 
             oscAudioProvider.removeDSPEffect(dataTypeUnit);

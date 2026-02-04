@@ -73,6 +73,7 @@ DSPCompressorEffect::DSPCompressorEffect() {
 }
 
 void DSPCompressorEffect::prepare(juce::dsp::ProcessSpec& spec) {
+	compressorSFX.prepare(spec);
 	compressorSFX.setThreshold(compressorThreshold);
 	compressorSFX.setRatio(compressorRatio);
 	compressorSFX.setAttack(compressorAttack);
@@ -91,18 +92,44 @@ int DSPCompressorEffect::getEffectID() {
 
 void DSPCompressorEffect::changeCompressorThreshold(float newThreshold) {
 	compressorThreshold = newThreshold;
+	compressorSFX.setThreshold(compressorThreshold);
 }
 
 void DSPCompressorEffect::changeCompressorRatio(float newRatio) {
 	compressorRatio = newRatio;
+	compressorSFX.setRatio(compressorRatio);
 }
 
 void DSPCompressorEffect::changeCompressorAttack(float newAttack) {
 	compressorAttack = newAttack;
+	compressorSFX.setAttack(compressorAttack);
 }
 
 void DSPCompressorEffect::changeCompressorRelease(float newRelease) {
 	compressorRelease = newRelease;
+	compressorSFX.setRelease(compressorRelease);
 }
 
 #pragma endregion COMPRESSOR
+
+#pragma region REVERB
+
+DSPReverbEffect::DSPReverbEffect() {
+	reverbSFX = dsp::Reverb();
+}
+
+void DSPReverbEffect::prepare(juce::dsp::ProcessSpec& spec) {
+	reverbSFX.prepare(spec);
+}
+
+void DSPReverbEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
+	reverbSFX.process(context);
+}
+
+DSPReverbEffect::~DSPReverbEffect() {}
+
+int DSPReverbEffect::getEffectID() {
+	return id;
+}
+
+#pragma endregion REVERB

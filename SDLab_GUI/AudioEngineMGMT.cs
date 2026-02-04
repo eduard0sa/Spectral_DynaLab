@@ -135,11 +135,14 @@ namespace SDLab_GUI
                     CompressorDSP newCompressorProcessor = new CompressorDSP(engine, engineBridgeRef);
                     DSPEffectItem<CompressorDSP> newCompressorDSP = new DSPEffectItem<CompressorDSP>(this, dspEffectType, newCompressorProcessor);
 
-                    //newCompressorDSP.addSliderControl("Drive:", newCompressorProcessor.DistortionDriveSliderData, newCompressorProcessor.distortionDriveChangeEvent);
+                    newCompressorDSP.addSliderControl("Threshold:", newCompressorProcessor.CompressorThresholdSliderData, newCompressorProcessor.compressorThresholdChangeEvent);
+                    newCompressorDSP.addSliderControl("Ratio:", newCompressorProcessor.CompressorRatioSliderData, newCompressorProcessor.compressorRatioChangeEvent);
+                    newCompressorDSP.addSliderControl("Attack:", newCompressorProcessor.CompressorAttackSliderData, newCompressorProcessor.compressorAttackChangeEvent);
+                    newCompressorDSP.addSliderControl("Release:", newCompressorProcessor.CompressorReleaseSliderData, newCompressorProcessor.compressorReleaseChangeEvent);
 
                     dspUnit = new Global.structVariableDataTypeUnit()
                     {
-                        dataType = Global.enumVariableDataType.TYPE_DISTORTION_DSP_CLASS,
+                        dataType = Global.enumVariableDataType.TYPE_COMPRESSOR_DSP_CLASS,
                         dataUnit = newCompressorDSP
                     };
 
@@ -158,6 +161,10 @@ namespace SDLab_GUI
             {
                 case enumVariableDataType.TYPE_DISTORTION_DSP_CLASS:
                     engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<DistortionDSP>)effectData.dataUnit).DspProcessor.DistortionDSPProcessor);
+                    dspProcessors.Remove(effectData);
+                    break;
+                case enumVariableDataType.TYPE_COMPRESSOR_DSP_CLASS:
+                    engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<CompressorDSP>)effectData.dataUnit).DspProcessor.CompressorDSPProcessor);
                     dspProcessors.Remove(effectData);
                     break;
             }
@@ -182,7 +189,7 @@ namespace SDLab_GUI
         {
             minVal = 1.0f,
             maxVal = 500.0f,
-            defVal = 2.0f,
+            defVal = 250f,
             numDisplayDecPlaces = 2
         };
         private Global.structPickerData distortionTypePickerData = new Global.structPickerData()
@@ -229,23 +236,88 @@ namespace SDLab_GUI
         private readonly AudioEngineWrapper engineBridgeRef;
         private IntPtr compressorDSPProcessor;
 
-        private float drive = 2;
+        private float threshold = 2;
+        private float ratio = 2;
+        private float attack = 2;
+        private float release = 2;
+
         private Global.structSliderData compressorThresholdSliderData = new Global.structSliderData()
         {
-            minVal = 1.0f,
-            maxVal = 500.0f,
+            minVal = -30f,
+            maxVal = 30f,
+            defVal = -10f,
+            numDisplayDecPlaces = 2
+        };
+
+        private Global.structSliderData compressorRatioSliderData = new Global.structSliderData()
+        {
+            minVal = 1f,
+            maxVal = 20f,
             defVal = 2.0f,
             numDisplayDecPlaces = 2
         };
 
-        public float Drive { get => drive; set => drive = value; }
-        internal Global.structSliderData DistortionDriveSliderData { get => compressorThresholdSliderData; set => compressorThresholdSliderData = value; }
-        public IntPtr DistortionDSPProcessor { get => compressorDSPProcessor; }
+        private Global.structSliderData compressorAttackSliderData = new Global.structSliderData()
+        {
+            minVal = 0.01f,
+            maxVal = 200f,
+            defVal = 20f,
+            numDisplayDecPlaces = 2
+        };
+
+        private Global.structSliderData compressorReleaseSliderData = new Global.structSliderData()
+        {
+            minVal = 10f,
+            maxVal = 5000f,
+            defVal = 500f,
+            numDisplayDecPlaces = 2
+        };
+
+        public float Threshold { get => threshold; set => threshold = value; }
+        public float Ratio { get => ratio; set => ratio = value; }
+        public float Attack { get => attack; set => attack = value; }
+        public float Release { get => release; set => release = value; }
+
+        internal Global.structSliderData CompressorThresholdSliderData { get => compressorThresholdSliderData; set => compressorThresholdSliderData = value; }
+        internal Global.structSliderData CompressorRatioSliderData { get => compressorRatioSliderData; set => compressorRatioSliderData = value; }
+        internal Global.structSliderData CompressorAttackSliderData { get => compressorAttackSliderData; set => compressorAttackSliderData = value; }
+        internal Global.structSliderData CompressorReleaseSliderData { get => compressorReleaseSliderData; set => compressorReleaseSliderData = value; }
+
+        public IntPtr CompressorDSPProcessor { get => compressorDSPProcessor; }
 
         public CompressorDSP(IntPtr engine, AudioEngineWrapper engineBridgeRef)
         {
             this.engineBridgeRef = engineBridgeRef;
             compressorDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)Global.enumDSPType.COMPRESSOR);
+        }
+
+        public void compressorThresholdChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            originSlider.Rotation = 180;
+            threshold = (float)originSlider.Value;
+            engineBridgeRef.ChangeCompressorThreshold(compressorDSPProcessor, threshold);
+        }
+
+        public void compressorRatioChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            ratio = (float)originSlider.Value;
+            engineBridgeRef.ChangeCompressorRatio(compressorDSPProcessor, ratio);
+        }
+
+        public void compressorAttackChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            attack = (float)originSlider.Value;
+            engineBridgeRef.ChangeCompressorAttack(compressorDSPProcessor, attack);
+        }
+
+        public void compressorReleaseChangeEvent(object? sender, EventArgs e)
+        {
+            Slider originSlider = sender as Slider;
+            release = (float)originSlider.Value;
+            engineBridgeRef.ChangeCompressorRelease(compressorDSPProcessor, release);
         }
     }
 }

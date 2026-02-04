@@ -58,18 +58,21 @@ namespace SDLab_GUI
         private void masterVolumeEntryValueChangedEvent(object sender, TextChangedEventArgs e)
         {
             Entry masterVolumeEntry = sender as Entry;
-            if(float.TryParse(masterVolumeEntry.Text.Substring(0, masterVolumeEntry.Text.Length - 2), out float newVolume) && isUpdatingMasterVolumeSlider == false)
+            if(masterVolumeEntry.Text.Length >= 2)
             {
-                if(newVolume >= 0 && newVolume <= 100)
+                if (float.TryParse(masterVolumeEntry.Text.Substring(0, masterVolumeEntry.Text.Length - 2), out float newVolume) && isUpdatingMasterVolumeSlider == false)
                 {
-                    audioManager.vsp.Volume = newVolume / 100;
-                    masterVolumeSlider.Value = newVolume;
-                    masterVolumeSliderValueLabel.Text = $"{newVolume.ToString("n2")}%";
+                    if (newVolume >= 0 && newVolume <= 100)
+                    {
+                        audioManager.vsp.Volume = newVolume / 100;
+                        masterVolumeSlider.Value = newVolume;
+                        masterVolumeSliderValueLabel.Text = $"{newVolume.ToString("n2")}%";
+                    }
                 }
-            }
-            else
-            {
-                isUpdatingMasterVolumeSlider = false;
+                else
+                {
+                    isUpdatingMasterVolumeSlider = false;
+                }
             }
         }
 

@@ -66,15 +66,15 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeCompressorThreshold(IntPtr compress
 }
 
 void AUDIOPROCBRIDGE::AudioEngineRef::_changeCompressorRatio(IntPtr compressorDSPProcessor, float newRatio) {
-	changeCompressorThreshold((void*)compressorDSPProcessor, newRatio);
+	changeCompressorRatio((void*)compressorDSPProcessor, newRatio);
 }
 
 void AUDIOPROCBRIDGE::AudioEngineRef::_changeCompressorAttack(IntPtr compressorDSPProcessor, float newAttack) {
-	changeCompressorThreshold((void*)compressorDSPProcessor, newAttack);
+	changeCompressorAttack((void*)compressorDSPProcessor, newAttack);
 }
 
 void AUDIOPROCBRIDGE::AudioEngineRef::_changeCompressorRelease(IntPtr compressorDSPProcessor, float newRelease) {
-	changeCompressorThreshold((void*)compressorDSPProcessor, newRelease);
+	changeCompressorRelease((void*)compressorDSPProcessor, newRelease);
 }
 
 #pragma endregion CompressorDSP

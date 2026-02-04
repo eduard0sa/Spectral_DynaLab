@@ -23,6 +23,9 @@ public partial class DSPModalEditor : ContentPage
                 case Global.enumVariableDataType.TYPE_DISTORTION_DSP_CLASS:
                     dspChainStackLayout.Children.Add(audioProvider.DspProcessors[i].dataUnit as DSPEffectItem<DistortionDSP>);
                     break;
+                case Global.enumVariableDataType.TYPE_COMPRESSOR_DSP_CLASS:
+                    dspChainStackLayout.Children.Add(audioProvider.DspProcessors[i].dataUnit as DSPEffectItem<CompressorDSP>);
+                    break;
             }
         }
 
@@ -59,8 +62,9 @@ public partial class DSPModalEditor : ContentPage
 
     private void addCompressorDSPBTNEvent(object? sender, EventArgs e)
     {
-        /*DSPEffectItem compressorItem = new DSPEffectItem(audioManager, audioProvider, Global.enumDSPType.COMPRESSOR);
-        dspChainStackLayout.Children.Add(compressorItem);*/
+        Global.structVariableDataTypeUnit compressorDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.COMPRESSOR);
+
+        dspChainStackLayout.Children.Add(compressorDSPUnit.dataUnit as DSPEffectItem<CompressorDSP>);
     }
 
     private void addReverbDSPBTNEvent(object? sender, EventArgs e)

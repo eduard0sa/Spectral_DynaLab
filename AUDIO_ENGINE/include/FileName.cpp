@@ -105,15 +105,15 @@ extern "C" {
     }
 
     void changeCompressorRatio(void* compressorDSPProcessor, float newRatio) {
-        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorThreshold(newRatio);
+        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorRatio(newRatio);
     }
 
     void changeCompressorAttack(void* compressorDSPProcessor, float newAttack) {
-        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorThreshold(newAttack);
+        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorAttack(newAttack);
     }
 
     void changeCompressorRelease(void* compressorDSPProcessor, float newRelease) {
-        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorThreshold(newRelease);
+        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorRelease(newRelease);
     }
 
     #pragma endregion CompressorDSP

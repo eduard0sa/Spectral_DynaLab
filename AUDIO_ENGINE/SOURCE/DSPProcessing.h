@@ -63,7 +63,7 @@ class DSPDistortionEffect : public DSPEffect
 private:
 	dsp::Gain<float> inputGain;
 	dsp::WaveShaper<float> distortionSFX;
-	float distortionDrive = 500;
+	float distortionDrive = 250;
 
 public:
 	int id;
@@ -88,10 +88,10 @@ class DSPCompressorEffect : public DSPEffect
 private:
 	dsp::Compressor<float> compressorSFX;
 
-	float compressorThreshold = -20.0f;
-	float compressorRatio = 4.0f;
-	float compressorAttack = 10.0f;
-	float compressorRelease = 100.0f;
+	float compressorThreshold = -10.0f;
+	float compressorRatio = 2.0f;
+	float compressorAttack = 20.0f;
+	float compressorRelease = 500.0f;
 
 public:
 	int id;
@@ -113,4 +113,24 @@ public:
 	void changeCompressorAttack(float newAttack);
 
 	void changeCompressorRelease(float newRelease);
+};
+
+class DSPReverbEffect : public DSPEffect
+{
+private:
+	dsp::Reverb reverbSFX;
+
+
+public:
+	int id;
+
+	DSPReverbEffect();
+
+	void prepare(juce::dsp::ProcessSpec& spec) override;
+
+	void process(juce::dsp::ProcessContextReplacing<float> context) override;
+
+	~DSPReverbEffect();
+
+	int getEffectID();
 };
