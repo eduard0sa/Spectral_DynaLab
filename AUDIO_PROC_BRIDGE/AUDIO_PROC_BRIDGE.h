@@ -14,9 +14,16 @@ namespace AUDIOPROCBRIDGE {
 
 		void _changeFrequency(IntPtr engine, float newFrequency);
 		void _changeGain(IntPtr engine, float newGain);
-		IntPtr _addDistortionDSPEffect(IntPtr engine);
+
+		IntPtr _addDSPEffect(IntPtr engine, int effectTypeID);
 		void _removeDSPEffect(IntPtr engine, IntPtr effectDSPProcessor);
+
 		void _changeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive);
 		void _changeDistortionFunctionToUse(IntPtr distortionDSPProcessor, float newFunctionIndex);
+
+		void _changeCompressorThreshold(IntPtr compressorDSPProcessor, float newThreshold);
+		void _changeCompressorRatio(IntPtr compressorDSPProcessor, float newRatio);
+		void _changeCompressorAttack(IntPtr compressorDSPProcessor, float newAttack);
+		void _changeCompressorRelease(IntPtr compressorDSPProcessor, float newRelease);
 	};
 }

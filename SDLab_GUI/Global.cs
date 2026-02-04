@@ -19,7 +19,8 @@
             COMPRESSOR,
             REVERB,
             EQ,
-            FILTER
+            FILTER,
+            GAIN
         }
 
         public struct structSliderData

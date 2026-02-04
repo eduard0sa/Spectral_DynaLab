@@ -1,7 +1,6 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using SDLab_InteropWrapper;
-using System.Threading.Channels;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI
@@ -132,6 +131,22 @@ namespace SDLab_GUI
 
                     return dspUnit;
 
+                case Global.enumDSPType.COMPRESSOR:
+                    CompressorDSP newCompressorProcessor = new CompressorDSP(engine, engineBridgeRef);
+                    DSPEffectItem<CompressorDSP> newCompressorDSP = new DSPEffectItem<CompressorDSP>(this, dspEffectType, newCompressorProcessor);
+
+                    //newCompressorDSP.addSliderControl("Drive:", newCompressorProcessor.DistortionDriveSliderData, newCompressorProcessor.distortionDriveChangeEvent);
+
+                    dspUnit = new Global.structVariableDataTypeUnit()
+                    {
+                        dataType = Global.enumVariableDataType.TYPE_DISTORTION_DSP_CLASS,
+                        dataUnit = newCompressorDSP
+                    };
+
+                    DspProcessors.Add(dspUnit);
+
+                    return dspUnit;
+
                 default:
                     return dspUnit;
             }
@@ -189,7 +204,7 @@ namespace SDLab_GUI
         public DistortionDSP(IntPtr engine, AudioEngineWrapper engineBridgeRef)
         {
             this.engineBridgeRef = engineBridgeRef;
-            distortionDSPProcessor = engineBridgeRef.AddDistortionDSPEffect(engine);
+            distortionDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)Global.enumDSPType.DISTORTION);
         }
 
         public void distortionDriveChangeEvent(object? sender, ValueChangedEventArgs e)
@@ -204,7 +219,33 @@ namespace SDLab_GUI
             Picker originPicker = sender as Picker;
 
             if(!Enum.TryParse<enum_distortionType>((string)originPicker.SelectedItem, out distortionType)) return;
-            //Call Juce Functions Here
+
+            engineBridgeRef.ChangeDistortionFunctionToUse(distortionDSPProcessor, (int)distortionType);
+        }
+    }
+
+    public class CompressorDSP
+    {
+        private readonly AudioEngineWrapper engineBridgeRef;
+        private IntPtr compressorDSPProcessor;
+
+        private float drive = 2;
+        private Global.structSliderData compressorThresholdSliderData = new Global.structSliderData()
+        {
+            minVal = 1.0f,
+            maxVal = 500.0f,
+            defVal = 2.0f,
+            numDisplayDecPlaces = 2
+        };
+
+        public float Drive { get => drive; set => drive = value; }
+        internal Global.structSliderData DistortionDriveSliderData { get => compressorThresholdSliderData; set => compressorThresholdSliderData = value; }
+        public IntPtr DistortionDSPProcessor { get => compressorDSPProcessor; }
+
+        public CompressorDSP(IntPtr engine, AudioEngineWrapper engineBridgeRef)
+        {
+            this.engineBridgeRef = engineBridgeRef;
+            compressorDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)Global.enumDSPType.COMPRESSOR);
         }
     }
 }

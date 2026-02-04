@@ -65,26 +65,6 @@ void _Oscillator::changeGain(float newGain) {
     outputGain->setGainLinear(gain);
 }
 
-DSPEffect* _Oscillator::addDistortionDSPEffect() {
-    DSPDistortionEffect* distortionEffectHEAP = (class DSPDistortionEffect*)malloc(sizeof(class DSPDistortionEffect));
-    DSPDistortionEffect* distortionEffectSTACK = new (distortionEffectHEAP) DSPDistortionEffect(); //Stack reference of the memory allocated at the last row, used to call the DSPDistortionEffect's class constructor.
-    
-    Random randomizer = Random();
-    int distortionEffectID;
-
-    do {
-        distortionEffectID = randomizer.nextInt(200);
-    } while (checkExistantEffectID(distortionEffectID));
-
-    distortionEffectHEAP->prepare(spec);
-    distortionEffectHEAP->id = distortionEffectID;
-
-    DSPEffectChain[DSPEffectChainLength] = distortionEffectHEAP;
-    DSPEffectChainLength++;
-
-    return distortionEffectHEAP;
-}
-
 void _Oscillator::removeDSPEffect(void* effect) {
     for (int i = 0; i < DSPEffectChainLength; i++) {
         if (DSPEffectChain[i]->getEffectID() == ((DSPEffect*)effect)->getEffectID()) {

@@ -11,6 +11,8 @@ namespace SDLab_InteropWrapper
             audioEngineRef = new AudioEngineRef();
         }
 
+        #region EngineMgmtLogic
+
         public int test()
         {
             return 3301;
@@ -46,9 +48,13 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeGain(engine, newGain);
         }
 
-        public IntPtr AddDistortionDSPEffect(IntPtr engine)
+        #endregion EngineMgmtLogic
+
+        #region DSPs
+
+        public IntPtr AddDSPEffect(IntPtr engine, int effecttypeID)
         {
-            return audioEngineRef._addDistortionDSPEffect(engine);
+            return audioEngineRef._addDSPEffect(engine, effecttypeID);
         }
 
         public void RemoveDSPEffect(IntPtr engine, IntPtr effectDSPProcessor)
@@ -56,14 +62,43 @@ namespace SDLab_InteropWrapper
             audioEngineRef._removeDSPEffect(engine, effectDSPProcessor);
         }
 
+        #region DistortionDSP
+
         public void ChangeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive)
         {
             audioEngineRef._changeDistortionDrive(distortionDSPProcessor, newDrive);
         }
 
-        public void ChangeDistortionFunctionToUse(IntPtr distortionDSPProcessor, float newFunctionIndex)
+        public void ChangeDistortionFunctionToUse(IntPtr distortionDSPProcessor, int newFunctionIndex)
         {
             audioEngineRef._changeDistortionDrive(distortionDSPProcessor, newFunctionIndex);
         }
+
+        #endregion DistortionDSP
+
+        #region CompressorDSP
+
+        public void ChangeCompressorThreshold(IntPtr compressorDSPProcessor, float newThreshold)
+        {
+            audioEngineRef._changeCompressorThreshold(compressorDSPProcessor, newThreshold);
+        }
+
+        public void ChangeCompressorRatio(IntPtr compressorDSPProcessor, float newRatio)
+        {
+            audioEngineRef._changeCompressorRatio(compressorDSPProcessor, newRatio);
+        }
+
+        public void ChangeCompressorAttack(IntPtr compressorDSPProcessor, float newAttack)
+        {
+            audioEngineRef._changeCompressorAttack(compressorDSPProcessor, newAttack);
+        }
+
+        public void ChangeCompressorRelease(IntPtr compressorDSPProcessor, float newRelease)
+        {
+            audioEngineRef._changeCompressorRelease(compressorDSPProcessor, newRelease);
+        }
+
+        #endregion CompressorDSP
+        #endregion DSPs
     }
 }

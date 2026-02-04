@@ -7,6 +7,7 @@
 #endif
 
 #include <stdio.h>
+
 using namespace std;
 
 extern "C" AUDIO_ENGINE_API int _main_();
@@ -17,7 +18,14 @@ extern "C" AUDIO_ENGINE_API void destroyEngine(void* engine);
 
 extern "C" AUDIO_ENGINE_API void changeFrequency(void* engine, float newFrequency);
 extern "C" AUDIO_ENGINE_API void changeGain(void* engine, float newGain);
-extern "C" AUDIO_ENGINE_API void* addDistortionDSPEffect(void* engine);
+
+extern "C" AUDIO_ENGINE_API void* addDSPEffect(void* engine, int dspType);
 extern "C" AUDIO_ENGINE_API void removeDSPEffect(void* engine, void* effectDSPProcessor);
+
 extern "C" AUDIO_ENGINE_API void changeDistortionDrive(void* distortionDSPProcessor, float newDrive);
 extern "C" AUDIO_ENGINE_API void changeDistortionFunctionToUse(void* distortionDSPProcessor, int newFunctionIndex);
+
+extern "C" AUDIO_ENGINE_API void changeCompressorThreshold(void* compressorDSPProcessor, float newThreshold);
+extern "C" AUDIO_ENGINE_API void changeCompressorRatio(void* compressorDSPProcessor, float newRatio);
+extern "C" AUDIO_ENGINE_API void changeCompressorAttack(void* compressorDSPProcessor, float newAttack);
+extern "C" AUDIO_ENGINE_API void changeCompressorRelease(void* compressorDSPProcessor, float newRelease);

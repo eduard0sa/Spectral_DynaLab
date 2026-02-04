@@ -6,6 +6,8 @@ extern "C" {
         return 3301;
     }
 
+    #pragma region EngineMgmtLogic
+
     void* createEngine() {
         return new _Oscillator();
 	}
@@ -32,13 +34,26 @@ extern "C" {
         ((_Oscillator*)engine)->changeGain(newGain);
 	}
 
-    void* addDistortionDSPEffect(void* engine) {
-        return ((_Oscillator*)engine)->addDistortionDSPEffect();
+    #pragma endregion EngineMgmtLogic
+
+    #pragma region DSPs
+
+    void* addDSPEffect(void* engine, int dspType) {
+        switch (dspType) {
+            case enum_EffectType::Distortion:
+                return ((_Oscillator*)engine)->addDSPEffect<DSPDistortionEffect>();
+            case enum_EffectType::Compressor:
+                return ((_Oscillator*)engine)->addDSPEffect<DSPCompressorEffect>();
+            default:
+                return NULL;
+        }
     }
 
     void removeDSPEffect(void* engine, void* effectDSPProcessor) {
         ((_Oscillator*)engine)->removeDSPEffect(effectDSPProcessor);
     }
+
+    #pragma region DistortionDSP
 
     void changeDistortionDrive(void* distortionDSPProcessor, float newDrive) {
         ((DSPDistortionEffect*)distortionDSPProcessor)->changeDistortionDrive(newDrive);
@@ -80,4 +95,28 @@ extern "C" {
                 break;
         }
     }
+
+    #pragma endregion DistortionDSP
+
+    #pragma region CompressorDSP
+
+    void changeCompressorThreshold(void* compressorDSPProcessor, float newThreshold) {
+        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorThreshold(newThreshold);
+    }
+
+    void changeCompressorRatio(void* compressorDSPProcessor, float newRatio) {
+        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorThreshold(newRatio);
+    }
+
+    void changeCompressorAttack(void* compressorDSPProcessor, float newAttack) {
+        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorThreshold(newAttack);
+    }
+
+    void changeCompressorRelease(void* compressorDSPProcessor, float newRelease) {
+        ((DSPCompressorEffect*)compressorDSPProcessor)->changeCompressorThreshold(newRelease);
+    }
+
+    #pragma endregion CompressorDSP
+
+    #pragma endregion DSPs
 }

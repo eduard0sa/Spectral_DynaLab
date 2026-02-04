@@ -2913,6 +2913,7 @@
       <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp" />
+    <ClCompile Include="..\..\SOURCE\DSPProcessing.cpp" />
     <ClCompile Include="..\..\SOURCE\Oscillator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -4256,6 +4257,7 @@
     <ClInclude Include="..\..\..\..\..\juce-8.0.3-windows\JUCE\modules\juce_gui_extra\juce_gui_extra.h" />
     <ClInclude Include="..\..\include\FileName.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
+    <ClInclude Include="..\..\SOURCE\DSPProcessing.h" />
     <ClInclude Include="..\..\SOURCE\Oscillator.h" />
   </ItemGroup>
   <ItemGroup>
