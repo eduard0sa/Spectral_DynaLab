@@ -1,4 +1,6 @@
-﻿namespace SDLab_GUI
+﻿using SDLab_GUI.AudioSystemsLogic;
+
+namespace SDLab_GUI.UIComponents
 {
     internal class OscillatorItem : FlexLayout
     {
@@ -71,20 +73,20 @@
         //Events
         private void frequencyChangeEvent(object? sender, ValueChangedEventArgs e)
         {
-            float newFrequency = (float)(e.NewValue);
+            float newFrequency = (float)e.NewValue;
             oscAudioProvider.changeFrequency(newFrequency);
         }
 
         private void gainChangeEvent(object? sender, ValueChangedEventArgs e)
         {
-            float newGain = (float)(e.NewValue);
+            float newGain = (float)e.NewValue;
             oscAudioProvider.changeGain(newGain);
         }
 
         private void deleteOscillatorEvent(object? sender, EventArgs e)
         {
             audioEngineMGMT.removeAudioEngine(oscAudioProvider);
-            (this.Parent as VerticalStackLayout).Children.Remove(this);
+            (Parent as VerticalStackLayout).Children.Remove(this);
         }
 
         private void openSFXEditorEvent(object? sender, EventArgs e)
@@ -389,46 +391,55 @@
 
     public class SoundWaveShapeDrawable : IDrawable
     {
-        public void Draw(ICanvas canvas, RectF dirtyRect)
-        {
-            int Samples = 100;
-            int Amplitude = 1;
-            float Frequency = 1f; // in cycles over the width
+        float[] visSamplesArray;
 
-            canvas.StrokeColor = (Color)Application.Current.Resources["DefaultRed"];
-            canvas.StrokeSize = 5;
-
-            float midY = dirtyRect.Height / 2f;
-            float width = dirtyRect.Width;
-            float height = dirtyRect.Height;
-
-            float stepX = width / (Samples - 1);
-
-            PathF path = new PathF();
-
-            for (int i = 0; i < Samples; i++)
-            {
-                float x = i * stepX;
-
-                // Normalized x in range [0, 2π * Frequency]
-                float t = (float)i / (Samples - 1);
-                float angle = t * MathF.PI * 2f * Frequency;
-
-                float y =
-                    midY -
-                    MathF.Sin(angle) *
-                    Amplitude *
-                    (height * 0.4f); // scale to view
-
-                if (i == 0)
-                    path.MoveTo(x, y);
-                else
-                    path.LineTo(x, y);
+        public float[] VisSamplesArray {
+            get {
+                return visSamplesArray;
             }
-
-            canvas.DrawPath(path);
+            set {
+                visSamplesArray = value;
+            }
         }
 
-        #endregion
+        public void Draw(ICanvas canvas, RectF dirtyRect)
+        {
+            if (VisSamplesArray != null)
+            {
+                int Samples = 512;
+                int Amplitude = 1;
+                float Frequency = 1f; // in cycles over the width
+
+                canvas.StrokeColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+                canvas.StrokeSize = 3;
+
+                float midY = dirtyRect.Height / 2f;
+                float width = dirtyRect.Width;
+                float height = dirtyRect.Height;
+
+                float stepX = width / (Samples - 1);
+
+                PathF path = new PathF();
+
+                for (int i = 0; i < Samples; i++)
+                {
+                    float x = i * stepX;
+
+                    // Normalized x in range [0, 2π * Frequency]
+                    float t = (float)i / (Samples - 1);
+
+                    float y = midY - visSamplesArray[i]; // scale to view
+
+                    if (i == 0)
+                        path.MoveTo(x, y);
+                    else
+                        path.LineTo(x, y);
+                }
+
+                canvas.DrawPath(path);
+            }
+        }
     }
+
+    #endregion
 }

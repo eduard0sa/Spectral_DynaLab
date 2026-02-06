@@ -46,6 +46,8 @@ extern "C" {
                 return ((_Oscillator*)engine)->addDSPEffect<DSPCompressorEffect>();
             case enum_EffectType::Reverb:
                 return ((_Oscillator*)engine)->addDSPEffect<DSPReverbEffect>();
+            case enum_EffectType::Chorus:
+                return ((_Oscillator*)engine)->addDSPEffect<DSPChorusEffect>();
             default:
                 return NULL;
         }
@@ -56,6 +58,11 @@ extern "C" {
     }
 
     #pragma region DistortionDSP
+
+    float* pushVisSamples(void* distortionDSPProcessor) {
+        float* a = ((DSPDistortionEffect*)distortionDSPProcessor)->pushVisSamples();
+        return a;
+    }
 
     void changeDistortionDrive(void* distortionDSPProcessor, float newDrive) {
         ((DSPDistortionEffect*)distortionDSPProcessor)->changeDistortionDrive(newDrive);
@@ -147,6 +154,26 @@ extern "C" {
     }
 
     #pragma endregion ReverbDSP
+
+    #pragma region ChorusDSP
+
+    void changeChorusRate(void* chorusDSPProcessor, float newRate) {
+        ((DSPChorusEffect*)chorusDSPProcessor)->changeChorusRate(newRate);
+    }
+    void changeChorusDepth(void* chorusDSPProcessor, float newDepth) {
+        ((DSPChorusEffect*)chorusDSPProcessor)->changeChorusDepth(newDepth);
+    }
+    void changeChorusCenterDelay(void* chorusDSPProcessor, float newCenterDelay) {
+        ((DSPChorusEffect*)chorusDSPProcessor)->changeChorusCenterDelay(newCenterDelay);
+    }
+    void changeChorusFeedback(void* chorusDSPProcessor, float newFeedback) {
+        ((DSPChorusEffect*)chorusDSPProcessor)->changeChorusFeedback(newFeedback);
+    }
+    void changeChorusMix(void* chorusDSPProcessor, float newMix) {
+        ((DSPChorusEffect*)chorusDSPProcessor)->changeChorusMix(newMix);
+    }
+
+    #pragma endregion ChorusDSP
 
     #pragma endregion DSPs
 }

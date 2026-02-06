@@ -20,11 +20,11 @@
         <Grid Grid.Row="1" Grid.Column="1" BackgroundColor="#101413">
             <Grid.RowDefinitions>
                 <RowDefinition Height="15*"/>
-                <RowDefinition Height="10*"/>
+                <RowDefinition Height="20*"/>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="61*"/>
+                <RowDefinition Height="51*"/>
             </Grid.RowDefinitions>
 
             <FlexLayout Grid.Row="0" Padding="50, 5, 20, 20" JustifyContent="SpaceBetween" AlignItems="Center" BackgroundColor="{StaticResource DarkPastelRed}">
@@ -34,7 +34,8 @@
 
             <Grid Grid.Row="1" BackgroundColor="{StaticResource DarkPastelRed}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100*"/>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="50*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20*"/>
@@ -45,22 +46,26 @@
                 </Grid.ColumnDefinitions>
 
                 <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                    <Button x:Name="addDistortionDSPBTN" Text="Distortion" StyleClass="DSPTypeButton" BorderColor="{StaticResource DefaultPastelRed}" TextColor="{StaticResource DefaultPastelRed}"/>
+                    <Button x:Name="addDistortionDSPBTN" Text="Distortion" StyleClass="DSPTypeButton"/>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Grid.Row="0" Grid.Column="1">
-                    <Button x:Name="addCompressorDSPBTN" Text="Compressor" StyleClass="DSPTypeButton" BorderColor="{StaticResource DefaultPastelYellow}" TextColor="{StaticResource DefaultPastelYellow}"/>
+                    <Button x:Name="addCompressorDSPBTN" Text="Compressor" StyleClass="DSPTypeButton"/>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Grid.Row="0" Grid.Column="2">
-                    <Button x:Name="addReverbDSPBTN" Text="Reverb" StyleClass="DSPTypeButton" BorderColor="{StaticResource DefaultManaGreen}" TextColor="{StaticResource DefaultManaGreen}"/>
+                    <Button x:Name="addReverbDSPBTN" Text="Reverb" StyleClass="DSPTypeButton"/>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Grid.Row="0" Grid.Column="3">
-                    <Button x:Name="addEQDSPBTN" Text="EQ" StyleClass="DSPTypeButton"/>
+                    <Button x:Name="addChorusDSPBTN" Text="Chorus" StyleClass="DSPTypeButton"/>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Grid.Row="0" Grid.Column="4">
+                    <Button x:Name="addEQDSPBTN" Text="EQ" StyleClass="DSPTypeButton"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0">
                     <Button x:Name="addFilterDSPBTN" Text="Filter" StyleClass="DSPTypeButton"/>
                 </VerticalStackLayout>
             </Grid>

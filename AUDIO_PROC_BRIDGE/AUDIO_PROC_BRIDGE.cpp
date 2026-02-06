@@ -39,6 +39,17 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeGain(IntPtr engine, float newGain) 
 
 #pragma region DSPs
 
+array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushVisSamples(IntPtr distortionDSPProcessor) {
+	array<float>^ managedArray = gcnew cli::array<float>(512);
+	float* visSamplesArrPTR = pushVisSamples((void*)distortionDSPProcessor);
+
+	for (int i = 0; i < 512; i++) {
+		managedArray[i] = visSamplesArrPTR[i];
+	}
+
+	return managedArray;
+}
+
 IntPtr AUDIOPROCBRIDGE::AudioEngineRef::_addDSPEffect(IntPtr engine, int effectTypeID) {
 	return IntPtr(addDSPEffect((void*)engine, effectTypeID));
 }
@@ -106,5 +117,29 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeReverbFreezeMode(IntPtr reverbDSPPr
 }
 
 #pragma endregion ReverbDSP
+
+#pragma region ChorusDSP
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeChorusRate(IntPtr chorusDSPProcessor, float newRate) {
+	changeChorusRate((void*)chorusDSPProcessor, newRate);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeChorusDepth(IntPtr chorusDSPProcessor, float newDepth) {
+	changeChorusDepth((void*)chorusDSPProcessor, newDepth);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeChorusCenterDelay(IntPtr chorusDSPProcessor, float newCenterDelay) {
+	changeChorusCenterDelay((void*)chorusDSPProcessor, newCenterDelay);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeChorusFeedback(IntPtr chorusDSPProcessor, float newFeedback) {
+	changeChorusFeedback((void*)chorusDSPProcessor, newFeedback);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeChorusMix(IntPtr chorusDSPProcessor, float newMix) {
+	changeChorusMix((void*)chorusDSPProcessor, newMix);
+}
+
+#pragma endregion ChorusDSP
 
 #pragma endregion DSPs

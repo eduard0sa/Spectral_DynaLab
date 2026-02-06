@@ -29,6 +29,7 @@ extern "C" AUDIO_ENGINE_API void removeDSPEffect(void* engine, void* effectDSPPr
 
 #pragma region DistortionDSP
 
+extern "C" AUDIO_ENGINE_API float* pushVisSamples(void* distortionDSPProcessor);
 extern "C" AUDIO_ENGINE_API void changeDistortionDrive(void* distortionDSPProcessor, float newDrive);
 extern "C" AUDIO_ENGINE_API void changeDistortionFunctionToUse(void* distortionDSPProcessor, int newFunctionIndex);
 
@@ -51,4 +52,14 @@ extern "C" AUDIO_ENGINE_API void changeReverbWidth(void* reverbDSPProcessor, flo
 extern "C" AUDIO_ENGINE_API void changeReverbFreezeMode(void* reverbDSPProcessor, bool newFreezeMode);
 
 #pragma endregion ReverbDSP
+#pragma region ChorusDSP
+
+extern "C" AUDIO_ENGINE_API void changeChorusRate(void* chorusDSPProcessor, float newRate);
+extern "C" AUDIO_ENGINE_API void changeChorusDepth(void* chorusDSPProcessor, float newDepth);
+extern "C" AUDIO_ENGINE_API void changeChorusCenterDelay(void* chorusDSPProcessor, float newCenterDelay);
+extern "C" AUDIO_ENGINE_API void changeChorusFeedback(void* chorusDSPProcessor, float newFeedback);
+extern "C" AUDIO_ENGINE_API void changeChorusMix(void* chorusDSPProcessor, float newMix);
+
+#pragma endregion ChorusDSP
+
 #pragma endregion DSPLogic

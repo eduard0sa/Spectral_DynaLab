@@ -18,6 +18,7 @@ enum enum_EffectType {
 	Distortion,
 	Compressor,
 	Reverb,
+	Chorus,
 	EQ,
 	Filter,
 	Gain
@@ -67,6 +68,7 @@ private:
 
 public:
 	int id;
+	float *visSampleArray;
 
 	DSPDistortionEffect();
 
@@ -77,6 +79,10 @@ public:
 	~DSPDistortionEffect();
 
 	int getEffectID();
+
+	float* pushVisSamples() {
+		return visSampleArray;
+	}
 
 	void changeFunctionToUse(float(*newFunctionToUse)(float));
 
@@ -148,4 +154,35 @@ public:
 	void changeReverbDryLevel(float newDryLevel);
 	void changeReverbWidth(float newWidth);
 	void changeReverbFreezeMode(bool newFreezeMode);
+};
+
+class DSPChorusEffect : public DSPEffect
+{
+private:
+	dsp::Chorus<float> chorusSFX;
+
+	float rate = 0.8f;
+	float depth = 0.4f;
+	float centerDelay = 10.0f;
+	float feedback = 0.0f;
+	float mix = 0.5f;
+
+public:
+	int id;
+
+	DSPChorusEffect();
+
+	void prepare(juce::dsp::ProcessSpec& spec) override;
+
+	void process(juce::dsp::ProcessContextReplacing<float> context) override;
+
+	~DSPChorusEffect();
+
+	int getEffectID();
+
+	void changeChorusRate(float newRate);
+	void changeChorusDepth(float newDepth);
+	void changeChorusCenterDelay(float newCenterDelay);
+	void changeChorusFeedback(float newFeedback);
+	void changeChorusMix(float newMix);
 };

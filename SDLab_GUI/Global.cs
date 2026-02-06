@@ -13,6 +13,7 @@
             TYPE_SWITCH,
             TYPE_DISTORTION_DSP_CLASS,
             TYPE_COMPRESSOR_DSP_CLASS,
+            TYPE_CHORUS_DSP_CLASS,
             TYPE_REVERB_DSP_CLASS
         }
 
@@ -21,6 +22,7 @@
             DISTORTION,
             COMPRESSOR,
             REVERB,
+            CHORUS,
             EQ,
             FILTER,
             GAIN

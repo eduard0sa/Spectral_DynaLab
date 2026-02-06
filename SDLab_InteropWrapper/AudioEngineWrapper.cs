@@ -52,6 +52,11 @@ namespace SDLab_InteropWrapper
 
         #region DSPs
 
+        public float[] PushVisSamples(IntPtr distortionDSPProcessor)
+        {
+            return audioEngineRef._pushVisSamples(distortionDSPProcessor);
+        }
+
         public IntPtr AddDSPEffect(IntPtr engine, int effecttypeID)
         {
             return audioEngineRef._addDSPEffect(engine, effecttypeID);
@@ -98,6 +103,10 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeCompressorRelease(compressorDSPProcessor, newRelease);
         }
 
+        #endregion CompressorDSP
+
+        #region ReverbDSP
+
         public void ChangeReverbRoomSize(IntPtr reverbDSPProcessor, float newRoomSize)
         {
             audioEngineRef._changeReverbRoomSize(reverbDSPProcessor, newRoomSize);
@@ -128,7 +137,37 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeReverbFreezeMode(reverbDSPProcessor, newFreezeMode);
         }
 
-        #endregion CompressorDSP
+        #endregion ReverbDSP
+
+        #region ChorusDSP
+
+        public void ChangeChorusRate(IntPtr chorusDSPProcessor, float newRate)
+        {
+            audioEngineRef._changeChorusRate(chorusDSPProcessor, newRate);
+        }
+
+        public void ChangeChorusDepth(IntPtr chorusDSPProcessor, float newDepth)
+        {
+            audioEngineRef._changeChorusDepth(chorusDSPProcessor, newDepth);
+        }
+
+        public void ChangeChorusCenterDelay(IntPtr chorusDSPProcessor, float newCenterDelay)
+        {
+            audioEngineRef._changeChorusCenterDelay(chorusDSPProcessor, newCenterDelay);
+        }
+
+        public void ChangeChorusFeedback(IntPtr chorusDSPProcessor, float newFeedback)
+        {
+            audioEngineRef._changeChorusFeedback(chorusDSPProcessor, newFeedback);
+        }
+
+        public void ChangeChorusMix(IntPtr chorusDSPProcessor, float newMix)
+        {
+            audioEngineRef._changeChorusMix(chorusDSPProcessor, newMix);
+        }
+
+        #endregion ChorusDSP
+
         #endregion DSPs
     }
 }

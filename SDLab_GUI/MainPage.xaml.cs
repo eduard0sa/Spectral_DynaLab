@@ -1,4 +1,6 @@
-﻿using SDLab_InteropWrapper;
+﻿using SDLab_GUI.AudioSystemsLogic;
+using SDLab_GUI.UIComponents;
+using SDLab_InteropWrapper;
 
 namespace SDLab_GUI
 {

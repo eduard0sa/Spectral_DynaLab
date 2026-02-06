@@ -1,4 +1,7 @@
-﻿namespace SDLab_GUI
+﻿using SDLab_GUI.AudioSystemsLogic;
+using System.Windows.Forms.VisualStyles;
+
+namespace SDLab_GUI.UIComponents
 {
     public class DSPEffectItem<T> : FlexLayout
     {
@@ -9,18 +12,19 @@
 
         private DSPEffectItemTriangleMark DSPEffectTriangleMark;
         private DSPEffectItemHeader DSPEffectHeader;
-        private DSPEffectItemControlGroup DSPEffectSliderControls;
+        private List<DSPEffectItemControlGroup> DSPEffectSliderControls;
         private DSPEffectItemWaveVizualizerArea DSPEffectWaveVizualizerArea;
 
         public T DspProcessor { get => dspProcessor; }
 
-        public DSPEffectItem(JuceAudioProvider audioProvider, Global.enumDSPType _dspType, T _dspProcessor)
+        public DSPEffectItem(JuceAudioProvider audioProvider, Global.enumDSPType _dspType, T _dspProcessor, Func<float[]> _graphUpdateMehod)
         {
             DSPEffectTriangleMark = new DSPEffectItemTriangleMark(this);
             DSPEffectTriangleMark.ClickEventHandler = deleteDSPEvent;
             DSPEffectHeader = new DSPEffectItemHeader(this, _dspType);
-            DSPEffectSliderControls = new DSPEffectItemControlGroup(this);
-            DSPEffectWaveVizualizerArea = new DSPEffectItemWaveVizualizerArea(this);
+            DSPEffectSliderControls = new List<DSPEffectItemControlGroup>();
+            DSPEffectSliderControls.Add(new DSPEffectItemControlGroup(this));
+            DSPEffectWaveVizualizerArea = new DSPEffectItemWaveVizualizerArea(this, _graphUpdateMehod);
 
             oscAudioProvider = audioProvider;
             dspProcessor = _dspProcessor;
@@ -38,32 +42,54 @@
             BackgroundColor = Color.FromArgb("#14141d");
             Margin = new Thickness(0, 10, 0, 0);
 
+
             Children.Add(DSPEffectTriangleMark);
             Children.Add(DSPEffectHeader);
-            Children.Add(DSPEffectSliderControls);
+
+            for(int i = 0; i < DSPEffectSliderControls.Count; i++)
+            {
+                this.SetGrow(DSPEffectSliderControls[i], 0.55f / DSPEffectSliderControls.Count);
+                Children.Add(DSPEffectSliderControls[i]);
+            }
+
             Children.Add(DSPEffectWaveVizualizerArea);
         }
 
-        public void addSliderControl(string sliderLabel, Global.structSliderData numericSliderData, EventHandler<ValueChangedEventArgs> _valueChangedEvent)
+        public void addSliderControl(int controlGroupID, string sliderLabel, Global.structSliderData numericSliderData, EventHandler<ValueChangedEventArgs> _valueChangedEvent)
         {
-            DSPEffectSliderControls.addSliderControl(sliderLabel, numericSliderData, _valueChangedEvent);
+            DSPEffectSliderControls[controlGroupID].addSliderControl(sliderLabel, numericSliderData, _valueChangedEvent);
         }
 
-        public void addPickerControl(string pickerLabel, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
+        public void addPickerControl(int controlGroupID, string pickerLabel, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
         {
-            DSPEffectSliderControls.addPickerControl(pickerLabel, numericPickerData, _valueChangedEvent);
+            DSPEffectSliderControls[controlGroupID].addPickerControl(pickerLabel, numericPickerData, _valueChangedEvent);
         }
 
-        public void addSwitchControl(string switchLabel, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        public void addSwitchControl(int controlGroupID, string switchLabel, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
         {
-            DSPEffectSliderControls.addSwitchControl(switchLabel, numericSwitchData, _valueChangedEvent);
+            DSPEffectSliderControls[controlGroupID].addSwitchControl(switchLabel, numericSwitchData, _valueChangedEvent);
+        }
+
+        public void addControlGroup()
+        {
+            DSPEffectItemControlGroup newCG = new DSPEffectItemControlGroup(this);
+
+            DSPEffectSliderControls.Add(newCG);
+            Children.Add(newCG);
+            this.SetOrder(newCG, Children.Count - 1);
+            this.SetOrder(DSPEffectWaveVizualizerArea, Children.Count);
+
+            for (int i = 0; i < DSPEffectSliderControls.Count; i++)
+            {
+                this.SetGrow(DSPEffectSliderControls[i], 0.55f / DSPEffectSliderControls.Count);
+            }
         }
 
         //Events
 
         private void deleteDSPEvent(object? sender, EventArgs e)
         {
-            (this.Parent as VerticalStackLayout).Children.Remove(this);
+            (Parent as VerticalStackLayout).Children.Remove(this);
 
             Global.structVariableDataTypeUnit dataTypeUnit = new Global.structVariableDataTypeUnit();
             dataTypeUnit.dataUnit = this;
@@ -78,6 +104,9 @@
                     break;
                 case Global.enumDSPType.REVERB:
                     dataTypeUnit.dataType = Global.enumVariableDataType.TYPE_REVERB_DSP_CLASS;
+                    break;
+                case Global.enumDSPType.CHORUS:
+                    dataTypeUnit.dataType = Global.enumVariableDataType.TYPE_CHORUS_DSP_CLASS;
                     break;
             }
 
@@ -177,7 +206,7 @@
             Direction = Microsoft.Maui.Layouts.FlexDirection.Column;
             JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
             VerticalOptions = LayoutOptions.Fill;
-            parentFLNode.SetGrow(this, 0.55f);
+            
         }
 
         public void addSliderControl(string sliderLabel, Global.structSliderData numericSliderData, EventHandler<ValueChangedEventArgs> _valueChangedEvent)
@@ -269,7 +298,8 @@
             sliderControlLabel.Text = controlLabel;
             sliderControlLabel.VerticalOptions = LayoutOptions.Center;
 
-            sliderControlSlider.WidthRequest = 300;
+            //sliderControlSlider.WidthRequest = 300;
+            sliderControlSlider.HorizontalOptions = LayoutOptions.Fill;
             sliderControlSlider.VerticalOptions = LayoutOptions.Center;
             sliderControlSlider.Focused += SliderAutoUnfocusEvent;
             sliderControlSlider.StyleClass = new List<string> { "RedAudioAttributeSlider" };
@@ -386,32 +416,56 @@
 
     #region Wave Shape Controls
 
-    public class DSPEffectItemWaveVizualizerArea : FlexLayout
+    public class DSPEffectItemWaveVizualizerArea : StackLayout
     {
-        OscillatorItemWaveVizualizerGV visualizer;
-        public DSPEffectItemWaveVizualizerArea(FlexLayout parentFLNode)
+        DSPEffectItemWaveVizualizerGV visualizer;
+        public DSPEffectItemWaveVizualizerArea(FlexLayout parentFLNode, Func<float[]> _graphUpdateFunction)
         {
             parentFLNode.SetGrow(this, 0.20f);
-            JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
-            AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             HeightRequest = 100;
-            BackgroundColor = (Color)Application.Current.Resources["Gray100"];
+            Padding = new Thickness(20, 20, 20, 20);
+            BackgroundColor = (Color)Application.Current.Resources["Gray950"];
 
-            visualizer = new OscillatorItemWaveVizualizerGV(this);
+            visualizer = new DSPEffectItemWaveVizualizerGV(this);
 
             Children.Add(visualizer);
+
+            Dispatcher.StartTimer(
+                TimeSpan.FromMilliseconds(33), // ~60 FPS
+                () =>
+                {
+                    /*PullWaveformFromDll();*/
+                    visualizer.VisSamplesArray = _graphUpdateFunction();
+                    visualizer.updateWaveForm();
+                    return true;
+                }
+            );
         }
     }
 
     public class DSPEffectItemWaveVizualizerGV : GraphicsView
     {
-        SoundWaveShapeDrawable drawableEngine = new SoundWaveShapeDrawable();
-        public DSPEffectItemWaveVizualizerGV(FlexLayout parentFLNode)
+        SoundWaveShapeDrawable drawableEngine;
+
+        public float[] VisSamplesArray
         {
-            parentFLNode.SetGrow(this, 0.90f);
-            HeightRequest = 100;
+            get
+            {
+                return drawableEngine.VisSamplesArray;
+            }
+            set
+            {
+                drawableEngine.VisSamplesArray = value;
+            }
+        }
+
+        public DSPEffectItemWaveVizualizerGV(StackLayout parentFLNode)
+        {
+            HorizontalOptions = LayoutOptions.Fill;
+            HeightRequest = 60;
+            drawableEngine = new SoundWaveShapeDrawable();
             Drawable = drawableEngine;
-            BackgroundColor = (Color)Application.Current.Resources["Gray500"];
+            updateWaveForm();
         }
 
         public void updateWaveForm()

@@ -1,3 +1,6 @@
+using SDLab_GUI.AudioSystemsLogic;
+using SDLab_GUI.UIComponents;
+
 namespace SDLab_GUI;
 
 public partial class DSPModalEditor : ContentPage
@@ -29,12 +32,16 @@ public partial class DSPModalEditor : ContentPage
                 case Global.enumVariableDataType.TYPE_REVERB_DSP_CLASS:
                     dspChainStackLayout.Children.Add(audioProvider.DspProcessors[i].dataUnit as DSPEffectItem<ReverbDSP>);
                     break;
+                case Global.enumVariableDataType.TYPE_CHORUS_DSP_CLASS:
+                    dspChainStackLayout.Children.Add(audioProvider.DspProcessors[i].dataUnit as DSPEffectItem<ChorusDSP>);
+                    break;
             }
         }
 
         addDistortionDSPBTN.Clicked += addDistortionDSPBTNEvent;
         addCompressorDSPBTN.Clicked += addCompressorDSPBTNEvent;
         addReverbDSPBTN.Clicked += addReverbDSPBTNEvent;
+        addChorusDSPBTN.Clicked += addChorusDSPBTNEvent;
         addEQDSPBTN.Clicked += addEQDSPBTNEvent;
         addFilterDSPBTN.Clicked += addFilterDSPBTNEvent;
     }
@@ -72,9 +79,16 @@ public partial class DSPModalEditor : ContentPage
 
     private void addReverbDSPBTNEvent(object? sender, EventArgs e)
     {
-        Global.structVariableDataTypeUnit compressorDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.REVERB);
+        Global.structVariableDataTypeUnit reverbDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.REVERB);
 
-        dspChainStackLayout.Children.Add(compressorDSPUnit.dataUnit as DSPEffectItem<ReverbDSP>);
+        dspChainStackLayout.Children.Add(reverbDSPUnit.dataUnit as DSPEffectItem<ReverbDSP>);
+    }
+
+    private void addChorusDSPBTNEvent(object? sender, EventArgs e)
+    {
+        Global.structVariableDataTypeUnit chorusDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.CHORUS);
+
+        dspChainStackLayout.Children.Add(chorusDSPUnit.dataUnit as DSPEffectItem<ChorusDSP>);
     }
 
     private void addEQDSPBTNEvent(object? sender, EventArgs e)

@@ -18,6 +18,7 @@ namespace AUDIOPROCBRIDGE {
 		IntPtr _addDSPEffect(IntPtr engine, int effectTypeID);
 		void _removeDSPEffect(IntPtr engine, IntPtr effectDSPProcessor);
 
+		array<float>^ _pushVisSamples(IntPtr distortionDSPProcessor);
 		void _changeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive);
 		void _changeDistortionFunctionToUse(IntPtr distortionDSPProcessor, float newFunctionIndex);
 
@@ -32,5 +33,11 @@ namespace AUDIOPROCBRIDGE {
 		void _changeReverbDryLevel(IntPtr reverbDSPProcessor, float newDryLevel);
 		void _changeReverbWidth(IntPtr reverbDSPProcessor, float newWidth);
 		void _changeReverbFreezeMode(IntPtr reverbDSPProcessor, bool newFreezeMode);
+
+		void _changeChorusRate(IntPtr chorusDSPProcessor, float newRate);
+		void _changeChorusDepth(IntPtr chorusDSPProcessor, float newDepth);
+		void _changeChorusCenterDelay(IntPtr chorusDSPProcessor, float newCenterDelay);
+		void _changeChorusFeedback(IntPtr chorusDSPProcessor, float newFeedback);
+		void _changeChorusMix(IntPtr chorusDSPProcessor, float newMix);
 	};
 }

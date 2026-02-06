@@ -47,6 +47,7 @@ void DSPDistortionEffect::prepare(juce::dsp::ProcessSpec& spec) {
 void DSPDistortionEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
 	inputGain.process(context);
 	distortionSFX.process(context);
+	visSampleArray = context.getOutputBlock().getChannelPointer(0);
 }
 
 DSPDistortionEffect::~DSPDistortionEffect() {}
@@ -170,3 +171,58 @@ void DSPReverbEffect::changeReverbFreezeMode(bool newFreezeMode) {
 }
 
 #pragma endregion REVERB
+
+#pragma region CHORUS
+
+DSPChorusEffect::DSPChorusEffect() {
+	chorusSFX = dsp::Chorus<float>();
+}
+
+void DSPChorusEffect::prepare(juce::dsp::ProcessSpec& spec) {
+	chorusSFX.prepare(spec);
+
+	chorusSFX.setRate(rate);
+	chorusSFX.setDepth(depth);
+	chorusSFX.setCentreDelay(centerDelay);
+	chorusSFX.setFeedback(feedback);
+	chorusSFX.setMix(mix);
+}
+
+void DSPChorusEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
+	chorusSFX.process(context);
+}
+
+DSPChorusEffect::~DSPChorusEffect() {
+
+}
+
+int DSPChorusEffect::getEffectID() {
+	return id;
+}
+
+void DSPChorusEffect::changeChorusRate(float newRate) {
+	rate = newRate;
+	chorusSFX.setRate(rate);
+}
+
+void DSPChorusEffect::changeChorusDepth(float newDepth) {
+	depth = newDepth;
+	chorusSFX.setDepth(depth);
+}
+
+void DSPChorusEffect::changeChorusCenterDelay(float newCenterDelay) {
+	centerDelay = newCenterDelay;
+	chorusSFX.setCentreDelay(centerDelay);
+}
+
+void DSPChorusEffect::changeChorusFeedback(float newFeedback) {
+	feedback = newFeedback;
+	chorusSFX.setFeedback(feedback);
+}
+
+void DSPChorusEffect::changeChorusMix(float newMix) {
+	mix = newMix;
+	chorusSFX.setMix(mix);
+}
+
+#pragma endregion CHORUS
