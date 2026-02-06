@@ -31,6 +31,8 @@ void DSPGainEffect::setGainLinear(float newGain) {
 DSPDistortionEffect::DSPDistortionEffect() {
 	inputGain = dsp::Gain<float>();
 	distortionSFX = dsp::WaveShaper<float>();
+	visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
+	visSampleArraySTACK = new (visSampleArrayHEAP) float[512]();
 }
 
 void DSPDistortionEffect::prepare(juce::dsp::ProcessSpec& spec) {
@@ -47,10 +49,16 @@ void DSPDistortionEffect::prepare(juce::dsp::ProcessSpec& spec) {
 void DSPDistortionEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
 	inputGain.process(context);
 	distortionSFX.process(context);
-	visSampleArray = context.getOutputBlock().getChannelPointer(0);
+
+	for (int i = 0; i < 512; i++) {
+		visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+	}
 }
 
-DSPDistortionEffect::~DSPDistortionEffect() {}
+DSPDistortionEffect::~DSPDistortionEffect() {
+	free(visSampleArrayHEAP);
+	visSampleArrayHEAP = NULL;
+}
 
 int DSPDistortionEffect::getEffectID() {
 	return id;

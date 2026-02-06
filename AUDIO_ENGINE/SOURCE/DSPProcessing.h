@@ -68,7 +68,8 @@ private:
 
 public:
 	int id;
-	float *visSampleArray;
+	float *visSampleArrayHEAP;
+	float *visSampleArraySTACK;
 
 	DSPDistortionEffect();
 
@@ -81,7 +82,7 @@ public:
 	int getEffectID();
 
 	float* pushVisSamples() {
-		return visSampleArray;
+		return visSampleArrayHEAP;
 	}
 
 	void changeFunctionToUse(float(*newFunctionToUse)(float));

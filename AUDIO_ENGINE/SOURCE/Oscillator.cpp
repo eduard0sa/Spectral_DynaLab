@@ -2,7 +2,14 @@
 
 _Oscillator::_Oscillator() {}
 
-_Oscillator::~_Oscillator() {}
+_Oscillator::~_Oscillator() {
+    int count = 0;
+
+    while (count < DSPEffectChainLength) {
+        removeDSPEffect(DSPEffectChain[count]);
+        count++;
+    }
+}
 
 #pragma region Juce_Overriden_methods
 
