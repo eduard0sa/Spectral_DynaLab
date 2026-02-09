@@ -392,6 +392,7 @@ namespace SDLab_GUI.UIComponents
     public class SoundWaveShapeDrawable : IDrawable
     {
         float[] visSamplesArray;
+        JuceAudioProvider oscAP;
 
         public float[] VisSamplesArray {
             get {
@@ -402,12 +403,14 @@ namespace SDLab_GUI.UIComponents
             }
         }
 
+        public JuceAudioProvider OscAP { get => oscAP; set => oscAP = value; }
+
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
             if (VisSamplesArray != null)
             {
-                int Samples = 512;
-                int Amplitude = 1;
+                int Samples = 450;
+                float Amplitude = oscAP.CurrentGain;
                 float Frequency = 1f; // in cycles over the width
 
                 canvas.StrokeColor = (Color)Application.Current.Resources["DefaultPastelRed"];
@@ -428,7 +431,7 @@ namespace SDLab_GUI.UIComponents
                     // Normalized x in range [0, 2π * Frequency]
                     float t = (float)i / (Samples - 1);
 
-                    float y = midY - visSamplesArray[i]; // scale to view
+                    float y = midY - (visSamplesArray[i] * Amplitude * 50); // scale to view
 
                     if (i == 0)
                         path.MoveTo(x, y);

@@ -24,7 +24,7 @@ namespace SDLab_GUI.UIComponents
             DSPEffectHeader = new DSPEffectItemHeader(this, _dspType);
             DSPEffectSliderControls = new List<DSPEffectItemControlGroup>();
             DSPEffectSliderControls.Add(new DSPEffectItemControlGroup(this));
-            DSPEffectWaveVizualizerArea = new DSPEffectItemWaveVizualizerArea(this, _graphUpdateMehod);
+            DSPEffectWaveVizualizerArea = new DSPEffectItemWaveVizualizerArea(this, _graphUpdateMehod, audioProvider);
 
             oscAudioProvider = audioProvider;
             dspProcessor = _dspProcessor;
@@ -93,6 +93,7 @@ namespace SDLab_GUI.UIComponents
 
             Global.structVariableDataTypeUnit dataTypeUnit = new Global.structVariableDataTypeUnit();
             dataTypeUnit.dataUnit = this;
+            DSPEffectWaveVizualizerArea.UpdateFrameTimer.Stop();
 
             switch (dSPType)
             {
@@ -419,33 +420,42 @@ namespace SDLab_GUI.UIComponents
     public class DSPEffectItemWaveVizualizerArea : StackLayout
     {
         DSPEffectItemWaveVizualizerGV visualizer;
-        public DSPEffectItemWaveVizualizerArea(FlexLayout parentFLNode, Func<float[]> _graphUpdateFunction)
+        Microsoft.Maui.Dispatching.IDispatcherTimer updateFrameTimer;
+
+        public DSPEffectItemWaveVizualizerArea(FlexLayout parentFLNode, Func<float[]> _graphUpdateFunction, JuceAudioProvider osc)
         {
             parentFLNode.SetGrow(this, 0.20f);
             HeightRequest = 100;
             Padding = new Thickness(20, 20, 20, 20);
             BackgroundColor = (Color)Application.Current.Resources["Gray950"];
 
-            visualizer = new DSPEffectItemWaveVizualizerGV(this);
+            visualizer = new DSPEffectItemWaveVizualizerGV(this, osc);
 
             Children.Add(visualizer);
 
-            Dispatcher.StartTimer(
-                TimeSpan.FromMilliseconds(33), // ~60 FPS
+            UpdateFrameTimer = Dispatcher.CreateTimer();
+
+            UpdateFrameTimer.Start();
+
+            /*
+             TimeSpan.FromMilliseconds(33), // ~60 FPS
                 () =>
                 {
-                    /*PullWaveformFromDll();*/
-                    visualizer.VisSamplesArray = _graphUpdateFunction();
-                    visualizer.updateWaveForm();
-                    return true;
-                }
-            );
+                    /*PullWaveformFromDll();
+            visualizer.VisSamplesArray = _graphUpdateFunction();
+            visualizer.updateWaveForm();
+            return true;
         }
+        */
+        }
+
+        public IDispatcherTimer UpdateFrameTimer { get => updateFrameTimer; set => updateFrameTimer = value; }
     }
 
     public class DSPEffectItemWaveVizualizerGV : GraphicsView
     {
         SoundWaveShapeDrawable drawableEngine;
+        JuceAudioProvider AP;
 
         public float[] VisSamplesArray
         {
@@ -459,17 +469,19 @@ namespace SDLab_GUI.UIComponents
             }
         }
 
-        public DSPEffectItemWaveVizualizerGV(StackLayout parentFLNode)
+        public DSPEffectItemWaveVizualizerGV(StackLayout parentFLNode, JuceAudioProvider osc)
         {
             HorizontalOptions = LayoutOptions.Fill;
             HeightRequest = 60;
             drawableEngine = new SoundWaveShapeDrawable();
             Drawable = drawableEngine;
+            AP = osc;
             updateWaveForm();
         }
 
         public void updateWaveForm()
         {
+            drawableEngine.OscAP = AP;
             Invalidate();
         }
     }
