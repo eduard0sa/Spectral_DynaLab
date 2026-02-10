@@ -2,7 +2,7 @@
 
 namespace SDLab_GUI.UIComponents
 {
-    internal class OscillatorItem : FlexLayout
+    public class OscillatorItem : FlexLayout
     {
         private JuceAudioProvider oscAudioProvider;
         private AudioEngineMGMT audioEngineMGMT;
@@ -27,11 +27,12 @@ namespace SDLab_GUI.UIComponents
             OscillatorItemWaveShapeControls = new OscillatorItemWaveShapeControl(this);
             OscillatorItemSFXButtonArea = new OscillatorItemSFXButtonArea(this);
             OscillatorItemSFXButtonArea.OpenSFXEditorEvent = openSFXEditorEvent;
-            OscillatorItemWaveVizualizerArea = new OscillatorItemWaveVizualizerArea(this);
 
             oscAudioProvider = audioManager.LaunchAudioEngine();
             audioEngineMGMT = audioManager;
             mainPageOBJ = mainPage;
+
+            OscillatorItemWaveVizualizerArea = new OscillatorItemWaveVizualizerArea(this, oscAudioProvider.pushOSCVisSampleArray, oscAudioProvider);
 
             frequencySliderData = new Global.structSliderData() {
                 minVal = 20f,
@@ -85,6 +86,7 @@ namespace SDLab_GUI.UIComponents
 
         private void deleteOscillatorEvent(object? sender, EventArgs e)
         {
+            OscillatorItemWaveVizualizerArea.UpdateFrameTimer.Stop();
             audioEngineMGMT.removeAudioEngine(oscAudioProvider);
             (Parent as VerticalStackLayout).Children.Remove(this);
         }
@@ -355,36 +357,68 @@ namespace SDLab_GUI.UIComponents
         }
     }
 
-    internal class OscillatorItemWaveVizualizerArea : FlexLayout
+    internal class OscillatorItemWaveVizualizerArea : StackLayout
     {
         OscillatorItemWaveVizualizerGV visualizer;
-        public OscillatorItemWaveVizualizerArea(FlexLayout parentFLNode)
+        Microsoft.Maui.Dispatching.IDispatcherTimer updateFrameTimer;
+
+        public IDispatcherTimer UpdateFrameTimer { get => updateFrameTimer; set => updateFrameTimer = value; }
+
+        public OscillatorItemWaveVizualizerArea(FlexLayout parentFLNode, Func<float[]> _graphUpdateFunction, JuceAudioProvider osc)
         {
             parentFLNode.SetGrow(this, 0.16f);
-            JustifyContent = Microsoft.Maui.Layouts.FlexJustify.Center;
-            AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             HeightRequest = 100;
-            BackgroundColor = (Color)Application.Current.Resources["Gray100"];
+            Padding = new Thickness(20, 20, 20, 20);
+            BackgroundColor = (Color)Application.Current.Resources["Gray950"];
 
-            visualizer = new OscillatorItemWaveVizualizerGV(this);
+            visualizer = new OscillatorItemWaveVizualizerGV(this, osc);
 
             Children.Add(visualizer);
+
+            UpdateFrameTimer = Dispatcher.CreateTimer();
+
+            UpdateFrameTimer.Interval = TimeSpan.FromMilliseconds(33);
+
+            UpdateFrameTimer.Tick += delegate {
+                visualizer.VisSamplesArray = _graphUpdateFunction();
+                visualizer.updateWaveForm();
+            };
+
+            UpdateFrameTimer.Start();
         }
     }
 
     internal class OscillatorItemWaveVizualizerGV : GraphicsView
     {
         SoundWaveShapeDrawable drawableEngine = new SoundWaveShapeDrawable();
-        public OscillatorItemWaveVizualizerGV(FlexLayout parentFLNode)
+        JuceAudioProvider AP;
+
+        public float[] VisSamplesArray
         {
-            parentFLNode.SetGrow(this, 0.90f);
-            HeightRequest = 100;
+            get
+            {
+                return drawableEngine.VisSamplesArray;
+            }
+            set
+            {
+                drawableEngine.VisSamplesArray = value;
+            }
+        }
+
+        public OscillatorItemWaveVizualizerGV(StackLayout parentFLNode, JuceAudioProvider osc)
+        {
+            HorizontalOptions = LayoutOptions.Fill;
+            HeightRequest = 60;
             Drawable = drawableEngine;
             BackgroundColor = (Color)Application.Current.Resources["Gray500"];
+
+            AP = osc;
+            updateWaveForm();
         }
 
         public void updateWaveForm()
         {
+            drawableEngine.OscAP = AP;
             Invalidate();
         }
     }

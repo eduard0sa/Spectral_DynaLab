@@ -18,6 +18,8 @@ extern "C" AUDIO_ENGINE_API void enginePrepareToPlay(void* engine, double sample
 extern "C" AUDIO_ENGINE_API void engineProcessWave(void* engine, float* buffer, int numSamples);
 extern "C" AUDIO_ENGINE_API void destroyEngine(void* engine);
 
+extern "C" AUDIO_ENGINE_API float* pushOscVisSamples(void* engine);
+
 extern "C" AUDIO_ENGINE_API void changeFrequency(void* engine, float newFrequency);
 extern "C" AUDIO_ENGINE_API void changeGain(void* engine, float newGain);
 

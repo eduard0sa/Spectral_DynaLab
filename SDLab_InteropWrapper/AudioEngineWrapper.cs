@@ -48,6 +48,11 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeGain(engine, newGain);
         }
 
+        public float[] PushOscVisSamples(IntPtr engine)
+        {
+            return audioEngineRef._pushOscVisSamples(engine);
+        }
+
         #endregion EngineMgmtLogic
 
         #region DSPs

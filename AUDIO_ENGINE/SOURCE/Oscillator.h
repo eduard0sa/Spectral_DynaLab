@@ -14,6 +14,9 @@ class _Oscillator
 		float gain = 0.1f;
 		float frequency = 50.0f; // Frequency in Hz
 
+		float* visSampleArrayHEAP;
+		float* visSampleArraySTACK;
+
 		//METHODS
 		_Oscillator();
 		~_Oscillator();
@@ -24,6 +27,8 @@ class _Oscillator
 
 		void changeFrequency(float newFrequency);
 		void changeGain(float newGain);
+
+		float* pushOscVisSamples();
 
 		template<typename T>
 		DSPEffect* addDSPEffect() {

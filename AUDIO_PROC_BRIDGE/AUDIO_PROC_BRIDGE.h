@@ -15,6 +15,8 @@ namespace AUDIOPROCBRIDGE {
 		void _changeFrequency(IntPtr engine, float newFrequency);
 		void _changeGain(IntPtr engine, float newGain);
 
+		array<float>^ _pushOscVisSamples(IntPtr engine);
+
 		IntPtr _addDSPEffect(IntPtr engine, int effectTypeID);
 		void _removeDSPEffect(IntPtr engine, IntPtr effectDSPProcessor);
 

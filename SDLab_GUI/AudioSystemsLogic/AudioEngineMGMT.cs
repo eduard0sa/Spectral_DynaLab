@@ -48,25 +48,17 @@ namespace SDLab_GUI.AudioSystemsLogic
         public void removeAudioEngine(JuceAudioProvider provider)
         {
             int dspProcessorsCount = (int)provider.DspProcessors.Count;
+            int counter = 0;
 
-            for (int i = 0; i < provider.DspProcessors.Count; i++)
+            while(counter < dspProcessorsCount)
             {
-                provider.removeDSPEffect(provider.DspProcessors[i]);
+                provider.removeDSPEffect(provider.DspProcessors[0]);
+                counter++;
             }
 
-            /*System.Timers.Timer counter = new System.Timers.Timer();
-
-            counter.Interval = 33 * dspProcessorsCount;
-
-            counter.Elapsed += delegate
-            {
-                counter.Stop();*/
             mixer.RemoveMixerInput(provider);
             oscillators.Remove(provider);
             _AudioEngineRef.DestroyEngine(provider.Engine);
-            /*};
-
-            counter.Start();*/
         }
 
         public JuceAudioProvider LaunchAudioEngine()
@@ -136,6 +128,11 @@ namespace SDLab_GUI.AudioSystemsLogic
         {
             currentGain = frequency;
             engineBridgeRef.ChangeGain(engine, frequency);
+        }
+
+        public float[] pushOSCVisSampleArray()
+        {
+            return engineBridgeRef.PushOscVisSamples(engine);
         }
 
         public structVariableDataTypeUnit addDSPEffect(enumDSPType dspEffectType)
@@ -236,15 +233,19 @@ namespace SDLab_GUI.AudioSystemsLogic
             switch (effectData.dataType)
             {
                 case enumVariableDataType.TYPE_DISTORTION_DSP_CLASS:
+                    ((DSPEffectItem<DistortionDSP>)effectData.dataUnit).stopGraphUpdateWorker();
                     engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<DistortionDSP>)effectData.dataUnit).DspProcessor.DistortionDSPProcessor);
                     break;
                 case enumVariableDataType.TYPE_COMPRESSOR_DSP_CLASS:
+                    ((DSPEffectItem<CompressorDSP>)effectData.dataUnit).stopGraphUpdateWorker();
                     engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<CompressorDSP>)effectData.dataUnit).DspProcessor.CompressorDSPProcessor);
                     break;
                 case enumVariableDataType.TYPE_REVERB_DSP_CLASS:
+                    ((DSPEffectItem<ReverbDSP>)effectData.dataUnit).stopGraphUpdateWorker();
                     engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<ReverbDSP>)effectData.dataUnit).DspProcessor.ReverbDSPProcessor);
                     break;
                 case enumVariableDataType.TYPE_CHORUS_DSP_CLASS:
+                    ((DSPEffectItem<ChorusDSP>)effectData.dataUnit).stopGraphUpdateWorker();
                     engineBridgeRef.RemoveDSPEffect(engine, ((DSPEffectItem<ChorusDSP>)effectData.dataUnit).DspProcessor.ChorusDSPProcessor);
                     break;
             }

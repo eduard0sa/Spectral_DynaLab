@@ -1,6 +1,9 @@
 #include "Oscillator.h"
 
-_Oscillator::_Oscillator() {}
+_Oscillator::_Oscillator() {
+    visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
+    visSampleArraySTACK = new (visSampleArrayHEAP) float[512]();
+}
 
 _Oscillator::~_Oscillator() {
     int count = 0;
@@ -50,6 +53,14 @@ void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     }
 
     outputGain->process(context);
+
+    for (int i = 0; i < 512; i++) {
+        visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+    }
+}
+
+float* _Oscillator::pushOscVisSamples() {
+    return visSampleArrayHEAP;
 }
 
 void _Oscillator::releaseResources()

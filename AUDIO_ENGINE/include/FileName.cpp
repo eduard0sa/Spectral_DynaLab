@@ -80,6 +80,10 @@ extern "C" {
         return a;
     }
 
+    float* pushOscVisSamples(void* engine) {
+        return ((_Oscillator*)engine)->pushOscVisSamples();
+    }
+
     void changeDistortionDrive(void* distortionDSPProcessor, float newDrive) {
         ((DSPDistortionEffect*)distortionDSPProcessor)->changeDistortionDrive(newDrive);
     }

@@ -322,7 +322,7 @@ namespace SDLab_GUI.AudioSystemsLogic
 
         private structSliderData chorusCenterDelaySliderData = new structSliderData()
         {
-            minVal = 10f,
+            minVal = 0.1f,
             maxVal = 60f,
             defVal = 25.0f,
             numDisplayDecPlaces = 2

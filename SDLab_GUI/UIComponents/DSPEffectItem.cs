@@ -88,8 +88,6 @@ namespace SDLab_GUI.UIComponents
 
         private void deleteDSPEvent(object? sender, EventArgs e)
         {
-            DSPEffectWaveVizualizerArea.UpdateFrameTimer.Stop();
-
             (Parent as VerticalStackLayout).Children.Remove(this);
 
             Global.structVariableDataTypeUnit dataTypeUnit = new Global.structVariableDataTypeUnit();
@@ -112,6 +110,11 @@ namespace SDLab_GUI.UIComponents
             }
 
             oscAudioProvider.removeDSPEffect(dataTypeUnit);
+        }
+
+        public void stopGraphUpdateWorker()
+        {
+            DSPEffectWaveVizualizerArea.UpdateFrameTimer.Stop();
         }
     }
 
@@ -443,17 +446,6 @@ namespace SDLab_GUI.UIComponents
             };
 
             UpdateFrameTimer.Start();
-
-            /*
-                TimeSpan.FromMilliseconds(33), // ~60 FPS
-                () =>
-                {
-                    /*PullWaveformFromDll();
-                    visualizer.VisSamplesArray = _graphUpdateFunction();
-                    visualizer.updateWaveForm();
-                    return true;
-                }
-            */
         }
 
         public IDispatcherTimer UpdateFrameTimer { get => updateFrameTimer; set => updateFrameTimer = value; }

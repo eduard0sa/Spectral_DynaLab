@@ -35,6 +35,17 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeGain(IntPtr engine, float newGain) 
 	changeGain((void*)engine, newGain);
 }
 
+array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushOscVisSamples(IntPtr engine) {
+	array<float>^ managedArray = gcnew cli::array<float>(512);
+	float* visSamplesArrPTR = pushOscVisSamples((void*)engine);
+
+	for (int i = 0; i < 512; i++) {
+		managedArray[i] = visSamplesArrPTR[i];
+	}
+
+	return managedArray;
+}
+
 #pragma endregion EngineMgmtLogic
 
 #pragma region DSPs
