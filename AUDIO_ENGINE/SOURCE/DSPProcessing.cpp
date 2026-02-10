@@ -64,6 +64,10 @@ int DSPDistortionEffect::getEffectID() {
 	return id;
 }
 
+float* DSPDistortionEffect::pushVisSamples() {
+	return visSampleArrayHEAP;
+}
+
 void DSPDistortionEffect::changeFunctionToUse(float(*newFunctionToUse)(float)) {
 	distortionSFX.functionToUse = newFunctionToUse;
 }
@@ -79,6 +83,8 @@ void DSPDistortionEffect::changeDistortionDrive(float newDrive) {
 
 DSPCompressorEffect::DSPCompressorEffect() {
 	compressorSFX = dsp::Compressor<float>();
+	visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
+	visSampleArraySTACK = new (visSampleArrayHEAP) float[512]();
 }
 
 void DSPCompressorEffect::prepare(juce::dsp::ProcessSpec& spec) {
@@ -91,12 +97,20 @@ void DSPCompressorEffect::prepare(juce::dsp::ProcessSpec& spec) {
 
 void DSPCompressorEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
 	compressorSFX.process(context);
+
+	for (int i = 0; i < 512; i++) {
+		visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+	}
 }
 
 DSPCompressorEffect::~DSPCompressorEffect() {}
 
 int DSPCompressorEffect::getEffectID() {
 	return id;
+}
+
+float* DSPCompressorEffect::pushVisSamples() {
+	return visSampleArrayHEAP;
 }
 
 void DSPCompressorEffect::changeCompressorThreshold(float newThreshold) {
@@ -123,7 +137,10 @@ void DSPCompressorEffect::changeCompressorRelease(float newRelease) {
 
 #pragma region REVERB
 
-DSPReverbEffect::DSPReverbEffect() {}
+DSPReverbEffect::DSPReverbEffect() {
+	visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
+	visSampleArraySTACK = new (visSampleArrayHEAP) float[512]();
+}
 
 void DSPReverbEffect::prepare(juce::dsp::ProcessSpec& spec) {
 	reverbSFX.prepare(spec);
@@ -140,12 +157,20 @@ void DSPReverbEffect::prepare(juce::dsp::ProcessSpec& spec) {
 
 void DSPReverbEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
 	reverbSFX.process(context);
+
+	for (int i = 0; i < 512; i++) {
+		visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+	}
 }
 
 DSPReverbEffect::~DSPReverbEffect() {}
 
 int DSPReverbEffect::getEffectID() {
 	return id;
+}
+
+float* DSPReverbEffect::pushVisSamples() {
+	return visSampleArrayHEAP;
 }
 
 void DSPReverbEffect::changeReverbRoomSize(float newRoomSize) {
@@ -184,6 +209,8 @@ void DSPReverbEffect::changeReverbFreezeMode(bool newFreezeMode) {
 
 DSPChorusEffect::DSPChorusEffect() {
 	chorusSFX = dsp::Chorus<float>();
+	visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
+	visSampleArraySTACK = new (visSampleArrayHEAP) float[512]();
 }
 
 void DSPChorusEffect::prepare(juce::dsp::ProcessSpec& spec) {
@@ -198,6 +225,10 @@ void DSPChorusEffect::prepare(juce::dsp::ProcessSpec& spec) {
 
 void DSPChorusEffect::process(juce::dsp::ProcessContextReplacing<float> context) {
 	chorusSFX.process(context);
+
+	for (int i = 0; i < 512; i++) {
+		visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+	}
 }
 
 DSPChorusEffect::~DSPChorusEffect() {
@@ -206,6 +237,10 @@ DSPChorusEffect::~DSPChorusEffect() {
 
 int DSPChorusEffect::getEffectID() {
 	return id;
+}
+
+float* DSPChorusEffect::pushVisSamples() {
+	return visSampleArrayHEAP;
 }
 
 void DSPChorusEffect::changeChorusRate(float newRate) {

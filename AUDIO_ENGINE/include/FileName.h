@@ -26,10 +26,10 @@ extern "C" AUDIO_ENGINE_API void changeGain(void* engine, float newGain);
 
 extern "C" AUDIO_ENGINE_API void* addDSPEffect(void* engine, int dspType);
 extern "C" AUDIO_ENGINE_API void removeDSPEffect(void* engine, void* effectDSPProcessor);
+extern "C" AUDIO_ENGINE_API float* pushVisSamples(void* SFXDSPProcessor, int dspType);
 
 #pragma region DistortionDSP
 
-extern "C" AUDIO_ENGINE_API float* pushVisSamples(void* distortionDSPProcessor);
 extern "C" AUDIO_ENGINE_API void changeDistortionDrive(void* distortionDSPProcessor, float newDrive);
 extern "C" AUDIO_ENGINE_API void changeDistortionFunctionToUse(void* distortionDSPProcessor, int newFunctionIndex);
 

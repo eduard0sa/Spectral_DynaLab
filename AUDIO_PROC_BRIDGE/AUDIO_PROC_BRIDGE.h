@@ -18,7 +18,7 @@ namespace AUDIOPROCBRIDGE {
 		IntPtr _addDSPEffect(IntPtr engine, int effectTypeID);
 		void _removeDSPEffect(IntPtr engine, IntPtr effectDSPProcessor);
 
-		array<float>^ _pushVisSamples(IntPtr distortionDSPProcessor);
+		array<float>^ _pushVisSamples(IntPtr SFXDSPProcessor, int effectTypeID);
 		void _changeDistortionDrive(IntPtr distortionDSPProcessor, float newDrive);
 		void _changeDistortionFunctionToUse(IntPtr distortionDSPProcessor, float newFunctionIndex);
 

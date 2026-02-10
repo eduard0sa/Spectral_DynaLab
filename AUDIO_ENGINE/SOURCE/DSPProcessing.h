@@ -6,14 +6,6 @@
 using namespace juce;
 using namespace std;
 
-/*struct Struct_DSP_Effects {
-	unique_ptr<dsp::Reverb> Reverb_Efect = make_unique<dsp::Reverb>();
-	unique_ptr<dsp::WaveShaper<float>> distortion = make_unique<dsp::WaveShaper<float>>();
-	unique_ptr<dsp::Gain<float>> inputGain = make_unique<dsp::Gain<float>>();
-	unique_ptr<dsp::Gain<float>> outputGain = make_unique<dsp::Gain<float>>();
-	//unique_ptr<dsp::Compressor<float>> Compressor_Effect = make_unique<dsp::Compressor<float>>();
-};*/
-
 enum enum_EffectType {
 	Distortion,
 	Compressor,
@@ -81,9 +73,7 @@ public:
 
 	int getEffectID();
 
-	float* pushVisSamples() {
-		return visSampleArrayHEAP;
-	}
+	float* pushVisSamples();
 
 	void changeFunctionToUse(float(*newFunctionToUse)(float));
 
@@ -102,6 +92,8 @@ private:
 
 public:
 	int id;
+	float* visSampleArrayHEAP;
+	float* visSampleArraySTACK;
 
 	DSPCompressorEffect();
 
@@ -112,6 +104,8 @@ public:
 	~DSPCompressorEffect();
 
 	int getEffectID();
+
+	float* pushVisSamples();
 
 	void changeCompressorThreshold(float newThreshold);
 
@@ -138,6 +132,8 @@ private:
 
 public:
 	int id;
+	float* visSampleArrayHEAP;
+	float* visSampleArraySTACK;
 
 	DSPReverbEffect();
 
@@ -148,6 +144,8 @@ public:
 	~DSPReverbEffect();
 
 	int getEffectID();
+
+	float* pushVisSamples();
 
 	void changeReverbRoomSize(float newRoomSize);
 	void changeReverbDamping(float newDamping);
@@ -170,6 +168,8 @@ private:
 
 public:
 	int id;
+	float* visSampleArrayHEAP;
+	float* visSampleArraySTACK;
 
 	DSPChorusEffect();
 
@@ -180,6 +180,8 @@ public:
 	~DSPChorusEffect();
 
 	int getEffectID();
+
+	float* pushVisSamples();
 
 	void changeChorusRate(float newRate);
 	void changeChorusDepth(float newDepth);

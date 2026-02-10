@@ -59,8 +59,24 @@ extern "C" {
 
     #pragma region DistortionDSP
 
-    float* pushVisSamples(void* distortionDSPProcessor) {
-        float* a = ((DSPDistortionEffect*)distortionDSPProcessor)->pushVisSamples();
+    float* pushVisSamples(void* SFXDSPProcessor, int dspType) {
+        float* a = NULL;
+
+        switch (dspType) {
+        case enum_EffectType::Distortion:
+            a = ((DSPDistortionEffect*)SFXDSPProcessor)->pushVisSamples();
+            break;
+        case enum_EffectType::Compressor:
+            a = ((DSPCompressorEffect*)SFXDSPProcessor)->pushVisSamples();
+            break;
+        case enum_EffectType::Reverb:
+            a = ((DSPReverbEffect*)SFXDSPProcessor)->pushVisSamples();
+            break;
+        case enum_EffectType::Chorus:
+            a = ((DSPChorusEffect*)SFXDSPProcessor)->pushVisSamples();
+            break;
+        }
+
         return a;
     }
 

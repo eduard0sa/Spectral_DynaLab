@@ -1,5 +1,4 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
-using System.Windows.Forms.VisualStyles;
 
 namespace SDLab_GUI.UIComponents
 {
@@ -89,12 +88,13 @@ namespace SDLab_GUI.UIComponents
 
         private void deleteDSPEvent(object? sender, EventArgs e)
         {
+            DSPEffectWaveVizualizerArea.UpdateFrameTimer.Stop();
+
             (Parent as VerticalStackLayout).Children.Remove(this);
 
             Global.structVariableDataTypeUnit dataTypeUnit = new Global.structVariableDataTypeUnit();
             dataTypeUnit.dataUnit = this;
-            DSPEffectWaveVizualizerArea.UpdateFrameTimer.Stop();
-
+            
             switch (dSPType)
             {
                 case Global.enumDSPType.DISTORTION:
@@ -435,18 +435,25 @@ namespace SDLab_GUI.UIComponents
 
             UpdateFrameTimer = Dispatcher.CreateTimer();
 
+            UpdateFrameTimer.Interval = TimeSpan.FromMilliseconds(33);
+
+            UpdateFrameTimer.Tick += delegate {
+                visualizer.VisSamplesArray = _graphUpdateFunction();
+                visualizer.updateWaveForm();
+            };
+
             UpdateFrameTimer.Start();
 
             /*
-             TimeSpan.FromMilliseconds(33), // ~60 FPS
+                TimeSpan.FromMilliseconds(33), // ~60 FPS
                 () =>
                 {
                     /*PullWaveformFromDll();
-            visualizer.VisSamplesArray = _graphUpdateFunction();
-            visualizer.updateWaveForm();
-            return true;
-        }
-        */
+                    visualizer.VisSamplesArray = _graphUpdateFunction();
+                    visualizer.updateWaveForm();
+                    return true;
+                }
+            */
         }
 
         public IDispatcherTimer UpdateFrameTimer { get => updateFrameTimer; set => updateFrameTimer = value; }

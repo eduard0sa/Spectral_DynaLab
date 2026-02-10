@@ -64,7 +64,7 @@ namespace SDLab_GUI.AudioSystemsLogic
 
         public float[] pushVisSampleArray()
         {
-            return engineBridgeRef.PushVisSamples(distortionDSPProcessor);
+            return engineBridgeRef.PushVisSamples(distortionDSPProcessor, (int)Global.enumDSPType.DISTORTION);
         }
     }
 
@@ -155,6 +155,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             Slider originSlider = sender as Slider;
             release = (float)originSlider.Value;
             engineBridgeRef.ChangeCompressorRelease(compressorDSPProcessor, release);
+        }
+
+        public float[] pushVisSampleArray()
+        {
+            return engineBridgeRef.PushVisSamples(compressorDSPProcessor, (int)Global.enumDSPType.COMPRESSOR);
         }
     }
 
@@ -281,6 +286,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             FreezeMode = originSwitchBTN.IsToggled;
             engineBridgeRef.ChangeReverbFreezeMode(reverbDSPProcessor, freezeMode);
         }
+
+        public float[] pushVisSampleArray()
+        {
+            return engineBridgeRef.PushVisSamples(reverbDSPProcessor, (int)Global.enumDSPType.REVERB);
+        }
     }
 
     public class ChorusDSP
@@ -387,6 +397,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             Slider originSlider = sender as Slider;
             mix = (float)originSlider.Value;
             engineBridgeRef.ChangeChorusMix(chorusDSPProcessor, mix);
+        }
+
+        public float[] pushVisSampleArray()
+        {
+            return engineBridgeRef.PushVisSamples(chorusDSPProcessor, (int)Global.enumDSPType.CHORUS);
         }
     }
 }

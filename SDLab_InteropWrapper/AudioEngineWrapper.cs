@@ -52,9 +52,9 @@ namespace SDLab_InteropWrapper
 
         #region DSPs
 
-        public float[] PushVisSamples(IntPtr distortionDSPProcessor)
+        public float[] PushVisSamples(IntPtr SFXDSPProcessor, int effectTypeID)
         {
-            return audioEngineRef._pushVisSamples(distortionDSPProcessor);
+            return audioEngineRef._pushVisSamples(SFXDSPProcessor, effectTypeID);
         }
 
         public IntPtr AddDSPEffect(IntPtr engine, int effecttypeID)

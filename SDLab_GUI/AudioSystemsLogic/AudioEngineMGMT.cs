@@ -47,14 +47,26 @@ namespace SDLab_GUI.AudioSystemsLogic
 
         public void removeAudioEngine(JuceAudioProvider provider)
         {
-            for(int i = 0; i < provider.DspProcessors.Count; i++)
+            int dspProcessorsCount = (int)provider.DspProcessors.Count;
+
+            for (int i = 0; i < provider.DspProcessors.Count; i++)
             {
                 provider.removeDSPEffect(provider.DspProcessors[i]);
             }
 
+            /*System.Timers.Timer counter = new System.Timers.Timer();
+
+            counter.Interval = 33 * dspProcessorsCount;
+
+            counter.Elapsed += delegate
+            {
+                counter.Stop();*/
             mixer.RemoveMixerInput(provider);
             oscillators.Remove(provider);
             _AudioEngineRef.DestroyEngine(provider.Engine);
+            /*};
+
+            counter.Start();*/
         }
 
         public JuceAudioProvider LaunchAudioEngine()
@@ -151,7 +163,7 @@ namespace SDLab_GUI.AudioSystemsLogic
 
                 case enumDSPType.COMPRESSOR:
                     CompressorDSP newCompressorProcessor = new CompressorDSP(engine, engineBridgeRef);
-                    DSPEffectItem<CompressorDSP> newCompressorDSP = new DSPEffectItem<CompressorDSP>(this, dspEffectType, newCompressorProcessor, delegate { return null; });
+                    DSPEffectItem<CompressorDSP> newCompressorDSP = new DSPEffectItem<CompressorDSP>(this, dspEffectType, newCompressorProcessor, newCompressorProcessor.pushVisSampleArray);
 
                     newCompressorDSP.addControlGroup();
                     newCompressorDSP.addSliderControl(0, "Threshold:", newCompressorProcessor.CompressorThresholdSliderData, newCompressorProcessor.compressorThresholdChangeEvent);
@@ -171,7 +183,7 @@ namespace SDLab_GUI.AudioSystemsLogic
 
                 case enumDSPType.REVERB:
                     ReverbDSP newReverbProcessor = new ReverbDSP(engine, engineBridgeRef);
-                    DSPEffectItem<ReverbDSP> newReverbDSP = new DSPEffectItem<ReverbDSP>(this, dspEffectType, newReverbProcessor, delegate { return null; });
+                    DSPEffectItem<ReverbDSP> newReverbDSP = new DSPEffectItem<ReverbDSP>(this, dspEffectType, newReverbProcessor, newReverbProcessor.pushVisSampleArray);
 
                     newReverbDSP.addControlGroup();
 
@@ -194,7 +206,7 @@ namespace SDLab_GUI.AudioSystemsLogic
 
                 case enumDSPType.CHORUS:
                     ChorusDSP newChorusProcessor = new ChorusDSP(engine, engineBridgeRef);
-                    DSPEffectItem<ChorusDSP> newChorusDSP = new DSPEffectItem<ChorusDSP>(this, dspEffectType, newChorusProcessor, delegate { return null; });
+                    DSPEffectItem<ChorusDSP> newChorusDSP = new DSPEffectItem<ChorusDSP>(this, dspEffectType, newChorusProcessor, newChorusProcessor.pushVisSampleArray);
 
                     newChorusDSP.addControlGroup();
 

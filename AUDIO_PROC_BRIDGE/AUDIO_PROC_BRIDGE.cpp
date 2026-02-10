@@ -39,9 +39,9 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeGain(IntPtr engine, float newGain) 
 
 #pragma region DSPs
 
-array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushVisSamples(IntPtr distortionDSPProcessor) {
+array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushVisSamples(IntPtr SFXDSPProcessor, int effectTypeID) {
 	array<float>^ managedArray = gcnew cli::array<float>(512);
-	float* visSamplesArrPTR = pushVisSamples((void*)distortionDSPProcessor);
+	float* visSamplesArrPTR = pushVisSamples((void*)SFXDSPProcessor, effectTypeID);
 
 	for (int i = 0; i < 512; i++) {
 		managedArray[i] = visSamplesArrPTR[i];
