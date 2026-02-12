@@ -3,11 +3,17 @@ using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.AudioSystemsLogic
 {
+    /// <summary>
+    /// Provides functionality for applying and controlling a distortion DSP effect and talks with the Interop Layer
+    /// </summary>
     public class DistortionDSP
     {
         private readonly AudioEngineWrapper engineBridgeRef;
         private nint distortionDSPProcessor;
 
+        /// <summary>
+        /// Specifies the types of audio distortion effects.
+        /// </summary>
         enum enum_distortionType
         {
             SoftClip,
@@ -46,6 +52,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             distortionDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.DISTORTION);
         }
 
+        /// <summary>
+        /// Handles changes to the distortion drive slider and updates the distortion drive value accordingly.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data containing the new value.</param>
         public void distortionDriveChangeEvent(object? sender, ValueChangedEventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -53,6 +64,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeDistortionDrive(distortionDSPProcessor, drive);
         }
 
+        /// <summary>
+        /// Handles changes to the distortion type selection and updates the distortion function accordingly.
+        /// </summary>
+        /// <param name="sender">The Picker control that triggered the event.</param>
+        /// <param name="e">Event data associated with the change.</param>
         public void distortionTypeChangeEvent(object? sender, EventArgs e)
         {
             Picker originPicker = sender as Picker;
@@ -62,12 +78,19 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeDistortionFunctionToUse(distortionDSPProcessor, (int)distortionType);
         }
 
+        /// <summary>
+        /// Retrieves an array of visualization sample data from the distortion DSP processor.
+        /// </summary>
+        /// <returns>A float array containing the visualization samples.</returns>
         public float[] pushVisSampleArray()
         {
             return engineBridgeRef.PushVisSamples(distortionDSPProcessor, (int)Global.enumDSPType.DISTORTION);
         }
     }
 
+    /// <summary>
+    /// Provides functionality for managing and controlling a compressor DSP effect and integrates with the Interop Layer.
+    /// </summary>
     public class CompressorDSP
     {
         private readonly AudioEngineWrapper engineBridgeRef;
@@ -128,6 +151,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             compressorDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.COMPRESSOR);
         }
 
+        /// <summary>
+        /// Handles changes to the compressor threshold slider, updates its rotation, and applies the new threshold value to the compressor processor.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the threshold change.</param>
         public void compressorThresholdChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -136,6 +164,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeCompressorThreshold(compressorDSPProcessor, threshold);
         }
 
+        /// <summary>
+        /// Handles changes to the compressor ratio slider and updates the compressor ratio accordingly.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the slider value change.</param>
         public void compressorRatioChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -143,6 +176,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeCompressorRatio(compressorDSPProcessor, ratio);
         }
 
+        /// <summary>
+        /// Handles changes to the compressor attack value by updating the internal state and notifying the engine bridge.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the change.</param>
         public void compressorAttackChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -150,6 +188,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeCompressorAttack(compressorDSPProcessor, attack);
         }
 
+        /// <summary>
+        /// Handles the event when the compressor release slider value changes and updates the compressor release parameter.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the slider value change.</param>
         public void compressorReleaseChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -157,12 +200,19 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeCompressorRelease(compressorDSPProcessor, release);
         }
 
+        /// <summary>
+        /// Retrieves an array of visualization sample data from the compressor DSP processor.
+        /// </summary>
+        /// <returns>An array of floating-point values representing the visualization samples.</returns>
         public float[] pushVisSampleArray()
         {
             return engineBridgeRef.PushVisSamples(compressorDSPProcessor, (int)Global.enumDSPType.COMPRESSOR);
         }
     }
 
+    /// <summary>
+    /// Provides control and parameter management for a reverb DSP effect within an audio engine, and talks with the Interop Layer
+    /// </summary>
     public class ReverbDSP
     {
         private readonly AudioEngineWrapper engineBridgeRef;
@@ -245,6 +295,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             reverbDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.REVERB);
         }
 
+        /// <summary>
+        /// Handles changes to the reverb room size slider and updates the reverb effect accordingly.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the slider value change.</param>
         public void reverbRoomSizeChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -252,6 +307,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeReverbRoomSize(reverbDSPProcessor, roomSize);
         }
 
+        /// <summary>
+        /// Handles the event when the reverb damping slider value changes and updates the reverb damping parameter in the audio engine.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the slider value change.</param>
         public void reverbDampingChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -259,6 +319,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeReverbDamping(reverbDSPProcessor, damping);
         }
 
+        /// <summary>
+        /// Handles the event triggered when the reverb wet level slider value changes and updates the reverb effect accordingly.
+        /// </summary>
+        /// <param name="sender">The slider control that initiated the event.</param>
+        /// <param name="e">Event data associated with the slider value change.</param>
         public void reverbWetLevelChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -266,6 +331,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeReverbWetLevel(reverbDSPProcessor, wetLevel);
         }
 
+        /// <summary>
+        /// Handles the event when the reverb dry level slider value changes and updates the reverb dry level accordingly.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the slider value change.</param>
         public void reverbDryLevelChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -273,6 +343,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeReverbDryLevel(reverbDSPProcessor, dryLevel);
         }
 
+        /// <summary>
+        /// Handles changes to the reverb width slider and updates the reverb width in the audio engine.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the slider value change.</param>
         public void reverbWidthChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -280,6 +355,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeReverbWidth(reverbDSPProcessor, width);
         }
 
+        /// <summary>
+        /// Handles the event triggered when the reverb freeze mode switch is toggled, updating the freeze mode state and notifying the audio engine.
+        /// </summary>
+        /// <param name="sender">The switch control that triggered the event.</param>
+        /// <param name="e">Event data associated with the toggle action.</param>
         public void reverbFreezeModeChangeEvent(object? sender, EventArgs e)
         {
             Switch originSwitchBTN = sender as Switch;
@@ -287,12 +367,19 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeReverbFreezeMode(reverbDSPProcessor, freezeMode);
         }
 
+        /// <summary>
+        /// Retrieves an array of visualization samples from the reverb DSP processor.
+        /// </summary>
+        /// <returns>An array of floating-point values representing the visualization samples.</returns>
         public float[] pushVisSampleArray()
         {
             return engineBridgeRef.PushVisSamples(reverbDSPProcessor, (int)Global.enumDSPType.REVERB);
         }
     }
 
+    /// <summary>
+    /// Provides functionality to manage and control a chorus DSP audio effect, and talks with the Interop Layer
+    /// </summary>
     public class ChorusDSP
     {
         private readonly AudioEngineWrapper engineBridgeRef;
@@ -364,6 +451,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             chorusDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.CHORUS);
         }
 
+        /// <summary>
+        /// Handles changes to the chorus rate slider and updates the chorus effect rate accordingly.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the rate change.</param>
         public void chorusRateChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -371,6 +463,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeChorusRate(chorusDSPProcessor, rate);
         }
 
+        /// <summary>
+        /// Handles changes to the chorus depth slider and updates the chorus effect depth accordingly.
+        /// </summary>
+        /// <param name="sender">The slider control that triggered the event.</param>
+        /// <param name="e">Event data associated with the change.</param>
         public void chorusDepthChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -378,6 +475,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeChorusDepth(chorusDSPProcessor, depth);
         }
 
+        /// <summary>
+        /// Handles changes to the chorus center delay slider and updates the chorus effect center delay accordingly.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void chorusCenterDelayChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -385,6 +487,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeChorusCenterDelay(chorusDSPProcessor, centerDelay);
         }
 
+        /// <summary>
+        /// Handles changes to the chorus feedback slider and updates the chorus effect feedback accordingly.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void chorusFeedbackChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -392,6 +499,11 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeChorusFeedback(chorusDSPProcessor, feedback);
         }
 
+        /// <summary>
+        /// Handles changes to the chorus mix slider and updates the chorus effect mix accordingly.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void chorusMixChangeEvent(object? sender, EventArgs e)
         {
             Slider originSlider = sender as Slider;
@@ -399,6 +511,10 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.ChangeChorusMix(chorusDSPProcessor, mix);
         }
 
+        /// <summary>
+        /// Pushes a float sample array for DSP output sound wave visualization.
+        /// </summary>
+        /// <returns>A floating-point array with the sample data.</returns>
         public float[] pushVisSampleArray()
         {
             return engineBridgeRef.PushVisSamples(chorusDSPProcessor, (int)Global.enumDSPType.CHORUS);

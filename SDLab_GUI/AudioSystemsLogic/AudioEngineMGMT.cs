@@ -6,6 +6,10 @@ using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.AudioSystemsLogic
 {
+    /// <summary>
+    /// <para> Audio engine management class. </para>
+    /// <para> It handles sound entries and effects and contacts core audio engine through the Interop Layer. </para>
+    /// </summary>
     public class AudioEngineMGMT
     {
         private float defaultFrequency = 38.0f;
@@ -20,33 +24,48 @@ namespace SDLab_GUI.AudioSystemsLogic
 
         public AudioEngineMGMT()
         {
+            //Initializing Mixer Provider
             mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 1))
             {
                 ReadFully = true
             };
 
+            //Initializing Volume Sample Provider
             vsp = new VolumeSampleProvider(mixer);
-
             vsp.Volume = 1.0f;
         }
 
+        /// <summary>
+        /// Initializes the audio mixer with the specified audio source.
+        /// </summary>
         public void initMixer()
         {
             output.Init(vsp);
         }
 
+        /// <summary>
+        /// Starts playback of the audio mixer output.
+        /// </summary>
         public void PlayMixer()
         {
             output.Play();
         }
 
+        /// <summary>
+        /// Pauses audio playback on the mixer output.
+        /// </summary>
         public void PauseMixer()
         {
             output.Pause();
         }
 
+        /// <summary>
+        /// Removes a specified audio engine and all its associated DSP effects from the app and from audio engines.
+        /// </summary>
+        /// <param name="provider">The JuceAudioProvider instance representing the audio engine to remove.</param>
         public void removeAudioEngine(JuceAudioProvider provider)
         {
+            //Associated DSPs removal
             int dspProcessorsCount = (int)provider.DspProcessors.Count;
             int counter = 0;
 
@@ -56,19 +75,26 @@ namespace SDLab_GUI.AudioSystemsLogic
                 counter++;
             }
 
+            //Oscillator removal
             mixer.RemoveMixerInput(provider);
             oscillators.Remove(provider);
             _AudioEngineRef.DestroyEngine(provider.Engine);
         }
 
+        /// <summary>
+        /// Initializes a new JuceAudioProvider with default frequency and gain, adds it to the mixer and oscillator list, and returns the provider.
+        /// </summary>
+        /// <returns>The newly created and configured JuceAudioProvider instance.</returns>
         public JuceAudioProvider LaunchAudioEngine()
         {
+            //Oscillator instantiation in the core audio engine
             AudioEngineOsc = _AudioEngineRef.CreateEngine();
             JuceAudioProvider provider = new JuceAudioProvider(AudioEngineOsc, _AudioEngineRef, 44100, 1);
 
             provider.changeFrequency(defaultFrequency);
             provider.changeGain(defaultGain);
 
+            //New oscillator instance append in mixer
             mixer.AddMixerInput(provider);
 
             oscillators.Add(provider);
@@ -76,6 +102,9 @@ namespace SDLab_GUI.AudioSystemsLogic
         }
     }
 
+    /// <summary>
+    /// Provides audio sample data from a JUCE-based audio engine, supporting real-time processing and management of DSP effects such as distortion, compressor, reverb, and chorus.
+    /// </summary>
     public class JuceAudioProvider : ISampleProvider
     {
         private readonly nint engine;
@@ -102,6 +131,13 @@ namespace SDLab_GUI.AudioSystemsLogic
             engineBridgeRef.EnginePrepareToPlay(engine, sampleRate, samplesPerBlock);
         }
 
+        /// <summary>
+        /// Asks the core audio system to fill a sample array with float wave values, and reads it into the player
+        /// </summary>
+        /// <param name="buffer">The array to fill with audio sample data.</param>
+        /// <param name="offset">The index in the buffer at which to begin writing samples.</param>
+        /// <param name="count">The number of samples to read into the buffer.</param>
+        /// <returns>The number of samples read into the buffer.</returns>
         public int Read(float[] buffer, int offset, int count)
         {
             int processedSamplesCount = 0;
@@ -118,23 +154,40 @@ namespace SDLab_GUI.AudioSystemsLogic
             return count;
         }
 
+        /// <summary>
+        /// Sets the current frequency and updates the core audio engine with the specified frequency value.
+        /// </summary>
+        /// <param name="frequency">The new frequency value to set.</param>
         public void changeFrequency(float frequency)
         {
             currentFrequency = frequency;
             engineBridgeRef.ChangeFrequency(engine, frequency);
         }
 
-        public void changeGain(float frequency)
+        /// <summary>
+        /// Sets the current gain and updates the core audio engine with the specified gain value.
+        /// </summary>
+        /// <param name="frequency">The new gain value to set.</param>
+        public void changeGain(float gain)
         {
-            currentGain = frequency;
-            engineBridgeRef.ChangeGain(engine, frequency);
+            currentGain = gain;
+            engineBridgeRef.ChangeGain(engine, gain);
         }
 
+        /// <summary>
+        /// Retrieves an array of oscillator playing samples from the core audio engine, for wave visualization.
+        /// </summary>
+        /// <returns>An array of float values representing oscillator visualization samples.</returns>
         public float[] pushOSCVisSampleArray()
         {
             return engineBridgeRef.PushOscVisSamples(engine);
         }
 
+        /// <summary>
+        /// Adds a DSP effect of the specified type to the processor collection and returns its data unit.
+        /// </summary>
+        /// <param name="dspEffectType">The type of DSP effect to add.</param>
+        /// <returns>A structVariableDataTypeUnit representing the added DSP effect.</returns>
         public structVariableDataTypeUnit addDSPEffect(enumDSPType dspEffectType)
         {
             structVariableDataTypeUnit dspUnit = new structVariableDataTypeUnit();
@@ -142,19 +195,23 @@ namespace SDLab_GUI.AudioSystemsLogic
             switch (dspEffectType)
             {
                 case enumDSPType.DISTORTION:
+                    //New DistotionDSP audio processing class instance
                     DistortionDSP newDistortionProcessor = new DistortionDSP(engine, engineBridgeRef);
+                    //New DistortionDSP UI component class instance
                     DSPEffectItem<DistortionDSP> newDistortionDSP = new DSPEffectItem<DistortionDSP>(this, dspEffectType, newDistortionProcessor, newDistortionProcessor.pushVisSampleArray);
 
+                    //Adding effect parameter controls
                     newDistortionDSP.addSliderControl(0, "Drive:", newDistortionProcessor.DistortionDriveSliderData, newDistortionProcessor.distortionDriveChangeEvent);
                     newDistortionDSP.addPickerControl(0, "Distortion Type:", newDistortionProcessor.DistortionTypePickerData, newDistortionProcessor.distortionTypeChangeEvent);
 
+                    //Packging effect data into a dataUnit struct instance
                     dspUnit = new structVariableDataTypeUnit()
                     {
                         dataType = enumVariableDataType.TYPE_DISTORTION_DSP_CLASS,
                         dataUnit = newDistortionDSP
                     };
 
-                    DspProcessors.Add(dspUnit);
+                    DspProcessors.Add(dspUnit); //Adding the dspUnit to the DSP List
 
                     return dspUnit;
 
@@ -228,6 +285,10 @@ namespace SDLab_GUI.AudioSystemsLogic
             }
         }
 
+        /// <summary>
+        /// Removes the specified DSP effect from the engine and stops its associated graph visualization update worker.
+        /// </summary>
+        /// <param name="effectData">The DSP effect data to be removed.</param>
         public void removeDSPEffect(structVariableDataTypeUnit effectData)
         {
             switch (effectData.dataType)
