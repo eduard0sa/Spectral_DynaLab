@@ -34,6 +34,20 @@ extern "C" {
         ((_Oscillator*)engine)->changeGain(newGain);
 	}
 
+    void changeWaveShapeFunction(void* engine, int functionIndex) {
+        switch (functionIndex) {
+            case 0:
+                ((_Oscillator*)engine)->changeWaveShapeFunction(enum_OscillatorWaveShapeType::sine);
+                break;
+            case 1:
+                ((_Oscillator*)engine)->changeWaveShapeFunction(enum_OscillatorWaveShapeType::square);
+                break;
+            case 2:
+                ((_Oscillator*)engine)->changeWaveShapeFunction(enum_OscillatorWaveShapeType::triangle);
+                break;
+            }
+    }
+
     #pragma endregion EngineMgmtLogic
 
     #pragma region DSPs

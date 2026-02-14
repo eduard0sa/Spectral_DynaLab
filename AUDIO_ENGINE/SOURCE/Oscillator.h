@@ -7,12 +7,19 @@
 using namespace juce;
 using namespace std;
 
+enum enum_OscillatorWaveShapeType {
+	sine,
+	square,
+	triangle
+};
+
 class _Oscillator
 {
 	public:
 		//PARAMETERS
 		float gain = 0.1f;
 		float frequency = 50.0f; // Frequency in Hz
+		enum_OscillatorWaveShapeType waveShape;
 
 		float* visSampleArrayHEAP;
 		float* visSampleArraySTACK;
@@ -29,6 +36,7 @@ class _Oscillator
 		void changeGain(float newGain);
 
 		float* pushOscVisSamples();
+		void changeWaveShapeFunction(enum_OscillatorWaveShapeType functionType);
 
 		template<typename T>
 		DSPEffect* addDSPEffect() {
@@ -67,6 +75,7 @@ class _Oscillator
 		DSPEffect* DSPEffectChain[100];
 
 		bool checkExistantEffectID(int id);
+		float processWaveShapeFunction(float phase);
 
 		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_Oscillator)
 };

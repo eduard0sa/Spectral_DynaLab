@@ -32,7 +32,7 @@ namespace SDLab_GUI.UIComponents
             OscillatorTriangleMark.ClickEventHandler = deleteOscillatorEvent;
             OscillatorItemHeader = new OscillatorItemHeader(this);
             OscillatorItemSliderControls = new OscillatorItemSliderControlGroup(this);
-            OscillatorItemWaveShapeControls = new OscillatorItemWaveShapeControl(this);
+            OscillatorItemWaveShapeControls = new OscillatorItemWaveShapeControl(this, setWaveShape);
             OscillatorItemSFXButtonArea = new OscillatorItemSFXButtonArea(this);
             OscillatorItemSFXButtonArea.OpenSFXEditorEvent = openSFXEditorEvent;
 
@@ -139,6 +139,31 @@ namespace SDLab_GUI.UIComponents
         private void closeSFXEditorEvent(object? sender, EventArgs e)
         {
             mainPageOBJ.Navigation.PopModalAsync();
+        }
+
+        /// <summary>
+        /// This method sets the oscillator wave shape to an option chosen by the user.
+        /// </summary>
+        /// <param name="sender">The option button clicked.</param>
+        /// <param name="e">EventHandler's event arguments object.</param>
+        private void setWaveShape(object? sender, EventArgs e)
+        {
+            ImageButton sourceIMGBTN = sender as ImageButton;
+
+            switch (sourceIMGBTN.Source.ToString().Split(": ")[1])
+            {
+                case "sine_wave.png":
+                    oscAudioProvider.changeWaveShapeFunction(Global.enumWaveShapeType.Sine);
+                    break;
+                case "digital_wave.png":
+                    oscAudioProvider.changeWaveShapeFunction(Global.enumWaveShapeType.Square);
+                    break;
+                case "triangle_wave.png":
+                    oscAudioProvider.changeWaveShapeFunction(Global.enumWaveShapeType.Triangle);
+                    break;
+            }
+
+            (sourceIMGBTN.Parent as OscillatorItemWaveShapeControl).highlightButton(sourceIMGBTN);
         }
     }
 
@@ -386,7 +411,7 @@ namespace SDLab_GUI.UIComponents
         /// OscillatorItemWaveShapeControl class constructor.
         /// </summary>
         /// <param name="parentFLNode">Reference to the parent FlexLayout object (the oscillator UI Component).</param>
-        public OscillatorItemWaveShapeControl(FlexLayout parentFLNode)
+        public OscillatorItemWaveShapeControl(FlexLayout parentFLNode, EventHandler waveTypeBTNClickEH)
         {
             parentFLNode.SetGrow(this, 0.16f);
             Direction = Microsoft.Maui.Layouts.FlexDirection.Row;
@@ -401,6 +426,7 @@ namespace SDLab_GUI.UIComponents
             sineWaveBTN.Margin = new Thickness(0, 0, 5, 0);
             sineWaveBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
             sineWaveBTN.CornerRadius = 5;
+            sineWaveBTN.Clicked += waveTypeBTNClickEH;
 
             squareWaveBTN.Source = "digital_wave.png";
             squareWaveBTN.Padding = 15;
@@ -409,6 +435,7 @@ namespace SDLab_GUI.UIComponents
             squareWaveBTN.Margin = new Thickness(0, 0, 5, 0);
             squareWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
             squareWaveBTN.CornerRadius = 5;
+            squareWaveBTN.Clicked += waveTypeBTNClickEH;
 
             triangleWaveBTN.Source = "triangle_wave.png";
             triangleWaveBTN.Padding = 15;
@@ -417,10 +444,19 @@ namespace SDLab_GUI.UIComponents
             triangleWaveBTN.Margin = new Thickness(0, 0, 5, 0);
             triangleWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
             triangleWaveBTN.CornerRadius = 5;
+            triangleWaveBTN.Clicked += waveTypeBTNClickEH;
 
             Children.Add(sineWaveBTN);
             Children.Add(squareWaveBTN);
             Children.Add(triangleWaveBTN);
+        }
+
+        public void highlightButton(ImageButton targetBTN)
+        {
+            sineWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            squareWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            triangleWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            targetBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
         }
     }
 

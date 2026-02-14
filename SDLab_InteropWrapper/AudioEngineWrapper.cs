@@ -48,6 +48,11 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeGain(engine, newGain);
         }
 
+        public void ChangeWaveShapeFunction(IntPtr engine, int functionIndex)
+        {
+            audioEngineRef._changeWaveShapeFunction(engine, functionIndex);
+        }
+
         public float[] PushOscVisSamples(IntPtr engine)
         {
             return audioEngineRef._pushOscVisSamples(engine);

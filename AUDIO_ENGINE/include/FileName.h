@@ -22,6 +22,7 @@ extern "C" AUDIO_ENGINE_API float* pushOscVisSamples(void* engine);
 
 extern "C" AUDIO_ENGINE_API void changeFrequency(void* engine, float newFrequency);
 extern "C" AUDIO_ENGINE_API void changeGain(void* engine, float newGain);
+extern "C" AUDIO_ENGINE_API void changeWaveShapeFunction(void* engine, int functionIndex);
 
 #pragma endregion EngineLogic
 #pragma region DSPLogic

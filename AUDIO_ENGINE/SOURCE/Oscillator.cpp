@@ -1,6 +1,7 @@
 #include "Oscillator.h"
 
 _Oscillator::_Oscillator() {
+    waveShape = enum_OscillatorWaveShapeType::sine;
     visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
     visSampleArraySTACK = new (visSampleArrayHEAP) float[512]();
 }
@@ -40,7 +41,7 @@ void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
 
         for (int sample = 0; sample < bufferToFill.numSamples; ++sample)
         {
-            buffer[sample] = std::sin(phase);
+            buffer[sample] = processWaveShapeFunction(phase);
             phase = fmod(phase + phaseIncrement, MathConstants<float>::twoPi);
         }
     }
@@ -72,6 +73,17 @@ void _Oscillator::releaseResources()
 
 #pragma region Custom_methods
 
+float _Oscillator::processWaveShapeFunction(float phase) {
+    switch (waveShape) {
+        case enum_OscillatorWaveShapeType::sine:
+            return std::sin(phase);
+        case enum_OscillatorWaveShapeType::square:
+            return (2 * ceil(sin(phase))) - 1; //abs(sin(x))/sin(x) is similar, but can't divide by zero.
+        case enum_OscillatorWaveShapeType::triangle:
+            return 2 * abs(2 * ((1/MathConstants<float>::pi) * phase - floor(1/2 + (1/MathConstants<float>::pi) * phase))) - 1;
+    }
+}
+
 void _Oscillator::changeFrequency(float newFrequency)
 {
     frequency = newFrequency;
@@ -81,6 +93,10 @@ void _Oscillator::changeFrequency(float newFrequency)
 void _Oscillator::changeGain(float newGain) {
     gain = newGain;
     outputGain->setGainLinear(gain);
+}
+
+void _Oscillator::changeWaveShapeFunction(enum_OscillatorWaveShapeType functionType) {
+    waveShape = functionType;
 }
 
 void _Oscillator::removeDSPEffect(void* effect) {

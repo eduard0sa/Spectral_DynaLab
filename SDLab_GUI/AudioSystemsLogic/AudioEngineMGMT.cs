@@ -111,6 +111,7 @@ namespace SDLab_GUI.AudioSystemsLogic
         private readonly AudioEngineWrapper engineBridgeRef;
         private float currentFrequency;
         private float currentGain;
+        private enumWaveShapeType waveShapeType = enumWaveShapeType.Sine;
         private int samplesPerBlock;
 
         private List<structVariableDataTypeUnit> dspProcessors = new List<structVariableDataTypeUnit>();
@@ -120,6 +121,7 @@ namespace SDLab_GUI.AudioSystemsLogic
         public nint Engine { get => engine; }
         public float CurrentFrequency { get => currentFrequency; }
         public float CurrentGain { get => currentGain; }
+        public enumWaveShapeType WaveShapeType { get => waveShapeType; }
         public List<structVariableDataTypeUnit> DspProcessors { get => dspProcessors; }
 
         public JuceAudioProvider(nint engine, AudioEngineWrapper engineBridgeRef, int sampleRate, int channels)
@@ -172,6 +174,16 @@ namespace SDLab_GUI.AudioSystemsLogic
         {
             currentGain = gain;
             engineBridgeRef.ChangeGain(engine, gain);
+        }
+
+        /// <summary>
+        /// Sets the current waveShapeType and updates the core audio engine with the specified wave shape function.
+        /// </summary>
+        /// <param name="_waveShapeType"></param>
+        public void changeWaveShapeFunction(enumWaveShapeType _waveShapeType)
+        {
+            waveShapeType = _waveShapeType;
+            engineBridgeRef.ChangeWaveShapeFunction(engine, (int)_waveShapeType);
         }
 
         /// <summary>

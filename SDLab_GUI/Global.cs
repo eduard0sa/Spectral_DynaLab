@@ -1,7 +1,13 @@
 ﻿namespace SDLab_GUI
 {
+    /// <summary>
+    /// Globalally accessed members class.
+    /// </summary>
     public class Global
     {
+        /// <summary>
+        /// Represents a dynamic datatype. Used with structVariableDataTypeUnit
+        /// </summary>
         public enum enumVariableDataType
         {
             TYPE_INT,
@@ -17,6 +23,9 @@
             TYPE_REVERB_DSP_CLASS
         }
 
+        /// <summary>
+        /// Represents a DSP SFX type.
+        /// </summary>
         public enum enumDSPType
         {
             DISTORTION,
@@ -28,6 +37,16 @@
             GAIN
         }
 
+        public enum enumWaveShapeType
+        {
+            Sine,
+            Square,
+            Triangle
+        }
+
+        /// <summary>
+        /// Stores slider numeric data.
+        /// </summary>
         public struct structSliderData
         {
             public float minVal;
@@ -36,12 +55,18 @@
             public int numDisplayDecPlaces;
         }
 
+        /// <summary>
+        /// Stores picker numeric data.
+        /// </summary>
         public struct structPickerData
         {
             public int defValIndex;
             public List<string> items;
         }
 
+        /// <summary>
+        /// Stores an arbitrary dataType as an object type, registering the original data type via enumVariableDataType.
+        /// </summary>
         public struct structVariableDataTypeUnit
         {
             internal object dataUnit;

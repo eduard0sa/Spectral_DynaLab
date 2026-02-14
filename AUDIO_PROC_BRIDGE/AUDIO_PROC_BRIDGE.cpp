@@ -35,6 +35,10 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeGain(IntPtr engine, float newGain) 
 	changeGain((void*)engine, newGain);
 }
 
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeWaveShapeFunction(IntPtr engine, int functionIndex) {
+	changeWaveShapeFunction((void*)engine, functionIndex);
+}
+
 array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushOscVisSamples(IntPtr engine) {
 	array<float>^ managedArray = gcnew cli::array<float>(512);
 	float* visSamplesArrPTR = pushOscVisSamples((void*)engine);
