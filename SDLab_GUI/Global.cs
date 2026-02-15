@@ -44,6 +44,13 @@
             Triangle
         }
 
+        public enum enumBaseColor
+        {
+            RED,
+            YELLOW,
+            GREEN
+        }
+
         /// <summary>
         /// Stores slider numeric data.
         /// </summary>

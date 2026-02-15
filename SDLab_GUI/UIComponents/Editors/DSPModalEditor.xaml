@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="SDLab_GUI.DSPModalEditor"
+             x:Class="SDLab_GUI.UIComponents.Editors.DSPModalEditor"
              BackgroundColor="Transparent">
 
     <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#aa101413">

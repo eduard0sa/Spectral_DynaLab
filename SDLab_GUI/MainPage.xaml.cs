@@ -1,5 +1,5 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
-using SDLab_GUI.UIComponents;
+using SDLab_GUI.UIComponents.TrackUIComponents;
 using SDLab_InteropWrapper;
 
 namespace SDLab_GUI

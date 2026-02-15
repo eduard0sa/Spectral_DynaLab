@@ -1,6 +1,6 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
-using SDLab_GUI.UIComponents;
+using SDLab_GUI.UIComponents.TrackUIComponents;
 using SDLab_InteropWrapper;
 using static SDLab_GUI.Global;
 
@@ -213,7 +213,7 @@ namespace SDLab_GUI.AudioSystemsLogic
                     DSPEffectItem<DistortionDSP> newDistortionDSP = new DSPEffectItem<DistortionDSP>(this, dspEffectType, newDistortionProcessor, newDistortionProcessor.pushVisSampleArray);
 
                     //Adding effect parameter controls
-                    newDistortionDSP.addSliderControl(0, "Drive:", newDistortionProcessor.DistortionDriveSliderData, newDistortionProcessor.distortionDriveChangeEvent);
+                    newDistortionDSP.addSliderControl(0, "Drive:", enumBaseColor.RED, newDistortionProcessor.DistortionDriveSliderData, newDistortionProcessor.distortionDriveChangeEvent);
                     newDistortionDSP.addPickerControl(0, "Distortion Type:", newDistortionProcessor.DistortionTypePickerData, newDistortionProcessor.distortionTypeChangeEvent);
 
                     //Packging effect data into a dataUnit struct instance
@@ -232,10 +232,10 @@ namespace SDLab_GUI.AudioSystemsLogic
                     DSPEffectItem<CompressorDSP> newCompressorDSP = new DSPEffectItem<CompressorDSP>(this, dspEffectType, newCompressorProcessor, newCompressorProcessor.pushVisSampleArray);
 
                     newCompressorDSP.addControlGroup();
-                    newCompressorDSP.addSliderControl(0, "Threshold:", newCompressorProcessor.CompressorThresholdSliderData, newCompressorProcessor.compressorThresholdChangeEvent);
-                    newCompressorDSP.addSliderControl(0, "Ratio:", newCompressorProcessor.CompressorRatioSliderData, newCompressorProcessor.compressorRatioChangeEvent);
-                    newCompressorDSP.addSliderControl(1, "Attack:", newCompressorProcessor.CompressorAttackSliderData, newCompressorProcessor.compressorAttackChangeEvent);
-                    newCompressorDSP.addSliderControl(1, "Release:", newCompressorProcessor.CompressorReleaseSliderData, newCompressorProcessor.compressorReleaseChangeEvent);
+                    newCompressorDSP.addSliderControl(0, "Threshold:", enumBaseColor.RED, newCompressorProcessor.CompressorThresholdSliderData, newCompressorProcessor.compressorThresholdChangeEvent);
+                    newCompressorDSP.addSliderControl(0, "Ratio:", enumBaseColor.RED, newCompressorProcessor.CompressorRatioSliderData, newCompressorProcessor.compressorRatioChangeEvent);
+                    newCompressorDSP.addSliderControl(1, "Attack:", enumBaseColor.RED, newCompressorProcessor.CompressorAttackSliderData, newCompressorProcessor.compressorAttackChangeEvent);
+                    newCompressorDSP.addSliderControl(1, "Release:", enumBaseColor.RED, newCompressorProcessor.CompressorReleaseSliderData, newCompressorProcessor.compressorReleaseChangeEvent);
 
                     dspUnit = new structVariableDataTypeUnit()
                     {
@@ -253,11 +253,11 @@ namespace SDLab_GUI.AudioSystemsLogic
 
                     newReverbDSP.addControlGroup();
 
-                    newReverbDSP.addSliderControl(0, "Room Size:", newReverbProcessor.ReverbRoomSizeSliderData, newReverbProcessor.reverbRoomSizeChangeEvent);
-                    newReverbDSP.addSliderControl(0, "Damping:", newReverbProcessor.ReverbDampingSliderData, newReverbProcessor.reverbDampingChangeEvent);
-                    newReverbDSP.addSliderControl(0, "Wet Level:", newReverbProcessor.ReverbWetLevelSliderData, newReverbProcessor.reverbWetLevelChangeEvent);
-                    newReverbDSP.addSliderControl(1, "Dry Level:", newReverbProcessor.ReverbDryLevelSliderData, newReverbProcessor.reverbDryLevelChangeEvent);
-                    newReverbDSP.addSliderControl(1, "Width:", newReverbProcessor.ReverbWidthSliderData, newReverbProcessor.reverbWidthChangeEvent);
+                    newReverbDSP.addSliderControl(0, "Room Size:", enumBaseColor.RED, newReverbProcessor.ReverbRoomSizeSliderData, newReverbProcessor.reverbRoomSizeChangeEvent);
+                    newReverbDSP.addSliderControl(0, "Damping:", enumBaseColor.RED, newReverbProcessor.ReverbDampingSliderData, newReverbProcessor.reverbDampingChangeEvent);
+                    newReverbDSP.addSliderControl(0, "Wet Level:", enumBaseColor.RED, newReverbProcessor.ReverbWetLevelSliderData, newReverbProcessor.reverbWetLevelChangeEvent);
+                    newReverbDSP.addSliderControl(1, "Dry Level:", enumBaseColor.RED, newReverbProcessor.ReverbDryLevelSliderData, newReverbProcessor.reverbDryLevelChangeEvent);
+                    newReverbDSP.addSliderControl(1, "Width:", enumBaseColor.RED, newReverbProcessor.ReverbWidthSliderData, newReverbProcessor.reverbWidthChangeEvent);
                     newReverbDSP.addSwitchControl(1, "Freeze Mode:", newReverbProcessor.ReverbFreezeModeSliderData, newReverbProcessor.reverbFreezeModeChangeEvent);
 
                     dspUnit = new structVariableDataTypeUnit()
@@ -276,11 +276,11 @@ namespace SDLab_GUI.AudioSystemsLogic
 
                     newChorusDSP.addControlGroup();
 
-                    newChorusDSP.addSliderControl(0, "Rate:", newChorusProcessor.ChorusRateSliderData, newChorusProcessor.chorusRateChangeEvent);
-                    newChorusDSP.addSliderControl(0, "Depth:", newChorusProcessor.ChorusDepthSliderData, newChorusProcessor.chorusDepthChangeEvent);
-                    newChorusDSP.addSliderControl(0, "Center Delay:", newChorusProcessor.ChorusCenterDelaySliderData, newChorusProcessor.chorusCenterDelayChangeEvent);
-                    newChorusDSP.addSliderControl(1, "Feedback:", newChorusProcessor.ChorusFeedbackSliderData, newChorusProcessor.chorusFeedbackChangeEvent);
-                    newChorusDSP.addSliderControl(1, "Mix:", newChorusProcessor.ChorusMixSliderData, newChorusProcessor.chorusMixChangeEvent);
+                    newChorusDSP.addSliderControl(0, "Rate:", enumBaseColor.RED, newChorusProcessor.ChorusRateSliderData, newChorusProcessor.chorusRateChangeEvent);
+                    newChorusDSP.addSliderControl(0, "Depth:", enumBaseColor.RED, newChorusProcessor.ChorusDepthSliderData, newChorusProcessor.chorusDepthChangeEvent);
+                    newChorusDSP.addSliderControl(0, "Center Delay:", enumBaseColor.RED, newChorusProcessor.ChorusCenterDelaySliderData, newChorusProcessor.chorusCenterDelayChangeEvent);
+                    newChorusDSP.addSliderControl(1, "Feedback:", enumBaseColor.RED, newChorusProcessor.ChorusFeedbackSliderData, newChorusProcessor.chorusFeedbackChangeEvent);
+                    newChorusDSP.addSliderControl(1, "Mix:", enumBaseColor.RED, newChorusProcessor.ChorusMixSliderData, newChorusProcessor.chorusMixChangeEvent);
 
                     dspUnit = new structVariableDataTypeUnit()
                     {

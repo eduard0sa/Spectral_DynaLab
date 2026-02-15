@@ -17,7 +17,7 @@
         <Setter Property="FontAttributes" Value="Bold"/>
         <Setter Property="TextColor" Value="{StaticResource DefaultManaGreen}"/>
     </Style>
-    
+
     <Style TargetType="Label" Class="WhiteSecHeader">
         <Setter Property="FontSize" Value="Large"/>
         <Setter Property="FontFamily" Value="Orbitron"/>
@@ -25,7 +25,21 @@
         <Setter Property="TextColor" Value="{StaticResource Gray200}"/>
     </Style>
 
+    <Style TargetType="Label" Class="RedTitle">
+        <Setter Property="FontSize" Value="Title"/>
+        <Setter Property="FontFamily" Value="Orbitron"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{StaticResource DefaultPastelRed}"/>
+    </Style>
+
     <Style TargetType="Label" Class="GreenTitle">
+        <Setter Property="FontSize" Value="Title"/>
+        <Setter Property="FontFamily" Value="Orbitron"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{StaticResource DefaultManaGreen}"/>
+    </Style>
+
+    <Style TargetType="Label" Class="YellowTitle">
         <Setter Property="FontSize" Value="Title"/>
         <Setter Property="FontFamily" Value="Orbitron"/>
         <Setter Property="FontAttributes" Value="Bold"/>
@@ -64,6 +78,14 @@
         <Setter Property="Margin" Value="20, 0, 10, 0"/>
         <Setter Property="ThumbColor" Value="{StaticResource DefaultPastelRed}"/>
         <Setter Property="MinimumTrackColor" Value="{StaticResource DefaultPastelRed}"/>
+        <Setter Property="MaximumTrackColor" Value="{StaticResource Gray600}"/>
+    </Style>
+
+    <Style TargetType="Slider" Class="GreenAudioAttributeSlider">
+        <Setter Property="WidthRequest" Value="100"/>
+        <Setter Property="Margin" Value="20, 0, 10, 0"/>
+        <Setter Property="ThumbColor" Value="{StaticResource DefaultManaGreen}"/>
+        <Setter Property="MinimumTrackColor" Value="{StaticResource DefaultManaGreen}"/>
         <Setter Property="MaximumTrackColor" Value="{StaticResource Gray600}"/>
     </Style>
 

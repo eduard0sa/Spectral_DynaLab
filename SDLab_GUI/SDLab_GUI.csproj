@@ -87,7 +87,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="UIComponents\DSPModalEditor.xaml">
+	  <MauiXaml Update="UIComponents\Editors\DSPModalEditor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\CustomStyleSheet.xaml">
