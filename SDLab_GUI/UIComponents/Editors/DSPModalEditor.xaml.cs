@@ -1,4 +1,5 @@
 using SDLab_GUI.AudioSystemsLogic;
+using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
 using SDLab_GUI.UIComponents.TrackUIComponents;
 
 namespace SDLab_GUI.UIComponents.Editors

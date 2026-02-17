@@ -3499,6 +3499,7 @@
     <ClCompile Include="..\..\SOURCE\Oscillator.cpp" />
     <ClCompile Include="..\..\SOURCE\DSPProcessing.cpp" />
     <ClCompile Include="..\..\SOURCE\FileTrack.cpp" />
+    <ClCompile Include="..\..\SOURCE\WaveEngineTemplate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\juce-8.0.3-windows\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
@@ -7522,6 +7523,7 @@
     <ClInclude Include="..\..\SOURCE\Oscillator.h" />
     <ClInclude Include="..\..\SOURCE\DSPProcessing.h" />
     <ClInclude Include="..\..\SOURCE\FileTrack.h" />
+    <ClInclude Include="..\..\SOURCE\WaveEngineTemplate.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\juce-8.0.3-windows\JUCE\modules\juce_audio_devices\native\oboe\src\common\README.md">

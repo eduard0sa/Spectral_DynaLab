@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "AUDIO_PROC_BRIDGE.h"
 #include "FileName.h"
 
@@ -13,11 +13,21 @@ IntPtr AUDIOPROCBRIDGE::AudioEngineRef::_createEngine() {
     return IntPtr(native);
 }
 
+IntPtr AUDIOPROCBRIDGE::AudioEngineRef::_createAudioFileEngine(System::String^ path) {
+	std:string stdStringTypePath = u8"";
+	for (int i = 0; i < path->Length; i++) {
+		stdStringTypePath += path[i];
+	}
+
+	void* native = ::createAudioFileEngine(stdStringTypePath);
+	return IntPtr(native);
+}
+
 void AUDIOPROCBRIDGE::AudioEngineRef::_enginePrepareToPlay(IntPtr engine, double sampleRate, int samplesPerBlockExpected) {
 	enginePrepareToPlay((void*)engine, sampleRate, samplesPerBlockExpected, 50, 10);
 }
 
-void AUDIOPROCBRIDGE::AudioEngineRef::_engineProcessWave(IntPtr engine, array<float>^ buffer, int numSamples, int offset) {
+void AUDIOPROCBRIDGE::AudioEngineRef::_engineProcessWave(IntPtr engine, cli::array<float>^ buffer, int numSamples, int offset) {
 	pin_ptr<float> pinnedPtr = &buffer[offset];
 	// Now you can safely get a float* to native code
 	float* nativePtr = pinnedPtr;
@@ -39,8 +49,8 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeWaveShapeFunction(IntPtr engine, in
 	changeWaveShapeFunction((void*)engine, functionIndex);
 }
 
-array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushOscVisSamples(IntPtr engine) {
-	array<float>^ managedArray = gcnew cli::array<float>(512);
+cli::array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushOscVisSamples(IntPtr engine) {
+	cli::array<float>^ managedArray = gcnew cli::array<float>(512);
 	float* visSamplesArrPTR = pushOscVisSamples((void*)engine);
 
 	for (int i = 0; i < 512; i++) {
@@ -50,12 +60,16 @@ array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushOscVisSamples(IntPtr engine)
 	return managedArray;
 }
 
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeAudioFileRepeatingMode(IntPtr engine, bool newRepeatState) {
+	changeAudioFileRepeatingMode((void*)engine, newRepeatState);
+}
+
 #pragma endregion EngineMgmtLogic
 
 #pragma region DSPs
 
-array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushVisSamples(IntPtr SFXDSPProcessor, int effectTypeID) {
-	array<float>^ managedArray = gcnew cli::array<float>(512);
+cli::array<float>^ AUDIOPROCBRIDGE::AudioEngineRef::_pushVisSamples(IntPtr SFXDSPProcessor, int effectTypeID) {
+	cli::array<float>^ managedArray = gcnew cli::array<float>(512);
 	float* visSamplesArrPTR = pushVisSamples((void*)SFXDSPProcessor, effectTypeID);
 
 	for (int i = 0; i < 512; i++) {

@@ -60,10 +60,6 @@ void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     }
 }
 
-float* _Oscillator::pushOscVisSamples() {
-    return visSampleArrayHEAP;
-}
-
 void _Oscillator::releaseResources()
 {
     // Release any resources if needed
@@ -90,38 +86,8 @@ void _Oscillator::changeFrequency(float newFrequency)
     phaseIncrement = (2.0 * juce::MathConstants<double>::pi * frequency) / _sampleRate;
 }
 
-void _Oscillator::changeGain(float newGain) {
-    gain = newGain;
-    outputGain->setGainLinear(gain);
-}
-
 void _Oscillator::changeWaveShapeFunction(enum_OscillatorWaveShapeType functionType) {
     waveShape = functionType;
-}
-
-void _Oscillator::removeDSPEffect(void* effect) {
-    for (int i = 0; i < DSPEffectChainLength; i++) {
-        if (DSPEffectChain[i]->getEffectID() == ((DSPEffect*)effect)->getEffectID()) {
-            free(DSPEffectChain[i]);
-            DSPEffectChain[i] = NULL;
-
-            for (int j = i; j < DSPEffectChainLength; j++) {
-                DSPEffectChain[j] = DSPEffectChain[j + 1];
-            }
-
-            DSPEffectChainLength--;
-            break;
-        }
-    }
-}
-
-bool _Oscillator::checkExistantEffectID(int id) {
-    for (int i = 0; i < DSPEffectChainLength; i++) {
-        if (DSPEffectChain[i]->getEffectID() == id) {
-            return true;
-        }
-    }
-    return false;
 }
 
 #pragma endregion

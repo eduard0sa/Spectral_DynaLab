@@ -1,5 +1,7 @@
 #include "FileName.h"
 #include <../SOURCE/Oscillator.h>
+#include <../SOURCE/FileTrack.h>
+#include <..\SOURCE\WaveEngineTemplate.h>
 
 extern "C" {
     int _main_() {
@@ -12,18 +14,26 @@ extern "C" {
         return new _Oscillator();
 	}
 
+    void* createAudioFileEngine(std::string filePath) {
+        return new _FileTrack(filePath);
+    }
+
     void enginePrepareToPlay(void* engine, double sampleRate, int samplesPerBlockExpected, float startFrequency, float startGain) {
-        ((_Oscillator*)engine)->prepareToPlay(samplesPerBlockExpected, sampleRate, startFrequency, startGain);
+        ((_IEngine*)engine)->prepareToPlay(samplesPerBlockExpected, sampleRate, startFrequency, startGain);
 	}
 
     void engineProcessWave(void* engine, float* buffer, int numSamples) {
         juce::AudioBuffer<float> planarBuffer(&buffer, 1, numSamples);
         juce::AudioSourceChannelInfo bufferToFill(&planarBuffer, 0, numSamples);
-        ((_Oscillator*)engine)->getNextAudioBlock(bufferToFill);
+        ((_IEngine*)engine)->getNextAudioBlock(bufferToFill);
 	}
 
     void destroyEngine(void* engine) {
-        delete (_Oscillator*)engine;
+        delete (_IEngine*)engine;
+    }
+
+    float* pushOscVisSamples(void* engine) {
+        return ((_IEngine*)engine)->pushOscVisSamples();
     }
 
     void changeFrequency(void* engine, float newFrequency) {
@@ -31,7 +41,7 @@ extern "C" {
 	}
 
     void changeGain(void* engine, float newGain) {
-        ((_Oscillator*)engine)->changeGain(newGain);
+        ((_IEngine*)engine)->changeGain(newGain);
 	}
 
     void changeWaveShapeFunction(void* engine, int functionIndex) {
@@ -48,6 +58,10 @@ extern "C" {
             }
     }
 
+    void changeAudioFileRepeatingMode(void* engine, bool newRepeatState) {
+        ((_FileTrack*)engine)->changeRepeatingMode(newRepeatState);
+    }
+
     #pragma endregion EngineMgmtLogic
 
     #pragma region DSPs
@@ -55,20 +69,20 @@ extern "C" {
     void* addDSPEffect(void* engine, int dspType) {
         switch (dspType) {
             case enum_EffectType::Distortion:
-                return ((_Oscillator*)engine)->addDSPEffect<DSPDistortionEffect>();
+                return ((_IEngine*)engine)->addDSPEffect<DSPDistortionEffect>();
             case enum_EffectType::Compressor:
-                return ((_Oscillator*)engine)->addDSPEffect<DSPCompressorEffect>();
+                return ((_IEngine*)engine)->addDSPEffect<DSPCompressorEffect>();
             case enum_EffectType::Reverb:
-                return ((_Oscillator*)engine)->addDSPEffect<DSPReverbEffect>();
+                return ((_IEngine*)engine)->addDSPEffect<DSPReverbEffect>();
             case enum_EffectType::Chorus:
-                return ((_Oscillator*)engine)->addDSPEffect<DSPChorusEffect>();
+                return ((_IEngine*)engine)->addDSPEffect<DSPChorusEffect>();
             default:
                 return NULL;
         }
     }
 
     void removeDSPEffect(void* engine, void* effectDSPProcessor) {
-        ((_Oscillator*)engine)->removeDSPEffect(effectDSPProcessor);
+        ((_IEngine*)engine)->removeDSPEffect(effectDSPProcessor);
     }
 
     #pragma region DistortionDSP
@@ -92,10 +106,6 @@ extern "C" {
         }
 
         return a;
-    }
-
-    float* pushOscVisSamples(void* engine) {
-        return ((_Oscillator*)engine)->pushOscVisSamples();
     }
 
     void changeDistortionDrive(void* distortionDSPProcessor, float newDrive) {

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
+
 using namespace System;
+using namespace std;
 
 namespace AUDIOPROCBRIDGE {
 	/// <summary>
@@ -21,6 +24,13 @@ namespace AUDIOPROCBRIDGE {
 		IntPtr _createEngine();
 
 		/// <summary>
+		/// This method creates an oscillator engine in the core audio engine.
+		/// </summary>
+		/// <returns>The int pointer to the new oscillator engine.</returns>
+		/// 
+		IntPtr _createAudioFileEngine(System::String^ path);
+
+		/// <summary>
 		/// This method prepares oscillator's parameters for play.
 		/// </summary>
 		/// <param name="engine">Pointer reference for the oscillator engine object in memory.</param>
@@ -35,7 +45,7 @@ namespace AUDIOPROCBRIDGE {
 		/// <param name="buffer">The empty float array buffer to be filled by JUCE.</param>
 		/// <param name="numSamples">Number of samples to process.</param>
 		/// <param name="offset">Sample array index from where JUCE starts processing the wave data.</param>
-		void _engineProcessWave(IntPtr engine, array<float>^ buffer, int numSamples, int offset);
+		void _engineProcessWave(IntPtr engine, cli::array<float>^ buffer, int numSamples, int offset);
 
 		/// <summary>
 		/// This method is executed when the Oscillator engine instance is removed, killing all dynamic components associated, avoiding memory leaks.
@@ -70,7 +80,9 @@ namespace AUDIOPROCBRIDGE {
 		/// </summary>
 		/// <param name="engine">Pointer reference for the oscillator engine object in memory.</param>
 		/// <returns>A floating-point sample array buffer, containing all samples to be displayed in a graph.</returns>
-		array<float>^ _pushOscVisSamples(IntPtr engine);
+		cli::array<float>^ _pushOscVisSamples(IntPtr engine);
+
+		void _changeAudioFileRepeatingMode(IntPtr engine, bool newRepeatState);
 
 		#pragma endregion EngineLogic
 
@@ -97,7 +109,7 @@ namespace AUDIOPROCBRIDGE {
 		/// <param name="SFXDSPProcessor">Pointer reference for the DSP Effect object previously allocated in memory.</param>
 		/// <param name="effectTypeID">DSP effect processor type index (maps to an internal enum).</param>
 		/// <returns>A floating-point DSP SFX sample array buffer, containing all samples to be displayed in a graph.</returns>
-		array<float>^ _pushVisSamples(IntPtr SFXDSPProcessor, int effectTypeID);
+		cli::array<float>^ _pushVisSamples(IntPtr SFXDSPProcessor, int effectTypeID);
 
 		#pragma region DistortionDSP
 

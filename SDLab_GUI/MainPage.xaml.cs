@@ -120,5 +120,24 @@ namespace SDLab_GUI
 
             trackStackLayout.Children.Add(newOscillator);
         }
+
+        /// <summary>
+        /// Handles the event when the add oscillator button is clicked by creating a new OscillatorItem and adding it to the track stack layout.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private async void addFileTrackBTNClickedEvent(object sender, EventArgs e)
+        {
+            var FileChoiceDialog = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "sdkljnskldfn"
+            });
+
+            if(FileChoiceDialog == null) return;
+
+            FileTrackItem newOscillator = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath);
+
+            trackStackLayout.Children.Add(newOscillator);
+        }
     }
 }

@@ -23,6 +23,19 @@
             TYPE_REVERB_DSP_CLASS
         }
 
+        public enum enumEngineType
+        {
+            Oscillator,
+            FileTrack
+        }
+
+        public enum enumWaveShapeType
+        {
+            Sine,
+            Square,
+            Triangle
+        }
+
         /// <summary>
         /// Represents a DSP SFX type.
         /// </summary>
@@ -35,13 +48,6 @@
             EQ,
             FILTER,
             GAIN
-        }
-
-        public enum enumWaveShapeType
-        {
-            Sine,
-            Square,
-            Triangle
         }
 
         public enum enumBaseColor

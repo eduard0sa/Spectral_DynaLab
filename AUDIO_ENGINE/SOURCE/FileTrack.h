@@ -2,73 +2,35 @@
 
 #include<../JuceLibraryCode/JuceHeader.h>
 #include<juce_dsp/juce_dsp.h>
+#include <../SOURCE/WaveEngineTemplate.h>
 #include <../SOURCE/DSPProcessing.h>
+#include <string>
+#include <iostream>
 #include <stdlib.h>
+
 using namespace juce;
 using namespace std;
 
-class _FileTrack
+class _FileTrack : _IEngine
 {
 public:
-	//PARAMETERS
-	float gain = 0.1f;
-
-	float* visSampleArrayHEAP;
-	float* visSampleArraySTACK;
-
 	//METHODS
-	_FileTrack();
+	_FileTrack(std::string filePath);
 	~_FileTrack();
 
-	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain);
-	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
-	void releaseResources();
+	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
+	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) override;
+	void releaseResources() override;
 
-	void changeGain(float newGain);
-
-	float* pushOscVisSamples();
-
-	template<typename T>
-	DSPEffect* addDSPEffect() {
-		T* compressionEffectHEAP = (T*)malloc(sizeof(T));
-		T* compressionEffectSTACK = new (compressionEffectHEAP) T(); //Stack reference of the memory allocated at the last row, used to call the DSPDistortionEffect's class constructor.
-
-		Random randomizer = Random();
-		int distortionEffectID;
-
-		do {
-			distortionEffectID = randomizer.nextInt(200);
-		} while (checkExistantEffectID(distortionEffectID));
-
-		compressionEffectHEAP->prepare(spec);
-		compressionEffectHEAP->id = distortionEffectID;
-
-		DSPEffectChain[DSPEffectChainLength] = compressionEffectHEAP;
-		DSPEffectChainLength++;
-
-		return compressionEffectHEAP;
-	}
-
-	void removeDSPEffect(void* effect);
+	void changeRepeatingMode(bool newRepeatState);
 
 private:
-	juce::dsp::ProcessSpec spec = juce::dsp::ProcessSpec();
+	AudioFormatManager formatManager = AudioFormatManager();
+	unique_ptr<AudioFormatReader> readerSource;
 
-	float phase = 0;
-	float phaseIncrement = 0.1f;
-	double _sampleRate = 44100.0;
-	int numChannels = 1;
-
-	unique_ptr<AudioTransportSource> transportSource = make_unique<AudioTransportSource>();
-	unique_ptr<AudioFormatManager> formatManager = make_unique<AudioFormatManager>();
-	unique_ptr<AudioFormatReaderSource> readerSource;
-
-	unique_ptr<dsp::Gain<float>> outputGain = make_unique<dsp::Gain<float>>();
-
-	int DSPEffectChainLength = 0;
-	DSPEffect* DSPEffectChain[100];
-
-	bool checkExistantEffectID(int id);
+	juce::AudioBuffer<float> tempBuffer;
+	int currentSampleIndex = 0;
+	bool isRepeating = false;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_FileTrack)
 };

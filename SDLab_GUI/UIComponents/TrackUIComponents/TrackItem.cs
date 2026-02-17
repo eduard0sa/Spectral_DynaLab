@@ -1,4 +1,5 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
+using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.UIComponents.TrackUIComponents
@@ -151,9 +152,9 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="pickerLabel">The label string for the picker control.</param>
         /// <param name="pickerData">The numeric data group for the picker control setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the picker is changed.</param>
-        public void addPickerControl(string pickerLabel, Global.structPickerData pickerData, EventHandler _valueChangedEvent)
+        public void addPickerControl(string pickerLabel, enumBaseColor color, Global.structPickerData pickerData, EventHandler _valueChangedEvent)
         {
-            TrackItemPickerControl pickerControl = new TrackItemPickerControl(pickerLabel, pickerData, _valueChangedEvent);
+            TrackItemPickerControl pickerControl = new TrackItemPickerControl(pickerLabel, color, pickerData, _valueChangedEvent);
 
             Global.structVariableDataTypeUnit pickerControlDataUnit = new Global.structVariableDataTypeUnit()
             {
@@ -175,9 +176,9 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="switchLabel">The label string for the picker control.</param>
         /// <param name="switchData">The numeric data group for the picker control setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the picker is changed.</param>
-        public void addSwitchControl(string switchLabel, Global.structSliderData switchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        public void addSwitchControl(string switchLabel, enumBaseColor color, Global.structSliderData switchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
         {
-            TrackItemSwitchControl switchControl = new TrackItemSwitchControl(switchLabel, switchData, _valueChangedEvent);
+            TrackItemSwitchControl switchControl = new TrackItemSwitchControl(switchLabel, color, switchData, _valueChangedEvent);
 
             Global.structVariableDataTypeUnit switchControlDataUnit = new Global.structVariableDataTypeUnit()
             {
@@ -260,7 +261,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
                     break;
                 case enumBaseColor.GREEN:
                     sliderControlSlider.StyleClass = new List<string> { "GreenAudioAttributeSlider" };
-                    sliderControlEntry.TextColor = (Color)Application.Current.Resources["GreenAudioAttributeSlider"];
+                    sliderControlEntry.TextColor = (Color)Application.Current.Resources["DefaultManaGreen"];
                     break;
             }
 
@@ -339,7 +340,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="controlLabel">The label string for this picker control.</param>
         /// <param name="numericPickerData">The numeric data for picker control setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the picker is changed.</param>
-        public TrackItemPickerControl(string controlLabel, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
+        public TrackItemPickerControl(string controlLabel, enumBaseColor baseColor, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
         {
             _numericSliderData_ = numericPickerData;
 
@@ -350,7 +351,19 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             pickerControlPicker.WidthRequest = 250;
             pickerControlPicker.VerticalOptions = LayoutOptions.Center;
-            pickerControlPicker.TextColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+
+            switch (baseColor)
+            {
+                case enumBaseColor.YELLOW:
+                    pickerControlPicker.TextColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
+                    break;
+                case enumBaseColor.RED:
+                    pickerControlPicker.TextColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+                    break;
+                case enumBaseColor.GREEN:
+                    pickerControlPicker.TextColor = (Color)Application.Current.Resources["DefaultManaGreen"];
+                    break;
+            }
 
             foreach (string item in _numericSliderData_.items)
             {
@@ -380,7 +393,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="controlLabel">The label string for this switch control.</param>
         /// <param name="numericSwitchData">The numeric data for the switch control setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the switch is changed.</param>
-        public TrackItemSwitchControl(string controlLabel, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        public TrackItemSwitchControl(string controlLabel, enumBaseColor baseColor, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
         {
             _numericSwitchData_ = numericSwitchData;
 
@@ -391,8 +404,23 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             switchControlSwitch.WidthRequest = 50;
             switchControlSwitch.VerticalOptions = LayoutOptions.Center;
-            switchControlSwitch.OnColor = (Color)Application.Current.Resources["DefaultPastelRed"];
-            switchControlSwitch.ThumbColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+
+            switch (baseColor)
+            {
+                case enumBaseColor.YELLOW:
+                    switchControlSwitch.OnColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
+                    switchControlSwitch.ThumbColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
+                    break;
+                case enumBaseColor.RED:
+                    switchControlSwitch.OnColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+                    switchControlSwitch.ThumbColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+                    break;
+                case enumBaseColor.GREEN:
+                    switchControlSwitch.OnColor = (Color)Application.Current.Resources["DefaultManaGreen"];
+                    switchControlSwitch.ThumbColor = (Color)Application.Current.Resources["DefaultManaGreen"];
+                    break;
+            }
+
             switchControlSwitch.Margin = new Thickness(20, 0, 0, 0);
 
             switchControlSwitch.IsToggled = false;

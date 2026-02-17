@@ -1,21 +1,13 @@
-#include "FileTrack.h"
+﻿#include "FileTrack.h"
 
-_FileTrack::_FileTrack() {
-    File audioFile;
-    audioFile = File::getSpecialLocation(File::SpecialLocationType::userMusicDirectory).getChildFile("borne - Take Away [NCS Release].mp3");
+_FileTrack::_FileTrack(std::string filePath) {
+    formatManager.registerBasicFormats();
+
+    File audioFile(juce::String::fromUTF8(filePath.c_str()));
+
     if (audioFile.existsAsFile()) {
-        auto* reader = formatManager->createReaderFor(audioFile);
-
-        if (reader != nullptr) {
-            readerSource.reset(new juce::AudioFormatReaderSource(reader, true));
-            transportSource->setSource(readerSource.get(),
-                0, // no buffer size restriction
-                nullptr, // use default reader
-                reader->sampleRate);
-
-            changeGain(0.5f);
-            transportSource->start();
-        }
+        readerSource.reset(formatManager.createReaderFor(audioFile));
+        changeGain(0.5f);
     }
 
     visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
@@ -44,40 +36,51 @@ void _FileTrack::prepareToPlay(int samplesPerBlockExpected, double sampleRate, f
     outputGain->prepare(spec);
     outputGain->setGainLinear(gain);
     outputGain->setRampDurationSeconds(0.02); // super important
+
+    
+    tempBuffer.setSize(spec.numChannels, readerSource->lengthInSamples, false, false, true);
+
+    readerSource->read(&tempBuffer,
+        0,
+        readerSource->lengthInSamples,
+        currentSampleIndex,
+        true,
+        false);
 }
 
 void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     bufferToFill.clearActiveBufferRegion();
-    float originalPhase = phase;
-    for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
-    {
-        float* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
-        phase = originalPhase;
 
-        for (int sample = 0; sample < bufferToFill.numSamples; ++sample)
+    if (currentSampleIndex < tempBuffer.getNumSamples()) {
+        for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
         {
-            transportSource->getNextAudioBlock(bufferToFill);
-            phase = fmod(phase + phaseIncrement, MathConstants<float>::twoPi);
+            float* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
+
+            for (int sample = 0; sample < min(bufferToFill.numSamples, tempBuffer.getNumSamples() - currentSampleIndex); ++sample)
+            {
+                buffer[sample] = tempBuffer.getSample(channel, currentSampleIndex + sample);
+            }
+        }
+
+        currentSampleIndex += bufferToFill.numSamples;
+
+        juce::dsp::AudioBlock<float> audioBlock(*bufferToFill.buffer);
+        juce::dsp::ProcessContextReplacing<float> context(audioBlock);
+
+        for (int i = 0; i < DSPEffectChainLength; i++) {
+            DSPEffectChain[i]->process(context);
+        }
+
+        outputGain->process(context);
+
+        for (int i = 0; i < 512; i++) {
+            visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
         }
     }
-
-    juce::dsp::AudioBlock<float> audioBlock(*bufferToFill.buffer);
-    juce::dsp::ProcessContextReplacing<float> context(audioBlock);
-
-    for (int i = 0; i < DSPEffectChainLength; i++) {
-        DSPEffectChain[i]->process(context);
+    else if (isRepeating == true) {
+        currentSampleIndex = 0;
     }
-
-    outputGain->process(context);
-
-    for (int i = 0; i < 512; i++) {
-        visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
-    }
-}
-
-float* _FileTrack::pushOscVisSamples() {
-    return visSampleArrayHEAP;
 }
 
 void _FileTrack::releaseResources()
@@ -87,36 +90,10 @@ void _FileTrack::releaseResources()
 
 #pragma endregion
 
-#pragma region Custom_methods
+#pragma region CustomMethods
 
-void _FileTrack::changeGain(float newGain) {
-    gain = newGain;
-    outputGain->setGainLinear(gain);
-}
-
-void _FileTrack::removeDSPEffect(void* effect) {
-    for (int i = 0; i < DSPEffectChainLength; i++) {
-        if (DSPEffectChain[i]->getEffectID() == ((DSPEffect*)effect)->getEffectID()) {
-            free(DSPEffectChain[i]);
-            DSPEffectChain[i] = NULL;
-
-            for (int j = i; j < DSPEffectChainLength; j++) {
-                DSPEffectChain[j] = DSPEffectChain[j + 1];
-            }
-
-            DSPEffectChainLength--;
-            break;
-        }
-    }
-}
-
-bool _FileTrack::checkExistantEffectID(int id) {
-    for (int i = 0; i < DSPEffectChainLength; i++) {
-        if (DSPEffectChain[i]->getEffectID() == id) {
-            return true;
-        }
-    }
-    return false;
+void _FileTrack::changeRepeatingMode(bool newRepeatState) {
+    isRepeating = newRepeatState;
 }
 
 #pragma endregion

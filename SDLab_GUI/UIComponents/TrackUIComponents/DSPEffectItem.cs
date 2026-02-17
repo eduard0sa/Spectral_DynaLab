@@ -1,4 +1,4 @@
-﻿using SDLab_GUI.AudioSystemsLogic;
+﻿using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
 
 namespace SDLab_GUI.UIComponents.TrackUIComponents
 {
@@ -100,9 +100,9 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="pickerLabel">The label string for the picker control.</param>
         /// <param name="numericPickerData">The numeric data for picker control definition.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the picker is changed.</param>
-        public void addPickerControl(int controlGroupID, string pickerLabel, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
+        public void addPickerControl(int controlGroupID, string pickerLabel, Global.enumBaseColor color, Global.structPickerData numericPickerData, EventHandler _valueChangedEvent)
         {
-            TrackItemControls[controlGroupID].addPickerControl(pickerLabel, numericPickerData, _valueChangedEvent);
+            TrackItemControls[controlGroupID].addPickerControl(pickerLabel, color, numericPickerData, _valueChangedEvent);
         }
 
         /// <summary>
@@ -112,9 +112,9 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="switchLabel">The label string for the picker control.</param>
         /// <param name="numericSwitchData">The numeric data for picker control definition.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the picker is changed.</param>
-        public void addSwitchControl(int controlGroupID, string switchLabel, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        public void addSwitchControl(int controlGroupID, string switchLabel, Global.enumBaseColor color, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
         {
-            TrackItemControls[controlGroupID].addSwitchControl(switchLabel, numericSwitchData, _valueChangedEvent);
+            TrackItemControls[controlGroupID].addSwitchControl(switchLabel, color, numericSwitchData, _valueChangedEvent);
         }
 
         /// <summary>

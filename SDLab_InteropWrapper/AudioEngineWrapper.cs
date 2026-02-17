@@ -23,6 +23,11 @@ namespace SDLab_InteropWrapper
             return audioEngineRef._createEngine();
         }
 
+        public IntPtr CreateEngine(string musicPath)
+        {
+            return audioEngineRef._createAudioFileEngine(musicPath);
+        }
+
         public void EnginePrepareToPlay(IntPtr engine, double sampleRate, int samplesPerBlockExpected)
         {
             audioEngineRef._enginePrepareToPlay(engine, sampleRate, samplesPerBlockExpected);
@@ -56,6 +61,11 @@ namespace SDLab_InteropWrapper
         public float[] PushOscVisSamples(IntPtr engine)
         {
             return audioEngineRef._pushOscVisSamples(engine);
+        }
+
+        public void ChangeAudioFileRepeatingMode(IntPtr engine, bool newRepeatState)
+        {
+            audioEngineRef._changeAudioFileRepeatingMode(engine, newRepeatState);
         }
 
         #endregion EngineMgmtLogic

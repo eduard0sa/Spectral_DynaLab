@@ -1,4 +1,5 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
+using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
 using SDLab_GUI.UIComponents.Editors;
 using static SDLab_GUI.Global;
 
@@ -39,7 +40,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             frequencySliderData = new Global.structSliderData() {
                 minVal = 20f,
                 maxVal = 2000f,
-                defVal = trackAudioProvider.CurrentFrequency,
+                defVal = ((OscillatorAudioProvider)trackAudioProvider).CurrentFrequency,
                 numDisplayDecPlaces = 0
             };
 
@@ -98,7 +99,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         private void frequencyChangeEvent(object? sender, ValueChangedEventArgs e)
         {
             float newFrequency = (float)e.NewValue;
-            trackAudioProvider.changeFrequency(newFrequency);
+            ((OscillatorAudioProvider)trackAudioProvider).changeFrequency(newFrequency);
         }
 
         /// <summary>
@@ -147,13 +148,13 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             switch (sourceIMGBTN.Source.ToString().Split(": ")[1])
             {
                 case "sine_wave.png":
-                    trackAudioProvider.changeWaveShapeFunction(Global.enumWaveShapeType.Sine);
+                    ((OscillatorAudioProvider)trackAudioProvider).changeWaveShapeFunction(Global.enumWaveShapeType.Sine);
                     break;
                 case "digital_wave.png":
-                    trackAudioProvider.changeWaveShapeFunction(Global.enumWaveShapeType.Square);
+                    ((OscillatorAudioProvider)trackAudioProvider).changeWaveShapeFunction(Global.enumWaveShapeType.Square);
                     break;
                 case "triangle_wave.png":
-                    trackAudioProvider.changeWaveShapeFunction(Global.enumWaveShapeType.Triangle);
+                    ((OscillatorAudioProvider)trackAudioProvider).changeWaveShapeFunction(Global.enumWaveShapeType.Triangle);
                     break;
             }
 

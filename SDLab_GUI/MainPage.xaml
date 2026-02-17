@@ -38,7 +38,7 @@
 
         <FlexLayout Grid.Row="2" Direction="Row" JustifyContent="SpaceBetween" AlignItems="Center">
             <Button Text="+ Add Oscillator Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelYellow}" Clicked="addOscillatorBTNClickedEvent"/>
-            <Button Text="+ Add Audio File Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultManaGreen}"/>
+            <Button Text="+ Add Audio File Track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultManaGreen}" Clicked="addFileTrackBTNClickedEvent"/>
         </FlexLayout>
 
         <ScrollView Grid.Row="3" HorizontalOptions="Fill" BackgroundColor="#0d0c16">
