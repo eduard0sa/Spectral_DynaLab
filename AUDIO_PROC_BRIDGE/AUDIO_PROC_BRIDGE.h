@@ -84,6 +84,12 @@ namespace AUDIOPROCBRIDGE {
 
 		void _changeAudioFileRepeatingMode(IntPtr engine, bool newRepeatState);
 
+		void _changeAudioFileTimePitchCouplingMode(IntPtr engine, bool newTimePitchCouplingMode);
+
+		void _changeAudioFileTempo(IntPtr engine, float newTempo);
+
+		void _changeAudioFilePitch(IntPtr engine, float newPitch);
+
 		#pragma endregion EngineLogic
 
 		#pragma region DSPLogic

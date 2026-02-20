@@ -78,6 +78,14 @@
         }
 
         /// <summary>
+        /// Stores switch numeric data.
+        /// </summary>
+        public struct structSwitchData
+        {
+            public bool defValIndex;
+        }
+
+        /// <summary>
         /// Stores an arbitrary dataType as an object type, registering the original data type via enumVariableDataType.
         /// </summary>
         public struct structVariableDataTypeUnit

@@ -26,6 +26,9 @@ extern "C" AUDIO_ENGINE_API void changeFrequency(void* engine, float newFrequenc
 extern "C" AUDIO_ENGINE_API void changeGain(void* engine, float newGain);
 extern "C" AUDIO_ENGINE_API void changeWaveShapeFunction(void* engine, int functionIndex);
 extern "C" AUDIO_ENGINE_API void changeAudioFileRepeatingMode(void* engine, bool newRepeatState);
+extern "C" AUDIO_ENGINE_API void changeAudioFileTimePitchCouplingMode(void* engine, bool newTimePitchCouplingMode);
+extern "C" AUDIO_ENGINE_API void changeAudioFileTempo(void* engine, float newTempo);
+extern "C" AUDIO_ENGINE_API void changeAudioFilePitch(void* engine, float newPitch);
 
 #pragma endregion EngineLogic
 #pragma region DSPLogic

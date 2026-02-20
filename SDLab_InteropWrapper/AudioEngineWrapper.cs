@@ -68,6 +68,21 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeAudioFileRepeatingMode(engine, newRepeatState);
         }
 
+        public void ChangeAudioFileTimePitchCouplingMode(IntPtr engine, bool newTimePitchCouplingMode)
+        {
+            audioEngineRef._changeAudioFileTimePitchCouplingMode(engine, newTimePitchCouplingMode);
+        }
+
+        public void ChangeAudioFileTempo(IntPtr engine, float newTempo)
+        {
+            audioEngineRef._changeAudioFileTempo(engine, newTempo);
+        }
+
+        public void ChangeAudioFilePitch(IntPtr engine, float newPitch)
+        {
+            audioEngineRef._changeAudioFilePitch(engine, newPitch);
+        }
+
         #endregion EngineMgmtLogic
 
         #region DSPs

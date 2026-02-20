@@ -23,6 +23,9 @@ public:
 	void releaseResources() override;
 
 	void changeRepeatingMode(bool newRepeatState);
+	void changeFileTimePitchCouplingMode(bool newFileTimePitchCouplingMode);
+	void changeFileTempo(float newTempo);
+	void changeFilePitch(float newPitch);
 
 private:
 	AudioFormatManager formatManager = AudioFormatManager();
@@ -31,6 +34,14 @@ private:
 	juce::AudioBuffer<float> tempBuffer;
 	int currentSampleIndex = 0;
 	bool isRepeating = false;
+
+	bool timePitchCouplingMode = true;
+
+	float currentSampleContinuousPosition = 0;
+	float tempo = 1.0f;
+	float pitchRatio = 1.5;
+
+	float resampleSample(int channelIndex, float sampleIndex);
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_FileTrack)
 };

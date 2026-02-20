@@ -62,6 +62,18 @@ extern "C" {
         ((_FileTrack*)engine)->changeRepeatingMode(newRepeatState);
     }
 
+    void changeAudioFileTimePitchCouplingMode(void* engine, bool newTimePitchCouplingMode) {
+        ((_FileTrack*)engine)->changeFileTimePitchCouplingMode(newTimePitchCouplingMode);
+    }
+
+    void changeAudioFileTempo(void* engine, float newTempo) {
+        ((_FileTrack*)engine)->changeFileTempo(newTempo);
+    }
+
+    void changeAudioFilePitch(void* engine, float newPitch) {
+        ((_FileTrack*)engine)->changeFilePitch(newPitch);
+    }
+
     #pragma endregion EngineMgmtLogic
 
     #pragma region DSPs

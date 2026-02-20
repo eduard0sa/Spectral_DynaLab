@@ -59,11 +59,16 @@ void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
 
             for (int sample = 0; sample < min(bufferToFill.numSamples, tempBuffer.getNumSamples() - currentSampleIndex); ++sample)
             {
-                buffer[sample] = tempBuffer.getSample(channel, currentSampleIndex + sample);
+                if (timePitchCouplingMode) {
+                    buffer[sample] = resampleSample(channel, sample);
+                }
+                else {
+                    buffer[sample] = tempBuffer.getSample(channel, currentSampleIndex + sample);
+                }
             }
         }
 
-        currentSampleIndex += bufferToFill.numSamples;
+        currentSampleIndex += (int)((float)bufferToFill.numSamples * pitchRatio);
 
         juce::dsp::AudioBlock<float> audioBlock(*bufferToFill.buffer);
         juce::dsp::ProcessContextReplacing<float> context(audioBlock);
@@ -80,6 +85,7 @@ void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
     }
     else if (isRepeating == true) {
         currentSampleIndex = 0;
+        currentSampleContinuousPosition = 0;
     }
 }
 
@@ -94,6 +100,38 @@ void _FileTrack::releaseResources()
 
 void _FileTrack::changeRepeatingMode(bool newRepeatState) {
     isRepeating = newRepeatState;
+}
+
+void _FileTrack::changeFileTimePitchCouplingMode(bool newFileTimePitchCouplingMode) {
+    timePitchCouplingMode = newFileTimePitchCouplingMode;
+}
+
+void _FileTrack::changeFileTempo(float newTempo) {
+    tempo = newTempo;
+}
+
+void _FileTrack::changeFilePitch(float newPitch) {
+    pitchRatio = newPitch;
+}
+
+float _FileTrack::resampleSample(int channelIndex, float sampleIndex)
+{
+    float resSample = tempBuffer.getSample(channelIndex, currentSampleIndex + sampleIndex);
+
+    if (currentSampleContinuousPosition + sampleIndex < tempBuffer.getNumSamples() - 1) {
+        int index = (int)currentSampleContinuousPosition;
+        float frac = currentSampleContinuousPosition - index;
+
+        float s1 = tempBuffer.getSample(channelIndex, index);
+        float s2 = tempBuffer.getSample(channelIndex, index + 1);
+        float interpolated = s1 + frac * (s2 - s1);
+
+        resSample = interpolated;
+    }
+
+    currentSampleContinuousPosition += pitchRatio;
+
+    return resSample;
 }
 
 #pragma endregion

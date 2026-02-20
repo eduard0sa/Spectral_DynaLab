@@ -64,6 +64,18 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeAudioFileRepeatingMode(IntPtr engin
 	changeAudioFileRepeatingMode((void*)engine, newRepeatState);
 }
 
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeAudioFileTimePitchCouplingMode(IntPtr engine, bool newTimePitchCouplingMode) {
+	changeAudioFileTimePitchCouplingMode((void*)engine, newTimePitchCouplingMode);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeAudioFileTempo(IntPtr engine, float newTempo) {
+	changeAudioFileTempo((void*)engine, newTempo);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeAudioFilePitch(IntPtr engine, float newPitch) {
+	changeAudioFilePitch((void*)engine, newPitch);
+}
+
 #pragma endregion EngineMgmtLogic
 
 #pragma region DSPs

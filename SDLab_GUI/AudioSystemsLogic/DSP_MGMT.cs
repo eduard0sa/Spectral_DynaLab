@@ -265,12 +265,9 @@ namespace SDLab_GUI.AudioSystemsLogic
             numDisplayDecPlaces = 2
         };
 
-        private structSliderData reverbFreezeModeSliderData = new structSliderData()
+        private structSwitchData reverbFreezeModeSliderData = new structSwitchData()
         {
-            minVal = 0f,
-            maxVal = 1f,
-            defVal = 0.5f,
-            numDisplayDecPlaces = 0
+            defValIndex = false
         };
 
 
@@ -287,7 +284,7 @@ namespace SDLab_GUI.AudioSystemsLogic
         internal structSliderData ReverbWetLevelSliderData { get => reverbWetLevelSliderData; set => reverbWetLevelSliderData = value; }
         internal structSliderData ReverbDryLevelSliderData { get => reverbDryLevelSliderData; set => reverbDryLevelSliderData = value; }
         internal structSliderData ReverbWidthSliderData { get => reverbWidthSliderData; set => reverbWidthSliderData = value; }
-        internal structSliderData ReverbFreezeModeSliderData { get => reverbFreezeModeSliderData; set => reverbFreezeModeSliderData = value; }
+        internal structSwitchData ReverbFreezeModeSliderData { get => reverbFreezeModeSliderData; set => reverbFreezeModeSliderData = value; }
 
         public ReverbDSP(nint engine, AudioEngineWrapper engineBridgeRef)
         {

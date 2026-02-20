@@ -1,5 +1,6 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
 using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
+using System.Linq;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.UIComponents.TrackUIComponents
@@ -176,7 +177,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="switchLabel">The label string for the picker control.</param>
         /// <param name="switchData">The numeric data group for the picker control setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the picker is changed.</param>
-        public void addSwitchControl(string switchLabel, enumBaseColor color, Global.structSliderData switchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        public void addSwitchControl(string switchLabel, enumBaseColor color, Global.structSwitchData switchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
         {
             TrackItemSwitchControl switchControl = new TrackItemSwitchControl(switchLabel, color, switchData, _valueChangedEvent);
 
@@ -192,6 +193,31 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             updateControlsFlexGrow();
 
             Children.Add(switchControl);
+        }
+
+        /// <summary>
+        /// This method adds a picker control to this control group, allowing the user to change SFX property values.
+        /// </summary>
+        /// <param name="controlIndex">The label string for the picker control.</param>
+        public void toggleControlVisibility(int controlIndex)
+        {
+            Global.structVariableDataTypeUnit controlDataUnit = controlList[controlIndex];
+
+            switch (controlDataUnit.dataType)
+            {
+                case enumVariableDataType.TYPE_SLIDER:
+                    TrackItemSliderControl _slider = (TrackItemSliderControl)(controlDataUnit.dataUnit);
+                    _slider.IsEnabled = !_slider.IsEnabled;
+                    break;
+                case enumVariableDataType.TYPE_PICKER:
+                    TrackItemPickerControl _picker = (TrackItemPickerControl)(controlDataUnit.dataUnit);
+                    _picker.IsEnabled = !_picker.IsEnabled;
+                    break;
+                case enumVariableDataType.TYPE_SWITCH:
+                    TrackItemPickerControl _switch = (TrackItemPickerControl)(controlDataUnit.dataUnit);
+                    _switch.IsEnabled = !_switch.IsEnabled;
+                    break;
+            }
         }
 
         /// <summary>
@@ -385,7 +411,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     {
         Label switchControlLabel = new Label();
         Switch switchControlSwitch = new Switch();
-        Global.structSliderData _numericSwitchData_;
+        Global.structSwitchData _numericSwitchData_;
 
         /// <summary>
         /// DSPEffectItemSwitchControl class constructor.
@@ -393,7 +419,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="controlLabel">The label string for this switch control.</param>
         /// <param name="numericSwitchData">The numeric data for the switch control setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the switch is changed.</param>
-        public TrackItemSwitchControl(string controlLabel, enumBaseColor baseColor, Global.structSliderData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        public TrackItemSwitchControl(string controlLabel, enumBaseColor baseColor, Global.structSwitchData numericSwitchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
         {
             _numericSwitchData_ = numericSwitchData;
 
@@ -423,7 +449,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             switchControlSwitch.Margin = new Thickness(20, 0, 0, 0);
 
-            switchControlSwitch.IsToggled = false;
+            switchControlSwitch.IsToggled = numericSwitchData.defValIndex;
             switchControlSwitch.Toggled += _valueChangedEvent;
 
             Children.Add(switchControlLabel);
