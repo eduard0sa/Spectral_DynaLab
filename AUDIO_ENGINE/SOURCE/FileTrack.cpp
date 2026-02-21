@@ -37,7 +37,6 @@ void _FileTrack::prepareToPlay(int samplesPerBlockExpected, double sampleRate, f
     outputGain->setGainLinear(gain);
     outputGain->setRampDurationSeconds(0.02); // super important
 
-    
     tempBuffer.setSize(spec.numChannels, readerSource->lengthInSamples, false, false, true);
 
     readerSource->read(&tempBuffer,
@@ -46,6 +45,14 @@ void _FileTrack::prepareToPlay(int samplesPerBlockExpected, double sampleRate, f
         currentSampleIndex,
         true,
         false);
+
+    int options =
+        RubberBand::RubberBandStretcher::OptionProcessRealTime |
+        RubberBand::RubberBandStretcher::OptionThreadingNever |
+        RubberBand::RubberBandStretcher::OptionPitchHighQuality;
+
+    rbbStretcher = std::make_unique<RubberBand::RubberBandStretcher>(spec.sampleRate, numChannels, options);
+    changeFileTempo(setTempoRatio);
 }
 
 void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
@@ -53,22 +60,44 @@ void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
     bufferToFill.clearActiveBufferRegion();
 
     if (currentSampleIndex < tempBuffer.getNumSamples()) {
-        for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
-        {
-            float* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
+        const int numChannels = bufferToFill.buffer->getNumChannels();
+        const int requestedSamples = bufferToFill.numSamples;
 
-            for (int sample = 0; sample < min(bufferToFill.numSamples, tempBuffer.getNumSamples() - currentSampleIndex); ++sample)
-            {
-                if (timePitchCouplingMode) {
-                    buffer[sample] = resampleSample(channel, sample);
-                }
-                else {
-                    buffer[sample] = tempBuffer.getSample(channel, currentSampleIndex + sample);
-                }
-            }
+        int availableInput = min(requestedSamples, tempBuffer.getNumSamples() - currentSampleIndex);
+
+        std::vector<const float*> input(numChannels);
+
+        while (rbbStretcher->available() < requestedSamples)
+        {
+            if (currentSampleIndex >= tempBuffer.getNumSamples())
+                break;
+
+            int blockToFeed = juce::jmin(
+                512,
+                tempBuffer.getNumSamples() - currentSampleIndex
+            );
+
+            for (int ch = 0; ch < numChannels; ++ch)
+                input[ch] = tempBuffer.getReadPointer(ch, currentSampleIndex);
+
+            rbbStretcher->process(input.data(), blockToFeed, false);
+
+            currentSampleIndex += blockToFeed;
         }
 
-        currentSampleIndex += (int)((float)bufferToFill.numSamples * pitchRatio);
+        int availableOutput = rbbStretcher->available();
+
+        if (availableOutput > 0)
+        {
+            int samplesToRetrieve = min(requestedSamples, availableOutput);
+
+            std::vector<float*> output(numChannels);
+
+            for (int ch = 0; ch < numChannels; ++ch)
+                output[ch] = bufferToFill.buffer->getWritePointer(ch, bufferToFill.startSample);
+
+            rbbStretcher->retrieve(output.data(), samplesToRetrieve);
+        }
 
         juce::dsp::AudioBlock<float> audioBlock(*bufferToFill.buffer);
         juce::dsp::ProcessContextReplacing<float> context(audioBlock);
@@ -104,17 +133,29 @@ void _FileTrack::changeRepeatingMode(bool newRepeatState) {
 
 void _FileTrack::changeFileTimePitchCouplingMode(bool newFileTimePitchCouplingMode) {
     timePitchCouplingMode = newFileTimePitchCouplingMode;
+
+    if (timePitchCouplingMode) {
+        internalTempoRatio = setPitchRatio;
+        rbbStretcher->setTimeRatio(1 / internalTempoRatio);
+    }
+    else {
+        internalTempoRatio = setTempoRatio;
+        rbbStretcher->setTimeRatio(1 / internalTempoRatio);
+    }
 }
 
 void _FileTrack::changeFileTempo(float newTempo) {
-    tempo = newTempo;
+    setTempoRatio = newTempo;
+    rbbStretcher->setTimeRatio(1 / setTempoRatio);
 }
 
 void _FileTrack::changeFilePitch(float newPitch) {
-    pitchRatio = newPitch;
+    setPitchRatio = newPitch;
+    rbbStretcher->setPitchScale(setPitchRatio);
+    if (timePitchCouplingMode) rbbStretcher->setTimeRatio(1 / setPitchRatio);
 }
 
-float _FileTrack::resampleSample(int channelIndex, float sampleIndex)
+float _FileTrack::resampleSample(int channelIndex, float sampleIndex, float _pitchRatio)
 {
     float resSample = tempBuffer.getSample(channelIndex, currentSampleIndex + sampleIndex);
 
@@ -129,7 +170,7 @@ float _FileTrack::resampleSample(int channelIndex, float sampleIndex)
         resSample = interpolated;
     }
 
-    currentSampleContinuousPosition += pitchRatio;
+    currentSampleContinuousPosition += _pitchRatio;
 
     return resSample;
 }

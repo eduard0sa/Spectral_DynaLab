@@ -46,7 +46,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             };
 
             tempoSliderData = new structSliderData() {
-                minVal = 0.1f,
+                minVal = 0.2f,
                 maxVal = 5.0f,
                 defVal = 1.0f,
                 numDisplayDecPlaces = 2

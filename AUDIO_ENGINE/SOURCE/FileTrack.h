@@ -4,6 +4,7 @@
 #include<juce_dsp/juce_dsp.h>
 #include <../SOURCE/WaveEngineTemplate.h>
 #include <../SOURCE/DSPProcessing.h>
+#include <RubberBandStretcher.h>
 #include <string>
 #include <iostream>
 #include <stdlib.h>
@@ -30,6 +31,7 @@ public:
 private:
 	AudioFormatManager formatManager = AudioFormatManager();
 	unique_ptr<AudioFormatReader> readerSource;
+	std::unique_ptr<RubberBand::RubberBandStretcher> rbbStretcher;
 
 	juce::AudioBuffer<float> tempBuffer;
 	int currentSampleIndex = 0;
@@ -38,10 +40,11 @@ private:
 	bool timePitchCouplingMode = true;
 
 	float currentSampleContinuousPosition = 0;
-	float tempo = 1.0f;
-	float pitchRatio = 1.5;
+	float internalTempoRatio = 1.0f;
+	float setTempoRatio = 1.0f;
+	float setPitchRatio = 1.0f;
 
-	float resampleSample(int channelIndex, float sampleIndex);
+	float resampleSample(int channelIndex, float sampleIndex, float _pitchRatio);
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_FileTrack)
 };
