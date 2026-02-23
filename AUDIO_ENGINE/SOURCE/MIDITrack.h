@@ -1,0 +1,43 @@
+#pragma once
+
+#include<../JuceLibraryCode/JuceHeader.h>
+#include<juce_dsp/juce_dsp.h>
+#include <../SOURCE/WaveEngineTemplate.h>
+#include <../SOURCE/DSPProcessing.h>
+#include <RubberBandStretcher.h>
+#include <string>
+#include <iostream>
+#include <stdlib.h>
+
+using namespace juce;
+using namespace std;
+
+class _MIDITrack : _IEngine
+{
+public:
+	//METHODS
+	_MIDITrack();
+	~_MIDITrack();
+
+	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
+	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) override;
+	void releaseResources() override;
+
+	void changeRepeatingMode(bool newRepeatState);
+	void changeFileTempo(float newTempo);
+
+private:
+	std::unique_ptr<RubberBand::RubberBandStretcher> rbbStretcher;
+
+	juce::AudioBuffer<float> tempBuffer;
+	int currentSampleIndex = 0;
+	bool isRepeating = false;
+
+	float currentSampleContinuousPosition = 0;
+	float internalTempoRatio = 1.0f;
+	float setTempoRatio = 1.0f;
+
+	float resampleSample(int channelIndex, float sampleIndex, float _pitchRatio);
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_MIDITrack)
+};

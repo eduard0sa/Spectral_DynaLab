@@ -61,6 +61,11 @@ namespace SDLab_GUI
             }
         }
 
+        public void PlayPauseExternalWrapper()
+        {
+            PlayPauseMixerEvent(new object(), new EventArgs());
+        }
+
         /// <summary>
         /// Handles volume changes to the master volume slider and updates the audio manager's volume accordingly.
         /// </summary>
@@ -122,7 +127,7 @@ namespace SDLab_GUI
         }
 
         /// <summary>
-        /// Handles the event when the add oscillator button is clicked by creating a new OscillatorItem and adding it to the track stack layout.
+        /// Handles the event when the add audio file track button is clicked by creating a new FileTrackItem and adding it to the track stack layout.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
@@ -130,7 +135,7 @@ namespace SDLab_GUI
         {
             var FileChoiceDialog = await FilePicker.PickAsync(new PickOptions
             {
-                PickerTitle = "sdkljnskldfn"
+                PickerTitle = "Selecionar ficheiro de audio (.mp3, .wav, .ogg, etc...)."
             });
 
             if(FileChoiceDialog == null) return;
@@ -138,6 +143,18 @@ namespace SDLab_GUI
             FileTrackItem newOscillator = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath);
 
             trackStackLayout.Children.Add(newOscillator);
+        }
+
+        /// <summary>
+        /// Handles the event when the add oscillator button is clicked by creating a new OscillatorItem and adding it to the track stack layout.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private async void addMIDITrackBTNClickedEvent(object sender, EventArgs e)
+        {
+            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this);
+
+            trackStackLayout.Children.Add(newMIDITrack);
         }
     }
 }

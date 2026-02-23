@@ -21,7 +21,7 @@ namespace AUDIOPROCBRIDGE {
 		/// </summary>
 		/// <returns>The int pointer to the new oscillator engine.</returns>
 		/// 
-		IntPtr _createEngine();
+		IntPtr _createEngine(bool isMidi);
 
 		/// <summary>
 		/// This method creates an oscillator engine in the core audio engine.
@@ -89,6 +89,10 @@ namespace AUDIOPROCBRIDGE {
 		void _changeAudioFileTempo(IntPtr engine, float newTempo);
 
 		void _changeAudioFilePitch(IntPtr engine, float newPitch);
+
+		void _changeMIDITrackRepeatingMode(IntPtr engine, bool newRepeatState);
+
+		void _changeMIDITrackTempo(IntPtr engine, float newTempo);
 
 		#pragma endregion EngineLogic
 

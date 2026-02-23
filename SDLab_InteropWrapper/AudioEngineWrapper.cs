@@ -18,9 +18,9 @@ namespace SDLab_InteropWrapper
             return 3301;
         }
 
-        public IntPtr CreateEngine()
+        public IntPtr CreateEngine(bool isMidi = false)
         {
-            return audioEngineRef._createEngine();
+            return audioEngineRef._createEngine(isMidi);
         }
 
         public IntPtr CreateEngine(string musicPath)
@@ -81,6 +81,16 @@ namespace SDLab_InteropWrapper
         public void ChangeAudioFilePitch(IntPtr engine, float newPitch)
         {
             audioEngineRef._changeAudioFilePitch(engine, newPitch);
+        }
+
+        public void _changeMIDITrackRepeatingMode(IntPtr engine, bool newRepeatState)
+        {
+            audioEngineRef._changeMIDITrackRepeatingMode(engine, newRepeatState);
+        }
+
+        public void _changeMIDITrackTempo(IntPtr engine, float newTempo)
+        {
+            audioEngineRef._changeMIDITrackTempo(engine, newTempo);
         }
 
         #endregion EngineMgmtLogic

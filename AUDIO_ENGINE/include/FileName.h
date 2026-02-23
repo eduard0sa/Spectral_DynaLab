@@ -14,7 +14,7 @@ using namespace std;
 #pragma region EngineLogic
 
 extern "C" AUDIO_ENGINE_API int _main_();
-extern "C" AUDIO_ENGINE_API void* createEngine();
+extern "C" AUDIO_ENGINE_API void* createEngine(bool isMidi);
 extern "C" AUDIO_ENGINE_API void* createAudioFileEngine(std::string filePath);
 extern "C" AUDIO_ENGINE_API void enginePrepareToPlay(void* engine, double sampleRate, int samplesPerBlockExpected, float startFrequency, float startGain);
 extern "C" AUDIO_ENGINE_API void engineProcessWave(void* engine, float* buffer, int numSamples);
@@ -25,10 +25,14 @@ extern "C" AUDIO_ENGINE_API float* pushOscVisSamples(void* engine);
 extern "C" AUDIO_ENGINE_API void changeFrequency(void* engine, float newFrequency);
 extern "C" AUDIO_ENGINE_API void changeGain(void* engine, float newGain);
 extern "C" AUDIO_ENGINE_API void changeWaveShapeFunction(void* engine, int functionIndex);
+
 extern "C" AUDIO_ENGINE_API void changeAudioFileRepeatingMode(void* engine, bool newRepeatState);
 extern "C" AUDIO_ENGINE_API void changeAudioFileTimePitchCouplingMode(void* engine, bool newTimePitchCouplingMode);
 extern "C" AUDIO_ENGINE_API void changeAudioFileTempo(void* engine, float newTempo);
 extern "C" AUDIO_ENGINE_API void changeAudioFilePitch(void* engine, float newPitch);
+
+extern "C" AUDIO_ENGINE_API void changeMIDITrackRepeatingMode(void* engine, bool newRepeatState);
+extern "C" AUDIO_ENGINE_API void changeMIDITrackTempo(void* engine, float newTempo);
 
 #pragma endregion EngineLogic
 #pragma region DSPLogic

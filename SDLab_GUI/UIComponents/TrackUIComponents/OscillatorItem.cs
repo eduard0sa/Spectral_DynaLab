@@ -261,7 +261,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             VerticalOptions = LayoutOptions.Fill;
             parentFLNode.SetGrow(this, 0.12f);
 
-            openSFXBTN.Text = "Open SFX";
+            openSFXBTN.Text = "Abrir SFX";
             openSFXBTN.FontSize = Device.GetNamedSize(NamedSize.Subtitle, typeof(Label));
             openSFXBTN.FontAttributes = FontAttributes.Bold;
             openSFXBTN.FontFamily = "Orbitron";

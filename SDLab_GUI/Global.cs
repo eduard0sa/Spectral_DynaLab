@@ -26,7 +26,8 @@
         public enum enumEngineType
         {
             Oscillator,
-            FileTrack
+            FileTrack,
+            MIDI
         }
 
         public enum enumWaveShapeType

@@ -8,8 +8,8 @@ int AUDIOPROCBRIDGE::AudioEngineRef::_root_() {
 	return _main_();
 }
 
-IntPtr AUDIOPROCBRIDGE::AudioEngineRef::_createEngine() {
-	void* native = ::createEngine();
+IntPtr AUDIOPROCBRIDGE::AudioEngineRef::_createEngine(bool isMidi) {
+	void* native = ::createEngine(isMidi);
     return IntPtr(native);
 }
 
@@ -74,6 +74,14 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeAudioFileTempo(IntPtr engine, float
 
 void AUDIOPROCBRIDGE::AudioEngineRef::_changeAudioFilePitch(IntPtr engine, float newPitch) {
 	changeAudioFilePitch((void*)engine, newPitch);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeMIDITrackRepeatingMode(IntPtr engine, bool newRepeatState) {
+	changeMIDITrackRepeatingMode((void*)engine, newRepeatState);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_changeMIDITrackTempo(IntPtr engine, float newTempo) {
+	changeMIDITrackTempo((void*)engine, newTempo);
 }
 
 #pragma endregion EngineMgmtLogic

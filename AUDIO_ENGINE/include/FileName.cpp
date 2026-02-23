@@ -1,7 +1,8 @@
 #include "FileName.h"
 #include <../SOURCE/Oscillator.h>
 #include <../SOURCE/FileTrack.h>
-#include <..\SOURCE\WaveEngineTemplate.h>
+#include <../SOURCE/MIDITrack.h>
+#include <../SOURCE/WaveEngineTemplate.h>
 
 extern "C" {
     int _main_() {
@@ -10,8 +11,13 @@ extern "C" {
 
     #pragma region EngineMgmtLogic
 
-    void* createEngine() {
-        return new _Oscillator();
+    void* createEngine(bool isMidi = false) {
+        if (isMidi) {
+            return new _MIDITrack();
+        }
+        else {
+            return new _Oscillator();
+        }
 	}
 
     void* createAudioFileEngine(std::string filePath) {
@@ -72,6 +78,14 @@ extern "C" {
 
     void changeAudioFilePitch(void* engine, float newPitch) {
         ((_FileTrack*)engine)->changeFilePitch(newPitch);
+    }
+
+    void changeMIDITrackRepeatingMode(void* engine, bool newRepeatState) {
+        ((_MIDITrack*)engine)->changeRepeatingMode(newRepeatState);
+    }
+
+    void changeMIDITrackTempo(void* engine, float newTempo) {
+        ((_MIDITrack*)engine)->changeFileTempo(newTempo);
     }
 
     #pragma endregion EngineMgmtLogic

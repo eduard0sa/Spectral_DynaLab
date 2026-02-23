@@ -28,7 +28,7 @@
             </Grid.RowDefinitions>
 
             <FlexLayout Grid.Row="0" Padding="50, 5, 20, 20" JustifyContent="SpaceBetween" AlignItems="Center" BackgroundColor="{StaticResource DarkPastelRed}">
-                <Label Text="DSP/SFX Editor" FontFamily="Orbitron" FontSize="Medium" FontAttributes="Bold" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
+                <Label Text="Editor DSP/SFX" FontFamily="Orbitron" FontSize="Medium" FontAttributes="Bold" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
                 <ImageButton x:Name="modalBoxCloseBTN" Source="close_xmark.png" WidthRequest="3" HeightRequest="3" BackgroundColor="Transparent"/>
             </FlexLayout>
 

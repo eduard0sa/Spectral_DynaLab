@@ -84,20 +84,37 @@ namespace SDLab_GUI.AudioSystemsLogic
         /// Initializes a new JuceAudioProvider with default frequency and gain, adds it to the mixer and oscillator list, and returns the provider.
         /// </summary>
         /// <returns>The newly created and configured JuceAudioProvider instance.</returns>
-        public JuceAudioProvider LaunchAudioEngine()
+        public JuceAudioProvider LaunchAudioEngine(bool isMIDI = false)
         {
-            //Oscillator instantiation in the core audio engine
-            AudioEngineOsc = _AudioEngineRef.CreateEngine();
-            OscillatorAudioProvider provider = new OscillatorAudioProvider(AudioEngineOsc, _AudioEngineRef, 44100, 1);
+            if (!isMIDI)
+            {
+                //Oscillator instantiation in the core audio engine
+                AudioEngineOsc = _AudioEngineRef.CreateEngine();
+                OscillatorAudioProvider provider = new OscillatorAudioProvider(AudioEngineOsc, _AudioEngineRef, 44100, 1);
 
-            provider.changeFrequency(defaultFrequency);
-            provider.changeGain(defaultGain);
+                provider.changeFrequency(defaultFrequency);
+                provider.changeGain(defaultGain);
 
-            //New oscillator instance append in mixer
-            mixer.AddMixerInput(provider);
+                //New oscillator instance append in mixer
+                mixer.AddMixerInput(provider);
 
-            oscillators.Add(provider);
-            return provider;
+                oscillators.Add(provider);
+                return provider;
+            }
+            else
+            {
+                //MIDI TRACK instantiation in the core audio engine
+                AudioEngineOsc = _AudioEngineRef.CreateEngine(true);
+                MIDITrackProvider provider = new MIDITrackProvider(AudioEngineOsc, _AudioEngineRef, 44100, 1);
+
+                provider.changeGain(defaultGain);
+
+                //New oscillator instance append in mixer
+                mixer.AddMixerInput(provider);
+
+                oscillators.Add(provider);
+                return provider;
+            }
         }
 
         /// <summary>

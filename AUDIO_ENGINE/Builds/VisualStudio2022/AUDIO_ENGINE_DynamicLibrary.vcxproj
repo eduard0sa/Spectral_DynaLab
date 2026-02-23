@@ -2918,6 +2918,7 @@ xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic L
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp" />
     <ClCompile Include="..\..\SOURCE\DSPProcessing.cpp" />
+    <ClCompile Include="..\..\SOURCE\MIDITrack.cpp" />
     <ClCompile Include="..\..\SOURCE\WaveEngineTemplate.cpp" />
     <ClCompile Include="..\..\SOURCE\FileTrack.cpp" />
     <ClCompile Include="..\..\SOURCE\Oscillator.cpp" />
@@ -4264,6 +4265,7 @@ xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic L
     <ClInclude Include="..\..\include\FileName.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
     <ClInclude Include="..\..\SOURCE\DSPProcessing.h" />
+    <ClInclude Include="..\..\SOURCE\MIDITrack.h" />
     <ClInclude Include="..\..\SOURCE\WaveEngineTemplate.h" />
     <ClInclude Include="..\..\SOURCE\FileTrack.h" />
     <ClInclude Include="..\..\SOURCE\Oscillator.h" />

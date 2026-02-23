@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SDLab_GUI.UIComponents.Editors.MIDIInterfaceEditor"
+             Title="MIDInterfaceEditor"
+             BackgroundColor="Transparent">
+
+    <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#aa101413">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="1" BackgroundColor="#101413">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="78*"/>
+            </Grid.RowDefinitions>
+
+            <FlexLayout Grid.Row="0" Padding="50, 5, 20, 20" JustifyContent="SpaceBetween" AlignItems="Center" BackgroundColor="{StaticResource DarkPastelRed}">
+                <Label Text="Editor MIDI" FontFamily="Orbitron" FontSize="Medium" FontAttributes="Bold" Margin="0, 5, 0, 0" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
+                <ImageButton x:Name="modalBoxCloseBTN" Source="close_xmark.png" WidthRequest="3" HeightRequest="3" BackgroundColor="Transparent"/>
+            </FlexLayout>
+
+            <FlexLayout Grid.Row="1" Direction="Row" JustifyContent="Center" AlignItems="Center">
+                <ImageButton Source="prev_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                <!--Clicked="PlayPauseMixerEvent"-->
+                <ImageButton x:Name="mainPlayBTN" Source="play_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                <ImageButton Source="for_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+            </FlexLayout>
+
+            <StackLayout Grid.Row="2" StyleClass="HorizontalBar"/>
+
+            <Grid Grid.Row="3" BackgroundColor="#0d0c16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="93*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="90*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="1" BackgroundColor="#1a1414">
+                    <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+                </Grid>
+
+                <ScrollView Grid.Row="1" Grid.Column="0">
+                    <VerticalStackLayout x:Name="MIDIKeyboardVerticalStackLayout" HorizontalOptions="Fill"></VerticalStackLayout>
+                </ScrollView>
+
+                <ScrollView Grid.Row="1" Grid.Column="1" Orientation="Both">
+                    
+                </ScrollView>
+
+                <StackLayout Grid.Row="2" Grid.ColumnSpan="2"></StackLayout>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>
