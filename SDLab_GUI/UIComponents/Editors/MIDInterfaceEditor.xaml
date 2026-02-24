@@ -55,12 +55,12 @@
                     <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
                 </Grid>
 
-                <ScrollView Grid.Row="1" Grid.Column="0">
+                <ScrollView x:Name="MIDIKeyboardScrollView" Grid.Row="1" Grid.Column="0">
                     <VerticalStackLayout x:Name="MIDIKeyboardVerticalStackLayout" HorizontalOptions="Fill"></VerticalStackLayout>
                 </ScrollView>
 
-                <ScrollView Grid.Row="1" Grid.Column="1" Orientation="Both">
-                    
+                <ScrollView x:Name="MIDIPianoRollScrollView" Grid.Row="1" Grid.Column="1" Orientation="Both" HorizontalOptions="Fill">
+                    <StackLayout x:Name="MIDIPianoRollStackLayout" HorizontalOptions="Fill"></StackLayout>
                 </ScrollView>
 
                 <StackLayout Grid.Row="2" Grid.ColumnSpan="2"></StackLayout>
