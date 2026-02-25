@@ -274,7 +274,6 @@ public partial class MIDIInterfaceEditor : ContentPage
         struct_keyboardInfo _KI;
         struct_timelineInfo _TI;
 
-        // Example notes: (noteIndex = 0..71), timeIndex = 0..63
         private List<struct_coordinates> activeNotes;
         private struct_coordinates hoveredNote = new struct_coordinates() { x = -1, y = -1 };
 
