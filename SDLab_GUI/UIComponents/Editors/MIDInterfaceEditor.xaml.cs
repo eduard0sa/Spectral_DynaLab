@@ -1,8 +1,6 @@
-using Microsoft.Maui.Graphics;
 using SDLab_GUI.AudioSystemsLogic;
 using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
 using SDLab_GUI.UIComponents.TrackUIComponents;
-using System.Data.Common;
 
 namespace SDLab_GUI.UIComponents.Editors;
 
@@ -14,6 +12,7 @@ public partial class MIDIInterfaceEditor : ContentPage
     private PianoRollGraphicsView pianoRoll;
 
     bool[] isSharpNodeArr = new bool[] { false, true, false, true, false, false, true, false, true, false, true, false };
+    float[] pianoRollLinesHeight = new float[] { 22f, 20f, 12f, 20f, 22f, 22f, 20f, 12f, 20f, 12f, 20f, 22f };
 
     private struct struct_timelineInfo
     {
@@ -26,6 +25,13 @@ public partial class MIDIInterfaceEditor : ContentPage
         public int numWhiteKeysPerOctave;
         public int numOctaves;
         public bool[] isSharpNoteArrRef;
+        public float[] pianoRollLinesHeight;
+    }
+
+    private struct struct_coordinates
+    {
+        public int x;
+        public int y;
     }
 
     public MIDIInterfaceEditor(AudioEngineMGMT audioManager, JuceAudioProvider audioProvider)
@@ -49,7 +55,8 @@ public partial class MIDIInterfaceEditor : ContentPage
         {
             numWhiteKeysPerOctave = 12,
             numOctaves = 6,
-            isSharpNoteArrRef = isSharpNodeArr
+            isSharpNoteArrRef = isSharpNodeArr,
+            pianoRollLinesHeight = pianoRollLinesHeight
         };
 
         MIDIPianoRollStackLayout.HeightRequest = MIDIKeyboardVerticalStackLayout.Height;
@@ -62,49 +69,6 @@ public partial class MIDIInterfaceEditor : ContentPage
 
         MIDIPianoRollScrollView.Scrolled += MIDIEditorScrolledEvent;
         MIDIKeyboardScrollView.Scrolled += MIDIEditorScrolledEvent;
-    }
-
-    private async Task<HorizontalStackLayout> test()
-    {
-        HorizontalStackLayout testHSL = new HorizontalStackLayout();
-
-        for (int i = 0; i < 100; i++)
-        {
-            VerticalStackLayout Column = new VerticalStackLayout();
-            Column.HeightRequest = MIDIKeyboardVerticalStackLayout.Height;
-            Column.WidthRequest = 5;
-            Column.Margin = new Thickness(10, 0, 0, 0);
-
-            for (int k = 0; k < 6; k++)
-            {
-                for (int j = 0; j < 12; j++)
-                {
-                    if (isSharpNodeArr[j])
-                    {
-                        StackLayout blackKey = new StackLayout();
-                        blackKey.ZIndex = 2;
-                        blackKey.WidthRequest = 10;
-                        blackKey.HeightRequest = 20;
-                        blackKey.Margin = new Thickness(0, -9, 0, 0);
-                        blackKey.BackgroundColor = Color.FromArgb("#151820");
-                        Column.Children.Add(blackKey);
-                    }
-                    else
-                    {
-                        StackLayout _whiteKey = new StackLayout();
-                        _whiteKey.WidthRequest = 10;
-                        _whiteKey.HeightRequest = 30;
-                        _whiteKey.Margin = new Thickness(0, (j == 5 || j == 0) ? 2 : -9, 0, 0);
-                        _whiteKey.BackgroundColor = Color.FromArgb("#101413");
-                        Column.Children.Add(_whiteKey);
-                    }
-                }
-            }
-
-            testHSL.Add(Column);
-        }
-
-        return testHSL;
     }
 
     /// <summary>
@@ -187,6 +151,7 @@ public partial class MIDIInterfaceEditor : ContentPage
     class PianoRollGraphicsView : GraphicsView
     {
         PianoRollDrawable drawable = new PianoRollDrawable();
+        PointerGestureRecognizer pointerGesture = new PointerGestureRecognizer();
 
         IDispatcherTimer updateFrameTimer;
 
@@ -201,8 +166,18 @@ public partial class MIDIInterfaceEditor : ContentPage
 
         public PianoRollGraphicsView(StackLayout parent, struct_timelineInfo timeLineInfo, struct_keyboardInfo keyboardInfo)
         {
+            float height = 0;
+
+            for(int i = 0; i < 12; i++)
+            {
+                height += keyboardInfo.pianoRollLinesHeight[i];
+            }
+
+            height *= keyboardInfo.numOctaves;
+            height += 22;
+
             WidthRequest = timeLineInfo.timeUnitSquareWidth * timeLineInfo.timeSpan;
-            HeightRequest = 20 * (keyboardInfo.numWhiteKeysPerOctave * keyboardInfo.numOctaves + 1) + 2 * keyboardInfo.numWhiteKeysPerOctave * keyboardInfo.numOctaves;
+            HeightRequest = height;
             HorizontalOptions = LayoutOptions.Start;
             drawable.KI = keyboardInfo;
             drawable.TI = timeLineInfo;
@@ -210,6 +185,16 @@ public partial class MIDIInterfaceEditor : ContentPage
             BackgroundColor = (Color)Application.Current.Resources["Gray500"];
 
             Drawable = drawable;
+
+            drawable.ActiveNotes = new List<struct_coordinates>() {
+                new struct_coordinates(){x = 5, y = 5},
+                new struct_coordinates(){x = 6, y = 10}
+            };
+
+            this.StartInteraction += OnStartInteraction;
+            this.DragInteraction += OnStartInteraction;
+            pointerGesture.PointerMoved += OnHoverInteraction;
+            this.GestureRecognizers.Add(pointerGesture);
 
             UpdateFrameTimer = Dispatcher.CreateTimer();
 
@@ -221,6 +206,67 @@ public partial class MIDIInterfaceEditor : ContentPage
 
             UpdateFrameTimer.Start();
         }
+
+        private void OnStartInteraction(object sender, TouchEventArgs e)
+        {
+            var point = e.Touches.First();
+
+            float x = (float)point.X;
+            float y = (float)point.Y;
+
+            int timeIndex = (int)(x / drawable.TI.timeUnitSquareWidth);
+
+            int heightClicked = 0, i = 0, c = 0;
+            while(heightClicked < y)
+            {
+                heightClicked += (int)drawable.KI.pianoRollLinesHeight[i];
+                i++;
+                c++;
+                if (i == 12) i = 0;
+            }
+
+            int noteIndex = c - 1;
+
+            struct_coordinates targetNoteCoordinates = new struct_coordinates() {
+                x = timeIndex,
+                y = noteIndex
+            };
+
+            drawable.ToggleNote(targetNoteCoordinates);
+
+            Invalidate();
+        }
+
+        private void OnHoverInteraction(object sender, PointerEventArgs e)
+        {
+            var point = e.GetPosition(this);
+
+            float x = (float)point.Value.X;
+            float y = (float)point.Value.Y;
+
+            int timeIndex = (int)(x / drawable.TI.timeUnitSquareWidth);
+
+            int heightClicked = 0, i = 0, c = 0;
+            while (heightClicked < y)
+            {
+                heightClicked += (int)drawable.KI.pianoRollLinesHeight[i];
+                i++;
+                c++;
+                if (i == 12) i = 0;
+            }
+
+            int noteIndex = c - 1;
+
+            struct_coordinates targetNoteCoordinates = new struct_coordinates()
+            {
+                x = timeIndex,
+                y = noteIndex
+            };
+
+            drawable.HoverNote(targetNoteCoordinates);
+
+            Invalidate();
+        }
     }
     
     class PianoRollDrawable : IDrawable
@@ -229,10 +275,12 @@ public partial class MIDIInterfaceEditor : ContentPage
         struct_timelineInfo _TI;
 
         // Example notes: (noteIndex = 0..71), timeIndex = 0..63
-        public List<(int noteIndex, int timeIndex)> ActiveNotes = new();
+        private List<struct_coordinates> activeNotes;
+        private struct_coordinates hoveredNote = new struct_coordinates() { x = -1, y = -1 };
 
         public struct_keyboardInfo KI { get => _KI; set => _KI = value; }
         public struct_timelineInfo TI { get => _TI; set => _TI = value; }
+        public List<struct_coordinates> ActiveNotes { get => activeNotes; set => activeNotes = value; }
 
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
@@ -245,20 +293,12 @@ public partial class MIDIInterfaceEditor : ContentPage
 
             for (int note = 0; note < KI.numOctaves * KI.numWhiteKeysPerOctave + 1; note++)
             {
-                if (KI.isSharpNoteArrRef[noteIndex])
-                {
-                    canvas.StrokeColor = Colors.Gray;
-                    canvas.DrawLine(0, y, TI.timeSpan * TI.timeUnitSquareWidth, y);
-                    y += 22;
-                }
-                else
-                {
-                    canvas.StrokeColor = Colors.Gray;
-                    canvas.DrawLine(0, y, TI.timeSpan * TI.timeUnitSquareWidth, y);
-                    y += 22;
-                }
+                canvas.StrokeColor = Color.FromArgb("#252526");
+                canvas.DrawLine(0, y, TI.timeSpan * TI.timeUnitSquareWidth, y);
+                y += KI.pianoRollLinesHeight[noteIndex];
 
-                if (noteIndex == KI.numWhiteKeysPerOctave - 1) {
+                if (noteIndex == KI.numWhiteKeysPerOctave - 1)
+                {
                     noteIndex = 0;
                     continue;
                 }
@@ -268,19 +308,60 @@ public partial class MIDIInterfaceEditor : ContentPage
 
             for (int t = 0; t <= TI.timeSpan; t++)
             {
-                canvas.StrokeColor = Colors.DarkGray;
+                canvas.StrokeColor = Color.FromArgb("#252526");
                 canvas.DrawLine(t * TI.timeUnitSquareWidth, 0, t * TI.timeUnitSquareWidth, (KI.numOctaves * KI.numWhiteKeysPerOctave + 1) * 22);
             }
 
             // Draw active notes
-            foreach (var (_noteIndex, timeIndex) in ActiveNotes)
+            foreach (struct_coordinates coords in ActiveNotes)
             {
-                float rectY = _noteIndex * 32;
-                float rectX = timeIndex * TI.timeUnitSquareWidth;
+                (float a, int b) = calcHeightAndNoteFromIndex(coords);
+                float rectY = a;
+                float rectX = coords.x * TI.timeUnitSquareWidth;
 
-                canvas.FillColor = Colors.Green;
-                canvas.FillRectangle(rectX, rectY, TI.timeUnitSquareWidth, 32);
+                canvas.FillColor = Color.FromArgb("#bc4338");
+                canvas.FillRectangle(rectX, rectY, TI.timeUnitSquareWidth, KI.pianoRollLinesHeight[b]);
             }
+
+            (float h, int _i) = calcHeightAndNoteFromIndex(hoveredNote);
+            float hoveredRectY = h;
+            float hoveredRectX = hoveredNote.x * TI.timeUnitSquareWidth;
+
+            canvas.FillColor = Color.FromArgb("#55bc4338");
+            canvas.FillRectangle(hoveredRectX, hoveredRectY, TI.timeUnitSquareWidth, KI.pianoRollLinesHeight[_i]);
+        }
+
+        public void ToggleNote(struct_coordinates noteCoords)
+        {
+            if (ActiveNotes.Contains(noteCoords))
+                ActiveNotes.Remove(noteCoords);
+            else
+                ActiveNotes.Add(noteCoords);
+        }
+
+        public void HoverNote(struct_coordinates noteCoords)
+        {
+            if (hoveredNote.x != noteCoords.x || hoveredNote.y != noteCoords.y)
+            {
+                hoveredNote = noteCoords;
+            }
+        }
+
+        private (float, int) calcHeightAndNoteFromIndex(struct_coordinates coords)
+        {
+            float c = 0;
+            int i = 0, j = 0;
+
+            while (j < coords.y)
+            {
+                c += KI.pianoRollLinesHeight[i];
+                i++;
+                j++;
+
+                if (i == 12) i = 0;
+            }
+
+            return (c, i);
         }
     }
 }
