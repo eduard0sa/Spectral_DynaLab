@@ -94,6 +94,10 @@ namespace AUDIOPROCBRIDGE {
 
 		void _changeMIDITrackTempo(IntPtr engine, float newTempo);
 
+		void _setMIDITemplateSamplingProvider(IntPtr engine, IntPtr audioProvider);
+
+		void _renderMIDIWaveform(IntPtr engine, cli::array<float>^ notesPitchRatioArr, int count);
+
 		#pragma endregion EngineLogic
 
 		#pragma region DSPLogic

@@ -94,5 +94,11 @@
             internal object dataUnit;
             internal enumVariableDataType dataType;
         }
+
+        public struct struct_coordinates
+        {
+            public int x;
+            public int y;
+        }
     }
 }

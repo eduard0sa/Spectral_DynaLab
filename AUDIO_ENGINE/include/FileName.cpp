@@ -88,6 +88,14 @@ extern "C" {
         ((_MIDITrack*)engine)->changeFileTempo(newTempo);
     }
 
+    void setMIDITemplateSamplingProvider(void* engine, void* audioProvider) {
+        ((_MIDITrack*)engine)->SetMIDITemplateSamplingProvider((_IEngine*)audioProvider);
+    }
+
+    void renderMIDIWaveform(void* engine, float* notesPitchRatioArr, int count) {
+        ((_MIDITrack*)engine)->RenderMIDIWaveform(notesPitchRatioArr, count);
+    }
+
     #pragma endregion EngineMgmtLogic
 
     #pragma region DSPs

@@ -84,6 +84,17 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_changeMIDITrackTempo(IntPtr engine, float
 	changeMIDITrackTempo((void*)engine, newTempo);
 }
 
+void AUDIOPROCBRIDGE::AudioEngineRef::_setMIDITemplateSamplingProvider(IntPtr engine, IntPtr audioProvider) {
+	setMIDITemplateSamplingProvider((void*)engine, (void*)audioProvider);
+}
+
+void AUDIOPROCBRIDGE::AudioEngineRef::_renderMIDIWaveform(IntPtr engine, cli::array<float>^ notesPitchRatioArr, int count) {
+	pin_ptr<float> pinnedPtr = &notesPitchRatioArr[0];
+	// Now you can safely get a float* to native code
+	float* nativePtr = pinnedPtr;
+	renderMIDIWaveform((void*)engine, nativePtr, count);
+}
+
 #pragma endregion EngineMgmtLogic
 
 #pragma region DSPs

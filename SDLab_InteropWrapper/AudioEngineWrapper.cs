@@ -93,6 +93,16 @@ namespace SDLab_InteropWrapper
             audioEngineRef._changeMIDITrackTempo(engine, newTempo);
         }
 
+        public void _setMIDITemplateSamplingProvider(IntPtr engine, IntPtr audioProvider)
+        {
+            audioEngineRef._setMIDITemplateSamplingProvider(engine, audioProvider);
+        }
+
+        public void _renderMIDIWaveform(IntPtr engine, float[] notesPitchRatioArr, int count)
+        {
+            audioEngineRef._renderMIDIWaveform(engine, notesPitchRatioArr, count);
+        }
+
         #endregion EngineMgmtLogic
 
         #region DSPs

@@ -20,8 +20,9 @@ namespace SDLab_GUI.AudioSystemsLogic
         public MixingSampleProvider mixer;
         public VolumeSampleProvider vsp;
         public WaveOutEvent output = new WaveOutEvent();
+        MainPage mainPage;
 
-        public AudioEngineMGMT()
+        public AudioEngineMGMT(MainPage _mainPage)
         {
             //Initializing Mixer Provider
             mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 1))
@@ -32,6 +33,8 @@ namespace SDLab_GUI.AudioSystemsLogic
             //Initializing Volume Sample Provider
             vsp = new VolumeSampleProvider(mixer);
             vsp.Volume = 1.0f;
+
+            mainPage = _mainPage;
         }
 
         /// <summary>
@@ -84,7 +87,7 @@ namespace SDLab_GUI.AudioSystemsLogic
         /// Initializes a new JuceAudioProvider with default frequency and gain, adds it to the mixer and oscillator list, and returns the provider.
         /// </summary>
         /// <returns>The newly created and configured JuceAudioProvider instance.</returns>
-        public JuceAudioProvider LaunchAudioEngine(bool isMIDI = false)
+        public JuceAudioProvider LaunchAudioEngine(bool isMIDI = false, bool addToMixer = true)
         {
             if (!isMIDI)
             {
@@ -96,7 +99,7 @@ namespace SDLab_GUI.AudioSystemsLogic
                 provider.changeGain(defaultGain);
 
                 //New oscillator instance append in mixer
-                mixer.AddMixerInput(provider);
+                if(addToMixer) mixer.AddMixerInput(provider);
 
                 oscillators.Add(provider);
                 return provider;
@@ -105,7 +108,7 @@ namespace SDLab_GUI.AudioSystemsLogic
             {
                 //MIDI TRACK instantiation in the core audio engine
                 AudioEngineOsc = _AudioEngineRef.CreateEngine(true);
-                MIDITrackProvider provider = new MIDITrackProvider(AudioEngineOsc, _AudioEngineRef, 44100, 1);
+                MIDITrackProvider provider = new MIDITrackProvider(AudioEngineOsc, _AudioEngineRef, mainPage, this, 44100, 1);
 
                 provider.changeGain(defaultGain);
 

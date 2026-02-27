@@ -25,17 +25,21 @@ public:
 
 	void changeRepeatingMode(bool newRepeatState);
 	void changeFileTempo(float newTempo);
+	void SetMIDITemplateSamplingProvider(_IEngine* audioProvider);
+	void RenderMIDIWaveform(float* notesPitchRatioArr, int count);
 
 private:
 	std::unique_ptr<RubberBand::RubberBandStretcher> rbbStretcher;
 
-	juce::AudioBuffer<float> tempBuffer;
+	juce::AudioBuffer<float> MIDITrackBuffer;
+
 	int currentSampleIndex = 0;
 	bool isRepeating = false;
 
 	float currentSampleContinuousPosition = 0;
 	float internalTempoRatio = 1.0f;
 	float setTempoRatio = 1.0f;
+	_IEngine* templateSamplingAudioProvider;
 
 	float resampleSample(int channelIndex, float sampleIndex, float _pitchRatio);
 

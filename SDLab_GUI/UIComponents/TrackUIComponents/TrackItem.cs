@@ -8,7 +8,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     /// <summary>
     /// Template UI audio track component class (abstract class). Can be used as base class for oscillators, audio file players, etc....
     /// </summary>
-    internal abstract class TrackItem : FlexLayout
+    public abstract class TrackItem : FlexLayout
     {
         protected JuceAudioProvider trackAudioProvider;
         protected AudioEngineMGMT audioEngineMGMT;
@@ -20,6 +20,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         protected TrackItemWaveVizualizerArea TrackItemWaveVizualizerArea;
 
         protected structSliderData gainSliderData;
+
+        public JuceAudioProvider TrackAudioProvider { get => trackAudioProvider; }
 
         protected abstract void UIPaint();
         protected abstract void deleteTrackEvent(object? sender, EventArgs e);
@@ -82,7 +84,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     /// <summary>
     /// Track Item UI Component Header
     /// </summary>
-    internal class TrackItemHeader : FlexLayout
+    public class TrackItemHeader : FlexLayout
     {
         Label HeaderLabel = new Label();
 
@@ -106,7 +108,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     /// <summary>
     /// Track Item UI Component Slider Control Group.
     /// </summary>
-    internal class TrackItemSliderControlGroup : FlexLayout
+    public class TrackItemSliderControlGroup : FlexLayout
     {
         List<Global.structVariableDataTypeUnit> controlList = new List<Global.structVariableDataTypeUnit>();
 
@@ -246,7 +248,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     /// <summary>
     /// Track Item UI Component Slider Control.
     /// </summary>
-    internal class TrackItemSliderControl : FlexLayout
+    public class TrackItemSliderControl : FlexLayout
     {
         Label sliderControlLabel = new Label();
         Slider sliderControlSlider = new Slider();
@@ -460,7 +462,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     /// <summary>
     /// Track Item UI Component Wave Visualizer Area.
     /// </summary>
-    internal class TrackItemWaveVizualizerArea : StackLayout
+    public class TrackItemWaveVizualizerArea : StackLayout
     {
         TrackItemWaveVizualizerGV visualizer;
         IDispatcherTimer updateFrameTimer;
@@ -507,7 +509,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     /// <summary>
     /// Track Item UI Component Wave Visualizer Graphics View.
     /// </summary>
-    internal class TrackItemWaveVizualizerGV : GraphicsView
+    public class TrackItemWaveVizualizerGV : GraphicsView
     {
         SoundWaveShapeDrawable drawableEngine = new SoundWaveShapeDrawable();
         JuceAudioProvider AP;

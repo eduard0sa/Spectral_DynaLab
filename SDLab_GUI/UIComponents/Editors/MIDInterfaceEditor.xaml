@@ -22,7 +22,9 @@
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="78*"/>
+                <RowDefinition Height="64*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
 
             <FlexLayout Grid.Row="0" Padding="50, 5, 20, 20" JustifyContent="SpaceBetween" AlignItems="Center" BackgroundColor="{StaticResource DarkPastelRed}">
@@ -65,6 +67,22 @@
 
                 <StackLayout Grid.Row="2" Grid.ColumnSpan="2"></StackLayout>
             </Grid>
+
+            <StackLayout Grid.Row="4" StyleClass="HorizontalBar"/>
+
+            <ScrollView Grid.Row="5">
+                <VerticalStackLayout>
+                    <VerticalStackLayout x:Name="MIDINoTemplateAudioProviderBanner" BackgroundColor="{StaticResource DarkPastelRed}">
+                        <Label Text="Configure uma fonte válida de som para a MIDI." TextColor="{StaticResource White}" HorizontalTextAlignment="Center" Margin="0, 20, 0, 0"/>
+                        <HorizontalStackLayout HorizontalOptions="Center" Margin="0, 20, 0, 0">
+                            <Button Text="+ Configurar sinal puro (OSCILLATOR)" WidthRequest="300" HeightRequest="10" CornerRadius="2" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="SetMIDITrackTemplateAP"/>
+                            <Button Text="+ Configurar sample externo" WidthRequest="300" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout x:Name="MIDITemplateAudioProviderLayout" IsVisible="False"/>
+                </VerticalStackLayout>
+            </ScrollView>
         </Grid>
     </Grid>
 </ContentPage>

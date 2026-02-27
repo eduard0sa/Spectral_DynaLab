@@ -20,7 +20,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// </summary>
         /// <param name="audioManager">Reference to the audio manager instance from MainPage.</param>
         /// <param name="mainPage">Reference from the Main Page program instance.</param>
-        public OscillatorItem(AudioEngineMGMT audioManager, MainPage mainPage)
+        public OscillatorItem(AudioEngineMGMT audioManager, MainPage mainPage, bool addToMixer = true)
         {
             TrackTriangleMark = new TrackItemLeftIconMenu(this);
             TrackTriangleMark.ClickEventHandler = deleteTrackEvent;
@@ -31,7 +31,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             _oscillatorItemSFXButtonArea = new OscillatorItemSFXButtonArea(this);
             _oscillatorItemSFXButtonArea.OpenSFXEditorEvent = openSFXEditorEvent;
 
-            trackAudioProvider = audioManager.LaunchAudioEngine();
+            trackAudioProvider = audioManager.LaunchAudioEngine(addToMixer: addToMixer);
             audioEngineMGMT = audioManager;
             mainPageOBJ = mainPage;
 

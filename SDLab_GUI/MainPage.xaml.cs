@@ -20,7 +20,7 @@ namespace SDLab_GUI
 
             //Initiallize audio Engine/Mixer
             AudioEngineWrapper audioEngineWrapper = new AudioEngineWrapper();
-            audioManager = new AudioEngineMGMT();
+            audioManager = new AudioEngineMGMT(this);
 
             audioManager.initMixer();
 

@@ -5,11 +5,12 @@ using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.UIComponents.TrackUIComponents
 {
-    internal class MIDITrackItem : TrackItem
+    public class MIDITrackItem : TrackItem
     {
         private MIDIItemSFXButtonArea openMIDIEditorButton;
         private structSwitchData repeatTrackModeSwitchData;
         private structSliderData tempoSliderData;
+        private TrackItem templateAudioProvider; //UI Component for the MIDI Template Audio Provider (Oscillator/File Track)
 
         public MIDITrackItem(AudioEngineMGMT audioManager, MainPage mainPage)
         {
@@ -100,7 +101,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
                 mainPageOBJ.PlayPauseExternalWrapper();
             }
 
-            MIDIInterfaceEditor MIDIEditor = new MIDIInterfaceEditor(audioEngineMGMT, trackAudioProvider);
+            MIDIInterfaceEditor MIDIEditor = new MIDIInterfaceEditor(audioEngineMGMT, this, templateAudioProvider);
             mainPageOBJ.Navigation.PushModalAsync(MIDIEditor);
 
             MIDIEditor.ModalBoxCloseEvent = closeMIDIEditorEvent;
@@ -109,6 +110,18 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         private void closeMIDIEditorEvent(object? sender, EventArgs e)
         {
             mainPageOBJ.Navigation.PopModalAsync();
+        }
+
+        public TrackItem SetMIDITrackTemplateAP(enumEngineType templateAPType)
+        {
+            switch (templateAPType)
+            {
+                case enumEngineType.Oscillator:
+                    templateAudioProvider = new OscillatorItem(audioEngineMGMT, mainPageOBJ, false);
+                    break;
+            }
+
+            return templateAudioProvider;
         }
 
         protected override void deleteTrackEvent(object? sender, EventArgs e)

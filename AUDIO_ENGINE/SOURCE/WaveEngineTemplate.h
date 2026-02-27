@@ -50,6 +50,10 @@ public:
 
 	void removeDSPEffect(void* effect);
 
+	void setBlockSize(int newBlockSize) {
+		spec.maximumBlockSize = newBlockSize;
+	}
+
 protected:
 	juce::dsp::ProcessSpec spec = juce::dsp::ProcessSpec();
 

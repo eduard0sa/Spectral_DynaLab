@@ -55,7 +55,7 @@ void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
 
     outputGain->process(context);
 
-    for (int i = 0; i < 512; i++) {
+    for (int i = 0; i < spec.maximumBlockSize; i++) {
         visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
     }
 }
