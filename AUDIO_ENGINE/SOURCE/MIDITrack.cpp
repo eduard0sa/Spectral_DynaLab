@@ -98,27 +98,56 @@ void _MIDITrack::SetMIDITemplateSamplingProvider(_IEngine* audioProvider) {
     templateSamplingAudioProvider = audioProvider;
 }
 
+//void _MIDITrack::RenderMIDIWaveform(float* notesPitchRatioArr, int count) {
+//    //MIDITrackBuffer.clear();
+//
+//    int samplesPerUnit = (100 * spec.sampleRate) / 1000;
+//    int numSampleProcessBlocks = ceil((double)samplesPerUnit / 512);
+//
+//    templateSamplingAudioProvider->setBlockSize(samplesPerUnit);
+//
+//    MIDITrackBuffer.setSize(1, samplesPerUnit * count);
+//
+//    int xcounter = 0;
+//    for (int i = 0; i < count; i++) {
+//        juce::AudioBuffer<float> planarBuffer;
+//        planarBuffer.setSize(1, samplesPerUnit);
+//        juce::AudioSourceChannelInfo bufferToFill(&planarBuffer, 0, samplesPerUnit);
+//
+//        templateSamplingAudioProvider->getNextAudioBlock(bufferToFill);
+//        MIDITrackBuffer.addFrom(0, samplesPerUnit * i, bufferToFill.buffer->getReadPointer(0, 0), samplesPerUnit);
+//    }
+//    printf("dfkgsdkfas");
+//    //UNFINISHED
+//}
+
 void _MIDITrack::RenderMIDIWaveform(float* notesPitchRatioArr, int count) {
-    //MIDITrackBuffer.clear();
+    int samplesPerNoteUnit = (100 * spec.sampleRate) / 1000;
 
-    int samplesPerUnit = (100 * spec.sampleRate) / 1000;
-    int numSampleProcessBlocks = ceil((double)samplesPerUnit / 512);
+    templateSamplingAudioProvider->setBlockSize(samplesPerNoteUnit);
+    spec.maximumBlockSize = samplesPerNoteUnit;
+    MIDITrackBuffer.setSize(1, samplesPerNoteUnit * count);
 
-    templateSamplingAudioProvider->setBlockSize(samplesPerUnit);
+    juce::AudioBuffer<float> planarBuffer;
+    planarBuffer.setSize(1, samplesPerNoteUnit);
+    juce::AudioSourceChannelInfo bufferToFill(&planarBuffer, 0, samplesPerNoteUnit);
 
-    MIDITrackBuffer.setSize(1, samplesPerUnit * count);
-
-    int xcounter = 0;
     for (int i = 0; i < count; i++) {
-        juce::AudioBuffer<float> planarBuffer;
-        planarBuffer.setSize(1, samplesPerUnit);
-        juce::AudioSourceChannelInfo bufferToFill(&planarBuffer, 0, samplesPerUnit);
+		bufferToFill.buffer->clear();
 
         templateSamplingAudioProvider->getNextAudioBlock(bufferToFill);
-        MIDITrackBuffer.addFrom(0, samplesPerUnit * i, bufferToFill.buffer->getReadPointer(0, 0), samplesPerUnit);
+
+        for (int j = 0; j < samplesPerNoteUnit; j++) {
+            try {
+                MIDITrackBuffer.addSample(0, samplesPerNoteUnit * i + j, bufferToFill.buffer->getSample(0, j));
+            }
+            catch (error_code e) {
+                DBG(e.message());
+            }
+        }
+
+        //MIDITrackBuffer.addFrom(0, samplesPerNoteUnit * i, bufferToFill.buffer->getWritePointer(0, 0), samplesPerNoteUnit);
     }
-    printf("dfkgsdkfas");
-    //UNFINISHED
 }
 
 /*float _MIDITrack::resampleSample(int channelIndex, float sampleIndex, float _pitchRatio)
