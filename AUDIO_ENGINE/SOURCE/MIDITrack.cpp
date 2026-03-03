@@ -48,7 +48,7 @@ void _MIDITrack::prepareToPlay(int samplesPerBlockExpected, double sampleRate, f
     changeFileTempo(setTempoRatio);
 }
 
-void _MIDITrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
+void _MIDITrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray = true) {
     bufferToFill.clearActiveBufferRegion();
 
     if (currentSampleIndex < MIDITrackBuffer.getNumSamples()) {
@@ -98,76 +98,33 @@ void _MIDITrack::SetMIDITemplateSamplingProvider(_IEngine* audioProvider) {
     templateSamplingAudioProvider = audioProvider;
 }
 
-//void _MIDITrack::RenderMIDIWaveform(float* notesPitchRatioArr, int count) {
-//    //MIDITrackBuffer.clear();
-//
-//    int samplesPerUnit = (100 * spec.sampleRate) / 1000;
-//    int numSampleProcessBlocks = ceil((double)samplesPerUnit / 512);
-//
-//    templateSamplingAudioProvider->setBlockSize(samplesPerUnit);
-//
-//    MIDITrackBuffer.setSize(1, samplesPerUnit * count);
-//
-//    int xcounter = 0;
-//    for (int i = 0; i < count; i++) {
-//        juce::AudioBuffer<float> planarBuffer;
-//        planarBuffer.setSize(1, samplesPerUnit);
-//        juce::AudioSourceChannelInfo bufferToFill(&planarBuffer, 0, samplesPerUnit);
-//
-//        templateSamplingAudioProvider->getNextAudioBlock(bufferToFill);
-//        MIDITrackBuffer.addFrom(0, samplesPerUnit * i, bufferToFill.buffer->getReadPointer(0, 0), samplesPerUnit);
-//    }
-//    printf("dfkgsdkfas");
-//    //UNFINISHED
-//}
-
 void _MIDITrack::RenderMIDIWaveform(float* notesPitchRatioArr, int count) {
-    int samplesPerNoteUnit = (100 * spec.sampleRate) / 1000;
+    samplesPerNoteUnit = (100 * spec.sampleRate) / 1000;
 
     templateSamplingAudioProvider->setBlockSize(samplesPerNoteUnit);
-    spec.maximumBlockSize = samplesPerNoteUnit;
+    //spec.maximumBlockSize = samplesPerNoteUnit;
     MIDITrackBuffer.setSize(1, samplesPerNoteUnit * count);
 
-    juce::AudioBuffer<float> planarBuffer;
-    planarBuffer.setSize(1, samplesPerNoteUnit);
-    juce::AudioSourceChannelInfo bufferToFill(&planarBuffer, 0, samplesPerNoteUnit);
+    noteUnitPlanarBuffer.setSize(1, samplesPerNoteUnit);
+	bufferToFill = juce::AudioSourceChannelInfo(&noteUnitPlanarBuffer, 0, samplesPerNoteUnit);
 
     for (int i = 0; i < count; i++) {
 		bufferToFill.buffer->clear();
 
-        templateSamplingAudioProvider->getNextAudioBlock(bufferToFill);
+        templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
+
+        float* buffer = MIDITrackBuffer.getWritePointer(0, 0);
 
         for (int j = 0; j < samplesPerNoteUnit; j++) {
             try {
-                MIDITrackBuffer.addSample(0, samplesPerNoteUnit * i + j, bufferToFill.buffer->getSample(0, j));
+                buffer[samplesPerNoteUnit * i + j] = bufferToFill.buffer->getSample(0, j);
+                //MIDITrackBuffer.addSample(0, samplesPerNoteUnit * i + j, bufferToFill.buffer->getSample(0, j));
             }
             catch (error_code e) {
                 DBG(e.message());
             }
         }
-
-        //MIDITrackBuffer.addFrom(0, samplesPerNoteUnit * i, bufferToFill.buffer->getWritePointer(0, 0), samplesPerNoteUnit);
     }
 }
-
-/*float _MIDITrack::resampleSample(int channelIndex, float sampleIndex, float _pitchRatio)
-{
-    float resSample = tempBuffer.getSample(channelIndex, currentSampleIndex + sampleIndex);
-
-    if (currentSampleContinuousPosition + sampleIndex < tempBuffer.getNumSamples() - 1) {
-        int index = (int)currentSampleContinuousPosition;
-        float frac = currentSampleContinuousPosition - index;
-
-        float s1 = tempBuffer.getSample(channelIndex, index);
-        float s2 = tempBuffer.getSample(channelIndex, index + 1);
-        float interpolated = s1 + frac * (s2 - s1);
-
-        resSample = interpolated;
-    }
-
-    currentSampleContinuousPosition += _pitchRatio;
-
-    return resSample;
-}*/
 
 #pragma endregion

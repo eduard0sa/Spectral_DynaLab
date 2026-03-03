@@ -20,7 +20,7 @@ public:
 	~_MIDITrack();
 
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
-	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) override;
+	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray) override;
 	void releaseResources() override;
 
 	void changeRepeatingMode(bool newRepeatState);
@@ -32,6 +32,9 @@ private:
 	std::unique_ptr<RubberBand::RubberBandStretcher> rbbStretcher;
 
 	juce::AudioBuffer<float> MIDITrackBuffer;
+	juce::AudioBuffer<float> noteUnitPlanarBuffer;
+	juce::AudioSourceChannelInfo bufferToFill;
+	int samplesPerNoteUnit;
 
 	int currentSampleIndex = 0;
 	bool isRepeating = false;

@@ -30,7 +30,7 @@ void _Oscillator::prepareToPlay(int samplesPerBlockExpected, double sampleRate, 
     outputGain->setRampDurationSeconds(0.02); // super important
 }
 
-void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
+void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray = true)
 {
     bufferToFill.clearActiveBufferRegion();
     float originalPhase = phase;
@@ -55,8 +55,10 @@ void _Oscillator::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
 
     outputGain->process(context);
 
-    for (int i = 0; i < spec.maximumBlockSize; i++) {
-        visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+    if (fillVisualizationArray) {
+        for (int i = 0; i < spec.maximumBlockSize; i++) {
+            visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+        }
     }
 }
 

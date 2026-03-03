@@ -55,7 +55,7 @@ void _FileTrack::prepareToPlay(int samplesPerBlockExpected, double sampleRate, f
     changeFileTempo(setTempoRatio);
 }
 
-void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
+void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray = true)
 {
     bufferToFill.clearActiveBufferRegion();
 

@@ -117,7 +117,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             switch (templateAPType)
             {
                 case enumEngineType.Oscillator:
-                    templateAudioProvider = new OscillatorItem(audioEngineMGMT, mainPageOBJ, false);
+                    templateAudioProvider = new OscillatorItem(audioEngineMGMT, mainPageOBJ, false, false);
                     break;
             }
 

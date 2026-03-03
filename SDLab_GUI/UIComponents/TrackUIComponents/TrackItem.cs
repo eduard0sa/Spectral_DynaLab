@@ -482,27 +482,30 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="parentFLNode">Reference to the parent FlexLayout object (the Track Item UI Component).</param>
         /// <param name="_graphUpdateFunction">Provides the function that updates the sound wave visualizer graph.</param>
         /// <param name="_audioProvider">Reference to audio system's audio provider (oscillator, file track, etc...) engine object.</param>
-        public TrackItemWaveVizualizerArea(FlexLayout parentFLNode, Func<float[]> _graphUpdateFunction, JuceAudioProvider _audioProvider)
+        public TrackItemWaveVizualizerArea(FlexLayout parentFLNode, Func<float[]> _graphUpdateFunction, JuceAudioProvider _audioProvider, bool activateWaveMonitor = true)
         {
             parentFLNode.SetGrow(this, 0.16f);
             HeightRequest = 100;
             Padding = new Thickness(20, 20, 20, 20);
             BackgroundColor = (Color)Application.Current.Resources["Gray950"];
 
-            visualizer = new TrackItemWaveVizualizerGV(this, _audioProvider);
+            if (activateWaveMonitor)
+            {
+                visualizer = new TrackItemWaveVizualizerGV(this, _audioProvider);
 
-            Children.Add(visualizer);
+                Children.Add(visualizer);
 
-            UpdateFrameTimer = Dispatcher.CreateTimer();
+                UpdateFrameTimer = Dispatcher.CreateTimer();
 
-            UpdateFrameTimer.Interval = TimeSpan.FromMilliseconds(33);
+                UpdateFrameTimer.Interval = TimeSpan.FromMilliseconds(33);
 
-            UpdateFrameTimer.Tick += delegate {
-                visualizer.VisSamplesArray = _graphUpdateFunction();
-                visualizer.updateWaveForm();
-            };
+                UpdateFrameTimer.Tick += delegate {
+                    visualizer.VisSamplesArray = _graphUpdateFunction();
+                    visualizer.updateWaveForm();
+                };
 
-            UpdateFrameTimer.Start();
+                UpdateFrameTimer.Start();
+            }
         }
     }
 

@@ -20,7 +20,7 @@ public:
 
 	//METHODS
 	virtual void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) abstract;
-	virtual void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) abstract;
+	virtual void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray = true) abstract;
 	virtual void releaseResources() abstract;
 
 	void changeGain(float newGain);

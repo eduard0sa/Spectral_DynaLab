@@ -20,7 +20,7 @@ public:
 	~_FileTrack();
 
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
-	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) override;
+	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray) override;
 	void releaseResources() override;
 
 	void changeRepeatingMode(bool newRepeatState);
