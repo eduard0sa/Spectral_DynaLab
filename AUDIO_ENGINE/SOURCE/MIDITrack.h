@@ -26,7 +26,7 @@ public:
 	void changeRepeatingMode(bool newRepeatState);
 	void changeFileTempo(float newTempo);
 	void SetMIDITemplateSamplingProvider(_IEngine* audioProvider);
-	void RenderMIDIWaveform(float* notesPitchRatioArr, int count);
+	void RenderMIDIWaveform(float** notesPitchRatioArr, int count);
 
 private:
 	std::unique_ptr<RubberBand::RubberBandStretcher> rbbStretcher;

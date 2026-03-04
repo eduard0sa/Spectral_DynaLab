@@ -96,7 +96,7 @@ namespace AUDIOPROCBRIDGE {
 
 		void _setMIDITemplateSamplingProvider(IntPtr engine, IntPtr audioProvider);
 
-		void _renderMIDIWaveform(IntPtr engine, cli::array<float>^ notesPitchRatioArr, int count);
+		void _renderMIDIWaveform(IntPtr engine, cli::array<float, 2>^ pianoRollMatrix, int count);
 
 		#pragma endregion EngineLogic
 

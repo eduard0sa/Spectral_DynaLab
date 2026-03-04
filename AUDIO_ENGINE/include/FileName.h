@@ -34,7 +34,7 @@ extern "C" AUDIO_ENGINE_API void changeAudioFilePitch(void* engine, float newPit
 extern "C" AUDIO_ENGINE_API void changeMIDITrackRepeatingMode(void* engine, bool newRepeatState);
 extern "C" AUDIO_ENGINE_API void changeMIDITrackTempo(void* engine, float newTempo);
 extern "C" AUDIO_ENGINE_API void setMIDITemplateSamplingProvider(void* engine, void* audioProvider);
-extern "C" AUDIO_ENGINE_API void renderMIDIWaveform(void* engine, float* notesPitchRatioArr, int count);
+extern "C" AUDIO_ENGINE_API void renderMIDIWaveform(void* engine, float** notesPitchRatioArr, int count);
 
 #pragma endregion EngineLogic
 #pragma region DSPLogic

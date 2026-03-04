@@ -92,7 +92,7 @@ extern "C" {
         ((_MIDITrack*)engine)->SetMIDITemplateSamplingProvider((_IEngine*)audioProvider);
     }
 
-    void renderMIDIWaveform(void* engine, float* notesPitchRatioArr, int count) {
+    void renderMIDIWaveform(void* engine, float** notesPitchRatioArr, int count) {
         ((_MIDITrack*)engine)->RenderMIDIWaveform(notesPitchRatioArr, count);
     }
 

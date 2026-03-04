@@ -1,6 +1,7 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
 using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
 using SDLab_GUI.UIComponents.Editors;
+using Windows.Networking.Vpn;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.UIComponents.TrackUIComponents
@@ -15,12 +16,14 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
         private Global.structSliderData frequencySliderData;
 
+        private bool activateWaveGraphMonitor = true;
+
         /// <summary>
         /// OscillatorItem class constructor.
         /// </summary>
         /// <param name="audioManager">Reference to the audio manager instance from MainPage.</param>
         /// <param name="mainPage">Reference from the Main Page program instance.</param>
-        public OscillatorItem(AudioEngineMGMT audioManager, MainPage mainPage, bool addToMixer = true, bool activateWaveGraphMonitor = true)
+        public OscillatorItem(AudioEngineMGMT audioManager, MainPage mainPage, bool addToMixer = true, bool _activateWaveGraphMonitor = true)
         {
             TrackTriangleMark = new TrackItemLeftIconMenu(this);
             TrackTriangleMark.ClickEventHandler = deleteTrackEvent;
@@ -34,8 +37,9 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             trackAudioProvider = audioManager.LaunchAudioEngine(addToMixer: addToMixer);
             audioEngineMGMT = audioManager;
             mainPageOBJ = mainPage;
+            activateWaveGraphMonitor = _activateWaveGraphMonitor;
 
-            TrackItemWaveVizualizerArea = new TrackItemWaveVizualizerArea(this, trackAudioProvider.pushOSCVisSampleArray, trackAudioProvider, false);
+            TrackItemWaveVizualizerArea = new TrackItemWaveVizualizerArea(this, trackAudioProvider.pushOSCVisSampleArray, trackAudioProvider, activateWaveGraphMonitor);
 
             frequencySliderData = new Global.structSliderData() {
                 minVal = 20f,
@@ -109,7 +113,10 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="e"></param>
         protected override void deleteTrackEvent(object? sender, EventArgs e)
         {
-            TrackItemWaveVizualizerArea.UpdateFrameTimer.Stop();
+            if (activateWaveGraphMonitor)
+            {
+                TrackItemWaveVizualizerArea.UpdateFrameTimer.Stop();
+            }
             audioEngineMGMT.removeAudioEngine(trackAudioProvider);
             (Parent as VerticalStackLayout).Children.Remove(this);
         }

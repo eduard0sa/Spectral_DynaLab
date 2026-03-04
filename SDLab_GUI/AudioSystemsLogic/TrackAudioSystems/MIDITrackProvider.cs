@@ -50,20 +50,25 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
 
         public void renderMIDIWaveform(JuceAudioProvider templateSamplingProvider)
         {
+            float[,] pianoRollMatrix = new float[6 * 7 + 1, 200];
+
             if(ActiveNotes.Count > 0)
             {
                 List<float> notesPitchRatios = new List<float>();
 
                 for (int i = 0; i < ActiveNotes.Count; i++)
                 {
+                    pianoRollMatrix[ActiveNotes[i].y, ActiveNotes[i].x] = (float)Math.Pow(2, ((double)ActiveNotes[i].y - 46) / 12);
                     notesPitchRatios.Add((float)Math.Pow(2, ((double)ActiveNotes[i].y - 46) / 12));
                 }
 
-                engineBridgeRef._renderMIDIWaveform(engine, notesPitchRatios.ToArray(), ActiveNotes.Count);
+                engineBridgeRef._renderMIDIWaveform(engine, pianoRollMatrix, ActiveNotes.Count);
+                //6 * 7 + 1
+                //200
             }
             else
             {
-                engineBridgeRef._renderMIDIWaveform(engine, new float[] { 0 }, 1);
+                engineBridgeRef._renderMIDIWaveform(engine, new float[,] { }, 1);
             }
         }
 

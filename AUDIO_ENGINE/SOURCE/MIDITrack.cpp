@@ -98,7 +98,7 @@ void _MIDITrack::SetMIDITemplateSamplingProvider(_IEngine* audioProvider) {
     templateSamplingAudioProvider = audioProvider;
 }
 
-void _MIDITrack::RenderMIDIWaveform(float* notesPitchRatioArr, int count) {
+void _MIDITrack::RenderMIDIWaveform(float** notesPitchRatioArr, int count) {
     samplesPerNoteUnit = (100 * spec.sampleRate) / 1000;
 
     templateSamplingAudioProvider->setBlockSize(samplesPerNoteUnit);
@@ -107,8 +107,33 @@ void _MIDITrack::RenderMIDIWaveform(float* notesPitchRatioArr, int count) {
 
     noteUnitPlanarBuffer.setSize(1, samplesPerNoteUnit);
 	bufferToFill = juce::AudioSourceChannelInfo(&noteUnitPlanarBuffer, 0, samplesPerNoteUnit);
+    float* buffer = MIDITrackBuffer.getWritePointer(0, 0);
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < 200; i++) {
+        bufferToFill.buffer->clear();
+        templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
+
+        for (int j = 0; j < samplesPerNoteUnit; j++) {
+            vector<float> summedBuffer = vector<float>(samplesPerNoteUnit, 0.0f);
+
+            for (int k = 0; k < 6 * 7 + 1; k++) {
+                try {
+                    if (notesPitchRatioArr[k, i] > 0) {
+                        summedBuffer[j] += bufferToFill.buffer->getSample(0, j);
+                    }
+                    //MIDITrackBuffer.addSample(0, samplesPerNoteUnit * i + j, bufferToFill.buffer->getSample(0, j));
+                }
+                catch (error_code e) {
+                    DBG(e.message());
+                }
+            }
+
+            //summedBuffer[i] += notesPitchRatioArr[k, i];
+            buffer[samplesPerNoteUnit * i + j] = summedBuffer[j];
+        }
+    }
+
+    /*for (int i = 0; i < count; i++) {
 		bufferToFill.buffer->clear();
 
         templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
@@ -124,7 +149,7 @@ void _MIDITrack::RenderMIDIWaveform(float* notesPitchRatioArr, int count) {
                 DBG(e.message());
             }
         }
-    }
+    }*/
 }
 
 #pragma endregion

@@ -88,11 +88,23 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_setMIDITemplateSamplingProvider(IntPtr en
 	setMIDITemplateSamplingProvider((void*)engine, (void*)audioProvider);
 }
 
-void AUDIOPROCBRIDGE::AudioEngineRef::_renderMIDIWaveform(IntPtr engine, cli::array<float>^ notesPitchRatioArr, int count) {
-	pin_ptr<float> pinnedPtr = &notesPitchRatioArr[0];
+void AUDIOPROCBRIDGE::AudioEngineRef::_renderMIDIWaveform(IntPtr engine, cli::array<float, 2>^ pianoRollMatrix, int count) {
+	/*pin_ptr<float> pinnedPtr = &pianoRollMatrix[0, 0];
 	// Now you can safely get a float* to native code
-	float* nativePtr = pinnedPtr;
-	renderMIDIWaveform((void*)engine, nativePtr, count);
+	float* nativePtr = pinnedPtr;*/
+
+	float** matrix = new float* [6 * 7 + 1];
+	for (int i = 0; i < 6 * 7 + 1; i++) {
+		float* row = new float[200];
+
+		for (int j = 0; j < 200; j++) {
+			row[j] = pianoRollMatrix[i, j];
+		}
+
+		matrix[i] = row;
+	}
+
+	renderMIDIWaveform((void*)engine, matrix, count);
 }
 
 #pragma endregion EngineMgmtLogic
