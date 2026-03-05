@@ -42,7 +42,7 @@ public partial class MIDIInterfaceEditor : ContentPage
         struct_timelineInfo timelineInfo = new struct_timelineInfo()
         {
             timeSpan = 200, //In blocks of 100 milliseconds
-            timeUnitSquareWidth = 10
+            timeUnitSquareWidth = 20
         };
 
         struct_keyboardInfo keyboardInfo = new struct_keyboardInfo()

@@ -89,10 +89,6 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_setMIDITemplateSamplingProvider(IntPtr en
 }
 
 void AUDIOPROCBRIDGE::AudioEngineRef::_renderMIDIWaveform(IntPtr engine, cli::array<float, 2>^ pianoRollMatrix, int count) {
-	/*pin_ptr<float> pinnedPtr = &pianoRollMatrix[0, 0];
-	// Now you can safely get a float* to native code
-	float* nativePtr = pinnedPtr;*/
-
 	float** matrix = new float* [6 * 7 + 1];
 	for (int i = 0; i < 6 * 7 + 1; i++) {
 		float* row = new float[200];

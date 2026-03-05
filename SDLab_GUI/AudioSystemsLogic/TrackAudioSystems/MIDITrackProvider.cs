@@ -10,7 +10,8 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
         private bool currentRepeatMode = false;
         private float currentTempo = 1.0f;
         private List<Global.struct_coordinates> activeNotes = new List<Global.struct_coordinates>();
-        private Global.struct_coordinates hoveredNote;
+        //private Global.struct_coordinates hoveredNote;
+        private AudioEngineMGMT AudioEngineMGMT;
 
         public List<Global.struct_coordinates> ActiveNotes { get => activeNotes; set => activeNotes = value; }
 
@@ -21,6 +22,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
             engineBridgeRef = _engineBridgeRef;
             WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(_sampleRate, _channels);
             engineBridgeRef.EnginePrepareToPlay(engine, _sampleRate, samplesPerBlock);
+            AudioEngineMGMT = _audioManager;
         }
 
         /// <summary>
@@ -50,21 +52,24 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
 
         public void renderMIDIWaveform(JuceAudioProvider templateSamplingProvider)
         {
-            float[,] pianoRollMatrix = new float[6 * 7 + 1, 200];
+            float[,] pianoRollMatrix = new float[6 * 12 + 1, 200];
 
             if(ActiveNotes.Count > 0)
             {
-                List<float> notesPitchRatios = new List<float>();
+
+                int validTimeIntervalsCount = 0;
 
                 for (int i = 0; i < ActiveNotes.Count; i++)
                 {
-                    pianoRollMatrix[ActiveNotes[i].y, ActiveNotes[i].x] = (float)Math.Pow(2, ((double)ActiveNotes[i].y - 46) / 12);
-                    notesPitchRatios.Add((float)Math.Pow(2, ((double)ActiveNotes[i].y - 46) / 12));
+                    pianoRollMatrix[ActiveNotes[i].y, ActiveNotes[i].x] = (float)Math.Pow(2, ((double)ActiveNotes[i].y - 36) / 12);
+
+                    if (ActiveNotes[i].x > validTimeIntervalsCount)
+                    {
+                        validTimeIntervalsCount = ActiveNotes[i].x;
+                    }
                 }
 
-                engineBridgeRef._renderMIDIWaveform(engine, pianoRollMatrix, ActiveNotes.Count);
-                //6 * 7 + 1
-                //200
+                engineBridgeRef._renderMIDIWaveform(engine, pianoRollMatrix, validTimeIntervalsCount + 1);
             }
             else
             {
@@ -74,12 +79,12 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
 
         public void PlayMIDI()
         {
-
+            AudioEngineMGMT.PlayMixer();
         }
 
         public void PauseMIDI()
         {
-
+            AudioEngineMGMT.PauseMixer();
         }
     }
 }

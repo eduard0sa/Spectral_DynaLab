@@ -44,7 +44,7 @@ private:
 	float setTempoRatio = 1.0f;
 	_IEngine* templateSamplingAudioProvider;
 
-	float resampleSample(int channelIndex, float sampleIndex, float _pitchRatio);
+	void processFrequencyChange(const juce::AudioSourceChannelInfo& bufferToFill, float pitchRatio);
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(_MIDITrack)
 };
