@@ -1,16 +1,7 @@
 #pragma once
 
-#include<../JuceLibraryCode/JuceHeader.h>
-#include<juce_dsp/juce_dsp.h>
 #include <../SOURCE/WaveEngineTemplate.h>
 #include <../SOURCE/DSPProcessing.h>
-#include <RubberBandStretcher.h>
-#include <string>
-#include <iostream>
-#include <stdlib.h>
-
-using namespace juce;
-using namespace std;
 
 class _FileTrack : _IEngine
 {
@@ -29,8 +20,8 @@ public:
 	void changeFilePitch(float newPitch);
 
 private:
-	AudioFormatManager formatManager = AudioFormatManager();
-	unique_ptr<AudioFormatReader> readerSource;
+	juce::AudioFormatManager formatManager = juce::AudioFormatManager();
+	std::unique_ptr<juce::AudioFormatReader> readerSource;
 	std::unique_ptr<RubberBand::RubberBandStretcher> rbbStretcher;
 
 	juce::AudioBuffer<float> tempBuffer;

@@ -1,12 +1,9 @@
 #pragma once
 
 #include<../JuceLibraryCode/JuceHeader.h>
-#include<juce_dsp/juce_dsp.h>
 #include <../SOURCE/DSPProcessing.h>
+#include <RubberBandStretcher.h>
 #include <stdlib.h>
-
-using namespace juce;
-using namespace std;
 
 enum enum_engineTypes {
 	oscillator,
@@ -32,7 +29,7 @@ public:
 		T* compressionEffectHEAP = (T*)malloc(sizeof(T));
 		T* compressionEffectSTACK = new (compressionEffectHEAP) T(); //Stack reference of the memory allocated at the last row, used to call the DSPDistortionEffect's class constructor.
 
-		Random randomizer = Random();
+		juce::Random randomizer = juce::Random();
 		int distortionEffectID;
 
 		do {
@@ -57,7 +54,7 @@ public:
 protected:
 	juce::dsp::ProcessSpec spec = juce::dsp::ProcessSpec();
 
-	unique_ptr<dsp::Gain<float>> outputGain = make_unique<dsp::Gain<float>>();
+	std::unique_ptr<juce::dsp::Gain<float>> outputGain = std::make_unique<juce::dsp::Gain<float>>();
 
 	double _sampleRate = 44100.0;
 	int numChannels = 1;

@@ -100,5 +100,12 @@
             public int x;
             public int y;
         }
+
+        public struct struct_noteInfo
+        {
+            public int startTime;
+            public int noteIndex;
+            public int duration;
+        }
     }
 }

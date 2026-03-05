@@ -6,8 +6,9 @@
 #define AUDIO_ENGINE_API __declspec(dllimport)
 #endif
 
-#include <stdio.h>
 #include <string>
+#include <vector>
+#include <../SOURCE/global.h>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ extern "C" AUDIO_ENGINE_API void changeAudioFilePitch(void* engine, float newPit
 extern "C" AUDIO_ENGINE_API void changeMIDITrackRepeatingMode(void* engine, bool newRepeatState);
 extern "C" AUDIO_ENGINE_API void changeMIDITrackTempo(void* engine, float newTempo);
 extern "C" AUDIO_ENGINE_API void setMIDITemplateSamplingProvider(void* engine, void* audioProvider);
-extern "C" AUDIO_ENGINE_API void renderMIDIWaveform(void* engine, float** notesPitchRatioArr, int count);
+extern "C" AUDIO_ENGINE_API void renderMIDIWaveform(void* engine, std::vector<std::vector<struct_noteInfo>> notesPitchRatioArr, int notesCount, int maxNotesPerColumn);
 
 #pragma endregion EngineLogic
 #pragma region DSPLogic

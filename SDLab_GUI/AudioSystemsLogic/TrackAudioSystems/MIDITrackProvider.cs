@@ -9,11 +9,14 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
     {
         private bool currentRepeatMode = false;
         private float currentTempo = 1.0f;
-        private List<Global.struct_coordinates> activeNotes = new List<Global.struct_coordinates>();
-        //private Global.struct_coordinates hoveredNote;
         private AudioEngineMGMT AudioEngineMGMT;
 
-        public List<Global.struct_coordinates> ActiveNotes { get => activeNotes; set => activeNotes = value; }
+        List<Global.struct_coordinates> activeNotes = new List<Global.struct_coordinates>();
+        private int[,] pianoRollMatrix = new int[200, 6 * 12 + 1];
+        private (int startTime, int noteIndex, int duration, float pitchRatio)[,] finalPianoRollMatrix = new (int startTime, int noteIndex, int duration, float pitchRatio)[200, 6 * 12 + 1];
+
+        public List<Global.struct_coordinates> ActiveNotesLazyList { get => activeNotes; set => activeNotes = value; }
+        public int[,] ActiveNotes { get => pianoRollMatrix; set => pianoRollMatrix = value; }
 
         public MIDITrackProvider(nint _engine, AudioEngineWrapper _engineBridgeRef, MainPage _mainPage, AudioEngineMGMT _audioManager, int _sampleRate, int _channels)
         {
@@ -52,29 +55,61 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
 
         public void renderMIDIWaveform(JuceAudioProvider templateSamplingProvider)
         {
-            float[,] pianoRollMatrix = new float[6 * 12 + 1, 200];
+            int maxValidNoteBlockColumnIndex = 0;
+            int maxColumnNoteIndex = 6 * 7;
 
-            if(ActiveNotes.Count > 0)
+            for (int i = 0; i < 200; i++)
             {
-
-                int validTimeIntervalsCount = 0;
-
-                for (int i = 0; i < ActiveNotes.Count; i++)
+                for (int j = 0; j < 6 * 7 + 1; j++)
                 {
-                    pianoRollMatrix[ActiveNotes[i].y, ActiveNotes[i].x] = (float)Math.Pow(2, ((double)ActiveNotes[i].y - 36) / 12);
+                    (int startTime, int noteIndex, int duration, float pitchRatio) blankNoteInfo = (i, j, 0, 0);
 
-                    if (ActiveNotes[i].x > validTimeIntervalsCount)
+                    finalPianoRollMatrix[i, j] = blankNoteInfo;
+
+                    if (i > 0)
                     {
-                        validTimeIntervalsCount = ActiveNotes[i].x;
+                        if (pianoRollMatrix[i, j] == 1 && pianoRollMatrix[i - 1, j] == 1)
+                        {
+                            continue;
+                        }
+                        else if (pianoRollMatrix[i, j] == 1 && pianoRollMatrix[i - 1, j] == 0)
+                        {
+                            int val = pianoRollMatrix[i, j], count = 0;
+                            while (val == 1)
+                            {
+                                count++;
+                                val = pianoRollMatrix[i + count, j];
+                            }
+
+                            (int startTime, int noteIndex, int duration, float pitchRatio) noteInfo = (i, j, count, (float)Math.Pow(2, ((double)j - 36) / 12));
+
+                            finalPianoRollMatrix[i, j] = noteInfo;
+
+                            if (i + count - 1 > maxValidNoteBlockColumnIndex) maxValidNoteBlockColumnIndex = i + count - 1;
+                        }
+                    }
+                    else
+                    {
+                        if(pianoRollMatrix[i, j] == 1)
+                        {
+                            int val = pianoRollMatrix[i, j], count = 0;
+                            while (val == 1)
+                            {
+                                count++;
+                                val = pianoRollMatrix[i + count, j];
+                            }
+
+                            (int startTime, int noteIndex, int duration, float pitchRatio) noteInfo = (i, j, count, (float)Math.Pow(2, ((double)j - 36) / 12));
+
+                            finalPianoRollMatrix[i, j] = noteInfo;
+
+                            if (i + count - 1 > maxValidNoteBlockColumnIndex) maxValidNoteBlockColumnIndex = i + count - 1;
+                        }
                     }
                 }
+            }
 
-                engineBridgeRef._renderMIDIWaveform(engine, pianoRollMatrix, validTimeIntervalsCount + 1);
-            }
-            else
-            {
-                engineBridgeRef._renderMIDIWaveform(engine, new float[,] { }, 1);
-            }
+            engineBridgeRef._renderMIDIWaveform(engine, finalPianoRollMatrix, maxValidNoteBlockColumnIndex + 1, maxColumnNoteIndex + 1);
         }
 
         public void PlayMIDI()

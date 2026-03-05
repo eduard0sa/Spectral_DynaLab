@@ -1,16 +1,8 @@
 #pragma once
 
-#include<../JuceLibraryCode/JuceHeader.h>
-#include<juce_dsp/juce_dsp.h>
 #include <../SOURCE/WaveEngineTemplate.h>
-#include <../SOURCE/DSPProcessing.h>
-#include <RubberBandStretcher.h>
+#include <../SOURCE/global.h>
 #include <string>
-#include <iostream>
-#include <stdlib.h>
-
-using namespace juce;
-using namespace std;
 
 class _MIDITrack : _IEngine
 {
@@ -26,14 +18,12 @@ public:
 	void changeRepeatingMode(bool newRepeatState);
 	void changeFileTempo(float newTempo);
 	void SetMIDITemplateSamplingProvider(_IEngine* audioProvider);
-	void RenderMIDIWaveform(float** notesPitchRatioArr, int count);
+	void RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> notesPitchRatioArr, int notesCount, int maxNotesPerColumn);
 
 private:
 	std::unique_ptr<RubberBand::RubberBandStretcher> rbbStretcher;
 
 	juce::AudioBuffer<float> MIDITrackBuffer;
-	juce::AudioBuffer<float> noteUnitPlanarBuffer;
-	juce::AudioSourceChannelInfo bufferToFill;
 	int samplesPerNoteUnit;
 
 	int currentSampleIndex = 0;

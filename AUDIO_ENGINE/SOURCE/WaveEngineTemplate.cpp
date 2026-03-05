@@ -1,5 +1,8 @@
 #include "WaveEngineTemplate.h"
 
+using namespace juce;
+using namespace std;
+
 void _IEngine::changeGain(float newGain) {
 	gain = newGain;
 	outputGain->setGainLinear(gain);

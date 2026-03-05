@@ -1,5 +1,8 @@
 #include "MIDITrack.h"
 
+using namespace juce;
+using namespace std;
+
 _MIDITrack::_MIDITrack() {
     //formatManager.registerBasicFormats();
 
@@ -89,27 +92,21 @@ void _MIDITrack::SetMIDITemplateSamplingProvider(_IEngine* audioProvider) {
     templateSamplingAudioProvider = audioProvider;
 }
 
-void _MIDITrack::RenderMIDIWaveform(float** notesPitchRatioArr, int count) {
+void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> notesPitchRatioArr, int notesCount, int maxNotesPerColumn) {
     MIDITrackBuffer.clear();
 
     samplesPerNoteUnit = (100 * spec.sampleRate) / 1000;
 
-    templateSamplingAudioProvider->setBlockSize(samplesPerNoteUnit);
+    MIDITrackBuffer.setSize(1, samplesPerNoteUnit * notesCount);
 
-    MIDITrackBuffer.setSize(1, samplesPerNoteUnit * count);
-    noteUnitPlanarBuffer.setSize(1, samplesPerNoteUnit);
-
-	bufferToFill = juce::AudioSourceChannelInfo(&noteUnitPlanarBuffer, 0, samplesPerNoteUnit);
     float* buffer = MIDITrackBuffer.getWritePointer(0, 0);
 
-    for (int i = 0; i < count; i++) {
+    /*for (int i = 0; i < notesCount; i++) {
         bufferToFill.buffer->clear();
         templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
 
-		vector<juce::AudioBuffer<float>> simultaneousNotesBufferToFill;
-
-        for (int k = 0; k < 6 * 7 + 1; k++) {
-            if (notesPitchRatioArr[k][i] > 0) {
+        for (int k = 0; k < maxNotesPerColumn; k++) {
+            if (notesPitchRatioArr[k][i].duration > 0) {
                 juce::AudioBuffer<float> currentNotePlanarBuffer = juce::AudioBuffer<float>(1, samplesPerNoteUnit);
                 float* currentNoteFloatBuffer = currentNotePlanarBuffer.getWritePointer(0, 0);
 
@@ -118,15 +115,32 @@ void _MIDITrack::RenderMIDIWaveform(float** notesPitchRatioArr, int count) {
                 }
 
                 juce::AudioSourceChannelInfo currentNoteBufferToFill = juce::AudioSourceChannelInfo(&currentNotePlanarBuffer, 0, samplesPerNoteUnit);
-                processFrequencyChange(currentNoteBufferToFill, notesPitchRatioArr[k][i]);
+                processFrequencyChange(currentNoteBufferToFill, notesPitchRatioArr[k][i].pitchRatio);
 
-				simultaneousNotesBufferToFill.push_back(currentNotePlanarBuffer);
+                for (int j = 0; j < samplesPerNoteUnit; j++) {
+                    buffer[samplesPerNoteUnit * i + j] += currentNotePlanarBuffer.getSample(0, j);
+                }
             }
         }
+    }*/
 
-        for (int k = 0; k < simultaneousNotesBufferToFill.size(); k++) {
-            for (int j = 0; j < samplesPerNoteUnit; j++) {
-                buffer[samplesPerNoteUnit * i + j] += simultaneousNotesBufferToFill[k].getSample(0, j);
+    for (int i = 0; i < notesCount; i++) {
+        for (int j = 0; j < notesPitchRatioArr[i].size(); j++) {
+            int bufferLength = samplesPerNoteUnit * notesPitchRatioArr[i][j].duration;
+
+            juce::AudioBuffer<float> currentNotePlanarBuffer = juce::AudioBuffer<float>(1, bufferLength);
+            //float* currentNoteFloatBuffer = currentNotePlanarBuffer.getWritePointer(0, 0);
+            juce::AudioSourceChannelInfo bufferToFill = juce::AudioSourceChannelInfo(&currentNotePlanarBuffer, 0, bufferLength);
+
+            templateSamplingAudioProvider->setBlockSize(bufferLength);
+
+            bufferToFill.buffer->clear();
+            templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
+            
+			processFrequencyChange(bufferToFill, notesPitchRatioArr[i][j].pitchRatio);
+            
+            for (int k = 0; k < bufferLength; k++) {
+				buffer[i * samplesPerNoteUnit + k] += (float)bufferToFill.buffer->getSample(0, k);
             }
         }
     }
@@ -135,30 +149,24 @@ void _MIDITrack::RenderMIDIWaveform(float** notesPitchRatioArr, int count) {
 void _MIDITrack::processFrequencyChange(const juce::AudioSourceChannelInfo& bufferToFill, float pitchRatio) {
 	rbbStretcher->setPitchScale(pitchRatio);
 
+    rbbStretcher->reset();
+
     const int numChannels = bufferToFill.buffer->getNumChannels();
     const int requestedSamples = bufferToFill.numSamples;
 
     int availableInput = requestedSamples;
+    int readIndex = 0;
 
     std::vector<const float*> input(numChannels);
 
-    while (rbbStretcher->available() < requestedSamples)
-    {
-        if (currentSampleIndex >= bufferToFill.buffer->getNumSamples())
-            break;
+    int blockToFeed = bufferToFill.buffer->getNumSamples();
 
-        int blockToFeed = juce::jmin(
-            512,
-            bufferToFill.buffer->getNumSamples() - currentSampleIndex
-        );
+    for (int ch = 0; ch < numChannels; ++ch)
+        input[ch] = bufferToFill.buffer->getReadPointer(ch, readIndex);
 
-        for (int ch = 0; ch < numChannels; ++ch)
-            input[ch] = bufferToFill.buffer->getReadPointer(ch, currentSampleIndex);
+    rbbStretcher->process(input.data(), blockToFeed, false);
 
-        rbbStretcher->process(input.data(), blockToFeed, false);
-
-        currentSampleIndex += blockToFeed;
-    }
+    readIndex += blockToFeed;
 
     int availableOutput = rbbStretcher->available();
 

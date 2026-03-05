@@ -2,9 +2,7 @@
 
 #include<../JuceLibraryCode/JuceHeader.h>
 #include<juce_dsp/juce_dsp.h>
-
-using namespace juce;
-using namespace std;
+#include <memory>
 
 enum enum_EffectType {
 	Distortion,
@@ -34,7 +32,7 @@ public:
 class DSPGainEffect : public DSPEffect
 {
 private:
-	dsp::Gain<float> gainSFX;
+	juce::dsp::Gain<float> gainSFX;
 
 public:
 	int id;
@@ -54,8 +52,8 @@ public:
 class DSPDistortionEffect : public DSPEffect
 {
 private:
-	dsp::Gain<float> inputGain;
-	dsp::WaveShaper<float> distortionSFX;
+	juce::dsp::Gain<float> inputGain;
+	juce::dsp::WaveShaper<float> distortionSFX;
 	float distortionDrive = 250;
 
 public:
@@ -83,7 +81,7 @@ public:
 class DSPCompressorEffect : public DSPEffect
 {
 private:
-	dsp::Compressor<float> compressorSFX;
+	juce::dsp::Compressor<float> compressorSFX;
 
 	float compressorThreshold = -10.0f;
 	float compressorRatio = 2.0f;
@@ -119,9 +117,9 @@ public:
 class DSPReverbEffect : public DSPEffect
 {
 private:
-	dsp::Reverb reverbSFX;
+	juce::dsp::Reverb reverbSFX;
 
-	dsp::Reverb::Parameters reverbSFXParams = dsp::Reverb::Parameters();
+	juce::dsp::Reverb::Parameters reverbSFXParams = juce::dsp::Reverb::Parameters();
 
 	float roomSize = 0.5f; // 0 - 1
 	float damping = 0.5f; // 0 - 1
@@ -158,7 +156,7 @@ public:
 class DSPChorusEffect : public DSPEffect
 {
 private:
-	dsp::Chorus<float> chorusSFX;
+	juce::dsp::Chorus<float> chorusSFX;
 
 	float rate = 0.8f;
 	float depth = 0.4f;

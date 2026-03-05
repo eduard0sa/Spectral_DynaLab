@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "FileName.h"
 
 using namespace System;
 using namespace std;
@@ -96,7 +97,7 @@ namespace AUDIOPROCBRIDGE {
 
 		void _setMIDITemplateSamplingProvider(IntPtr engine, IntPtr audioProvider);
 
-		void _renderMIDIWaveform(IntPtr engine, cli::array<float, 2>^ pianoRollMatrix, int count);
+		void _renderMIDIWaveform(IntPtr engine, cli::array<ValueTuple<int, int, int, float>, 2>^ pianoRollMatrix, int notesCount, int maxNotesPerColumn);
 
 		#pragma endregion EngineLogic
 

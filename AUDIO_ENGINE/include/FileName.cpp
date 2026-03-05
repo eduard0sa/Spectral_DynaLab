@@ -1,8 +1,8 @@
 #include "FileName.h"
+
 #include <../SOURCE/Oscillator.h>
 #include <../SOURCE/FileTrack.h>
 #include <../SOURCE/MIDITrack.h>
-#include <../SOURCE/WaveEngineTemplate.h>
 
 extern "C" {
     int _main_() {
@@ -92,8 +92,8 @@ extern "C" {
         ((_MIDITrack*)engine)->SetMIDITemplateSamplingProvider((_IEngine*)audioProvider);
     }
 
-    void renderMIDIWaveform(void* engine, float** notesPitchRatioArr, int count) {
-        ((_MIDITrack*)engine)->RenderMIDIWaveform(notesPitchRatioArr, count);
+    void renderMIDIWaveform(void* engine, std::vector<std::vector<struct_noteInfo>> notesPitchRatioArr, int notesCount, int maxNotesPerColumn) {
+        ((_MIDITrack*)engine)->RenderMIDIWaveform(notesPitchRatioArr, notesCount, maxNotesPerColumn);
     }
 
     #pragma endregion EngineMgmtLogic

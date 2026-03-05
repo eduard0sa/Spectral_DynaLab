@@ -1,5 +1,8 @@
 #include "DSPProcessing.h"
 
+using namespace juce;
+using namespace std;
+
 #pragma region GAIN
 
 DSPGainEffect::DSPGainEffect() {

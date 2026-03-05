@@ -98,9 +98,9 @@ namespace SDLab_InteropWrapper
             audioEngineRef._setMIDITemplateSamplingProvider(engine, audioProvider);
         }
 
-        public void _renderMIDIWaveform(IntPtr engine, float[, ] pianoRollMatrix, int count)
+        public void _renderMIDIWaveform(IntPtr engine, (int startTime, int noteIndex, int duration, float pitchRatio)[, ] pianoRollMatrix, int notesCount, int maxNotesPerColumn)
         {
-            audioEngineRef._renderMIDIWaveform(engine, pianoRollMatrix, count);
+            audioEngineRef._renderMIDIWaveform(engine, pianoRollMatrix, notesCount, maxNotesPerColumn);
         }
 
         #endregion EngineMgmtLogic

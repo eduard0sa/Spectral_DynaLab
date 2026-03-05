@@ -1,5 +1,8 @@
 #include "Oscillator.h"
 
+using namespace juce;
+using namespace std;
+
 _Oscillator::_Oscillator() {
     waveShape = enum_OscillatorWaveShapeType::sine;
     visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));

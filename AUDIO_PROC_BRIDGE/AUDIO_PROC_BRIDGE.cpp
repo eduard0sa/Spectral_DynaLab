@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "AUDIO_PROC_BRIDGE.h"
-#include "FileName.h"
 
 #pragma region EngineMgmtLogic
 
@@ -88,19 +87,28 @@ void AUDIOPROCBRIDGE::AudioEngineRef::_setMIDITemplateSamplingProvider(IntPtr en
 	setMIDITemplateSamplingProvider((void*)engine, (void*)audioProvider);
 }
 
-void AUDIOPROCBRIDGE::AudioEngineRef::_renderMIDIWaveform(IntPtr engine, cli::array<float, 2>^ pianoRollMatrix, int count) {
-	float** matrix = new float* [6 * 7 + 1];
-	for (int i = 0; i < 6 * 7 + 1; i++) {
-		float* row = new float[200];
+void AUDIOPROCBRIDGE::AudioEngineRef::_renderMIDIWaveform(IntPtr engine, cli::array<ValueTuple<int, int, int, float>, 2>^ pianoRollMatrix, int notesCount, int maxNotesPerColumn) {
+	std::vector<std::vector<struct_noteInfo>> matrix = vector<vector<struct_noteInfo>>(notesCount);
+	
+	for (int i = 0; i < notesCount; i++) {
+		vector<struct_noteInfo> timeBlock = vector<struct_noteInfo>();
 
-		for (int j = 0; j < 200; j++) {
-			row[j] = pianoRollMatrix[i, j];
+		for (int j = 0; j < maxNotesPerColumn; j++) {
+			if (pianoRollMatrix[i, j].Item4 != 0) {
+				struct_noteInfo noteInfo;
+				noteInfo.startTime = pianoRollMatrix[i, j].Item1;
+				noteInfo.noteIndex = pianoRollMatrix[i, j].Item2;
+				noteInfo.duration = pianoRollMatrix[i, j].Item3;
+				noteInfo.pitchRatio = pianoRollMatrix[i, j].Item4;
+
+				timeBlock.push_back(noteInfo);
+			}
 		}
 
-		matrix[i] = row;
+		matrix[i] = timeBlock;
 	}
 
-	renderMIDIWaveform((void*)engine, matrix, count);
+	renderMIDIWaveform((void*)engine, matrix, notesCount, maxNotesPerColumn);
 }
 
 #pragma endregion EngineMgmtLogic

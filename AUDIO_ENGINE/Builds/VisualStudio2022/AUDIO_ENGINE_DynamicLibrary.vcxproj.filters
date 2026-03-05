@@ -7526,6 +7526,7 @@
     <ClInclude Include="..\..\SOURCE\FileTrack.h" />
     <ClInclude Include="..\..\SOURCE\WaveEngineTemplate.h" />
     <ClInclude Include="..\..\SOURCE\MIDITrack.h" />
+    <ClInclude Include="..\..\SOURCE\global.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\juce-8.0.3-windows\JUCE\modules\juce_audio_devices\native\oboe\src\common\README.md">

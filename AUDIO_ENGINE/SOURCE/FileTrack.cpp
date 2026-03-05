@@ -1,5 +1,8 @@
 ﻿#include "FileTrack.h"
 
+using namespace juce;
+using namespace std;
+
 _FileTrack::_FileTrack(std::string filePath) {
     formatManager.registerBasicFormats();
 

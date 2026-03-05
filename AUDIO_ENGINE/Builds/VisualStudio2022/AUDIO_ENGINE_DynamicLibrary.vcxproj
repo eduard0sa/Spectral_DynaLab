@@ -68,6 +68,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\juce-8.0.3-windows\JUCE\modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -116,6 +117,7 @@ xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic L
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\juce-8.0.3-windows\JUCE\modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -4265,6 +4267,7 @@ xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic L
     <ClInclude Include="..\..\include\FileName.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
     <ClInclude Include="..\..\SOURCE\DSPProcessing.h" />
+    <ClInclude Include="..\..\SOURCE\global.h" />
     <ClInclude Include="..\..\SOURCE\MIDITrack.h" />
     <ClInclude Include="..\..\SOURCE\WaveEngineTemplate.h" />
     <ClInclude Include="..\..\SOURCE\FileTrack.h" />

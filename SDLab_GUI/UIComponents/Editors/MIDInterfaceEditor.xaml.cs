@@ -341,7 +341,7 @@ class PianoRollGraphicsView : GraphicsView
             }
 
             // Draw active notes
-            foreach (Global.struct_coordinates coords in ((MIDITrackProvider)MIDIAP).ActiveNotes)
+            foreach (Global.struct_coordinates coords in ((MIDITrackProvider)MIDIAP).ActiveNotesLazyList)
             {
                 (float a, int b) = calcHeightAndNoteFromIndex(coords);
                 float rectY = a;
@@ -361,13 +361,18 @@ class PianoRollGraphicsView : GraphicsView
 
         public void ToggleNote(Global.struct_coordinates noteCoords)
         {
-            if (((MIDITrackProvider)MIDIAP).ActiveNotes.Contains(noteCoords))
+            if(noteCoords.x >= 0 && noteCoords.y >= 0)
             {
-                ((MIDITrackProvider)MIDIAP).ActiveNotes.Remove(noteCoords);
-            }
-            else
-            {
-                ((MIDITrackProvider)MIDIAP).ActiveNotes.Add(noteCoords);
+                if (((MIDITrackProvider)MIDIAP).ActiveNotes[noteCoords.x, noteCoords.y] > 0)
+                {
+                    ((MIDITrackProvider)MIDIAP).ActiveNotes[noteCoords.x, noteCoords.y] = 0;
+                    ((MIDITrackProvider)MIDIAP).ActiveNotesLazyList.Remove(noteCoords);
+                }
+                else
+                {
+                    ((MIDITrackProvider)MIDIAP).ActiveNotes[noteCoords.x, noteCoords.y] = 1;
+                    ((MIDITrackProvider)MIDIAP).ActiveNotesLazyList.Add(noteCoords);
+                }
             }
         }
 
