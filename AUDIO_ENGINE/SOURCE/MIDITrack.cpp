@@ -4,8 +4,6 @@ using namespace juce;
 using namespace std;
 
 _MIDITrack::_MIDITrack() {
-    //formatManager.registerBasicFormats();
-
     visSampleArrayHEAP = (float*)malloc(sizeof(float[512]));
     visSampleArraySTACK = new (visSampleArrayHEAP) float[512]();
 }
@@ -101,35 +99,11 @@ void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> no
 
     float* buffer = MIDITrackBuffer.getWritePointer(0, 0);
 
-    /*for (int i = 0; i < notesCount; i++) {
-        bufferToFill.buffer->clear();
-        templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
-
-        for (int k = 0; k < maxNotesPerColumn; k++) {
-            if (notesPitchRatioArr[k][i].duration > 0) {
-                juce::AudioBuffer<float> currentNotePlanarBuffer = juce::AudioBuffer<float>(1, samplesPerNoteUnit);
-                float* currentNoteFloatBuffer = currentNotePlanarBuffer.getWritePointer(0, 0);
-
-                for (int j = 0; j < samplesPerNoteUnit; j++) {
-					currentNoteFloatBuffer[j] = (float)bufferToFill.buffer->getSample(0, j);
-                }
-
-                juce::AudioSourceChannelInfo currentNoteBufferToFill = juce::AudioSourceChannelInfo(&currentNotePlanarBuffer, 0, samplesPerNoteUnit);
-                processFrequencyChange(currentNoteBufferToFill, notesPitchRatioArr[k][i].pitchRatio);
-
-                for (int j = 0; j < samplesPerNoteUnit; j++) {
-                    buffer[samplesPerNoteUnit * i + j] += currentNotePlanarBuffer.getSample(0, j);
-                }
-            }
-        }
-    }*/
-
     for (int i = 0; i < notesCount; i++) {
         for (int j = 0; j < notesPitchRatioArr[i].size(); j++) {
             int bufferLength = samplesPerNoteUnit * notesPitchRatioArr[i][j].duration;
 
             juce::AudioBuffer<float> currentNotePlanarBuffer = juce::AudioBuffer<float>(1, bufferLength);
-            //float* currentNoteFloatBuffer = currentNotePlanarBuffer.getWritePointer(0, 0);
             juce::AudioSourceChannelInfo bufferToFill = juce::AudioSourceChannelInfo(&currentNotePlanarBuffer, 0, bufferLength);
 
             templateSamplingAudioProvider->setBlockSize(bufferLength);
