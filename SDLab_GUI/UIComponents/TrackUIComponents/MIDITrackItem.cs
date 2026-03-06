@@ -101,7 +101,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
                 mainPageOBJ.PlayPauseExternalWrapper();
             }
 
-            MIDIInterfaceEditor MIDIEditor = new MIDIInterfaceEditor(audioEngineMGMT, this, templateAudioProvider);
+            MIDIInterfaceEditor MIDIEditor = new MIDIInterfaceEditor(mainPageOBJ, audioEngineMGMT, this, templateAudioProvider);
             mainPageOBJ.Navigation.PushModalAsync(MIDIEditor);
 
             MIDIEditor.ModalBoxCloseEvent = closeMIDIEditorEvent;

@@ -56,11 +56,11 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
         public void renderMIDIWaveform(JuceAudioProvider templateSamplingProvider)
         {
             int maxValidNoteBlockColumnIndex = 0;
-            int maxColumnNoteIndex = 6 * 7;
+            int maxColumnNoteIndex = 6 * 12;
 
             for (int i = 0; i < 200; i++)
             {
-                for (int j = 0; j < 6 * 7 + 1; j++)
+                for (int j = 0; j < 6 * 12 + 1; j++)
                 {
                     (int startTime, int noteIndex, int duration, float pitchRatio) blankNoteInfo = (i, j, 0, 0);
 

@@ -24,17 +24,19 @@ public partial class MIDIInterfaceEditor : ContentPage
     private MIDITrackItem MIDIAudioTrack;
     private EventHandler modalBoxCloseEvent;
     private PianoRollGraphicsView pianoRoll;
+    private MainPage mainPageRefObj;
 
     bool[] isSharpNodeArr = new bool[] { false, true, false, true, false, false, true, false, true, false, true, false };
     float[] pianoRollLinesHeight = new float[] { 22f, 20f, 12f, 20f, 22f, 22f, 20f, 12f, 20f, 12f, 20f, 22f };
 
-    public MIDIInterfaceEditor(AudioEngineMGMT audioManager, MIDITrackItem audioProvider, TrackItem templateSampleAudioProvider)
+    public MIDIInterfaceEditor(MainPage _mainPageRef, AudioEngineMGMT audioManager, MIDITrackItem audioProvider, TrackItem templateSampleAudioProvider)
 	{
 		InitializeComponent();
 
         // Additional initialization code can be added here
         audioEngineMGMT = audioManager;
         MIDIAudioTrack = (MIDITrackItem)audioProvider;
+        mainPageRefObj = _mainPageRef;
 
         clearMIDIKeyboard();
         generateMIDIKeyboard(MIDIKeyboardVerticalStackLayout);
@@ -161,20 +163,26 @@ public partial class MIDIInterfaceEditor : ContentPage
         MIDINoTemplateAudioProviderBanner.IsVisible = false;
         MIDITemplateAudioProviderLayout.IsVisible = true;
 
-        mainPlayBTN.Clicked += delegate {
+        mainPlayBTN.Clicked += async delegate {
+            mainPageRefObj.ShowLoadingModalSplashScreen();
+
             switch (mainPlayBTN.Source.ToString().Split(" ")[1])
             {
                 case "pause_button.png":
-                    ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PauseMIDI();
                     mainPlayBTN.Source = "play_solid_full.png";
+                    ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PauseMIDI();
                     break;
 
                 case "play_solid_full.png":
-                    ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).renderMIDIWaveform(newTemplateAP.TrackAudioProvider);
-                    ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PlayMIDI();
                     mainPlayBTN.Source = "pause_button.png";
+                    await Task.Run(() => {
+                        ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).renderMIDIWaveform(newTemplateAP.TrackAudioProvider);
+                        ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PlayMIDI();
+                    });
                     break;
             }
+
+            mainPageRefObj.HideLoadingModalSplashScreen();
         };
     }
 }

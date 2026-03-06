@@ -94,6 +94,9 @@
 	  <MauiXaml Update="Resources\Styles\CustomStyleSheet.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="UIComponents\Editors\LoadingModalView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="UIComponents\Editors\MIDInterfaceEditor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -1,4 +1,5 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
+using SDLab_GUI.UIComponents.Editors;
 using SDLab_GUI.UIComponents.TrackUIComponents;
 using SDLab_InteropWrapper;
 
@@ -11,7 +12,9 @@ namespace SDLab_GUI
     {
         private AudioEngineMGMT audioManager;
 
-        bool isUpdatingMasterVolumeSlider = false;
+        private bool isUpdatingMasterVolumeSlider = false;
+
+        private LoadingModalView newLoadingModal = new LoadingModalView();
 
         public MainPage()
         {
@@ -112,6 +115,17 @@ namespace SDLab_GUI
                     isUpdatingMasterVolumeSlider = false;
                 }
             }
+        }
+
+        public void ShowLoadingModalSplashScreen()
+        {
+            newLoadingModal = new LoadingModalView();
+            Navigation.PushModalAsync(newLoadingModal);
+        }
+
+        public void HideLoadingModalSplashScreen()
+        {
+            Navigation.PopModalAsync();
         }
 
         /// <summary>
