@@ -88,6 +88,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="StartPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="UIComponents\Editors\DSPModalEditor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
