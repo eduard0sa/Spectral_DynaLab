@@ -562,8 +562,12 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     /// </summary>
     public class SoundWaveShapeDrawable : IDrawable
     {
-        float[] visSamplesArray;
-        JuceAudioProvider oscAP;
+        private JuceAudioProvider oscAP;
+
+        private float[] visSamplesArray;
+        private int samples = 450;
+        private int blockSize = 450;
+        private int currSampleIndex = 0;
 
         /// <summary>
         /// This property holds the floating-point array for sound wave graph visualization.
@@ -589,6 +593,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             set => oscAP = value;
         }
 
+        public int Samples { get => samples; set => samples = value; }
+
         /// <summary>
         /// This method updated the graph path, by reading the samples array and drawing it's values in the Graphics View.
         /// </summary>
@@ -598,7 +604,6 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         {
             if (VisSamplesArray != null)
             {
-                int Samples = 450;
                 float Amplitude = oscAP.CurrentGain;
                 float Frequency = 1f; // in cycles over the width
 
@@ -609,23 +614,32 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
                 float width = dirtyRect.Width;
                 float height = dirtyRect.Height;
 
-                float stepX = width / (Samples - 1);
+                float stepX = width / (blockSize - 1);
 
                 PathF path = new PathF();
 
-                for (int i = 0; i < Samples; i++)
+                int iterCount = (int)Math.Min(blockSize, Samples - currSampleIndex);
+
+                for (int i = 0; i < iterCount; i++)
                 {
-                    float x = i * stepX;
+                    float x = currSampleIndex * stepX;
 
                     // Normalized x in range [0, 2π * Frequency]
-                    float t = (float)i / (Samples - 1);
+                    float t = (float)currSampleIndex / (blockSize - 1);
 
-                    float y = midY - visSamplesArray[i] * Amplitude * 50; // scale to view
+                    float y = midY - visSamplesArray[currSampleIndex] * Amplitude * 50; // scale to view
 
-                    if (i == 0)
+                    if (currSampleIndex == 0)
                         path.MoveTo(x, y);
                     else
                         path.LineTo(x, y);
+
+                    currSampleIndex++;
+                }
+
+                if(currSampleIndex == Samples)
+                {
+                    currSampleIndex = 0;
                 }
 
                 canvas.DrawPath(path);

@@ -99,7 +99,7 @@ namespace SDLab_GUI
         private void masterVolumeEntryValueChangedEvent(object sender, TextChangedEventArgs e)
         {
             Entry masterVolumeEntry = sender as Entry;
-            if(masterVolumeEntry.Text.Length >= 2)
+            if (masterVolumeEntry.Text.Length >= 2)
             {
                 if (float.TryParse(masterVolumeEntry.Text.Substring(0, masterVolumeEntry.Text.Length - 2), out float newVolume) && isUpdatingMasterVolumeSlider == false)
                 {
@@ -152,7 +152,7 @@ namespace SDLab_GUI
                 PickerTitle = "Selecionar ficheiro de audio (.mp3, .wav, .ogg, etc...)."
             });
 
-            if(FileChoiceDialog == null) return;
+            if (FileChoiceDialog == null) return;
 
             FileTrackItem newOscillator = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath);
 
@@ -169,6 +169,21 @@ namespace SDLab_GUI
             MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this);
 
             trackStackLayout.Children.Add(newMIDITrack);
+        }
+
+        private void saveProjectChangesBTNClickedEvent(object sender, EventArgs e)
+        {
+
+        }
+
+        private void closeEditorBTNClickedEvent(object sender, EventArgs e)
+        {
+            if(mainPlayBTN.Source.ToString().Split(" ")[1] == "pause_button.png")
+            {
+                PlayPauseExternalWrapper();
+            }
+
+            Navigation.PopAsync();
         }
     }
 }

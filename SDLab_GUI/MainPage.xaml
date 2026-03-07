@@ -38,8 +38,8 @@
 
         <FlexLayout Grid.Row="2" Direction="Row" JustifyContent="SpaceBetween" AlignItems="Center" Padding="20, 0, 20, 0">
             <HorizontalStackLayout>
-                <Button Text="Salvar Alterações" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
-                <Button Text="« Sair do Editor" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                <Button Text="Salvar Alterações" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="saveProjectChangesBTNClickedEvent"/>
+                <Button Text="« Menu Inicial" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="closeEditorBTNClickedEvent"/>
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>

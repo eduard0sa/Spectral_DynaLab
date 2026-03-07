@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<GLOBAL_CONFIGS>
+	<FirstOpened>null</FirstOpened>
+	<RecentProjects>
+		<Project>
+			<Name>Projecto de Teste</Name>
+			<Path>C:\Users\Utilizador\Desktop\SDLab_GUI\TestProject.sdproj</Path>
+			<CreationDate Date="2024-06-20" Time="15:30:00"/>
+			<LastOpened Date="2024-06-20" Time="15:30:00"/>
+		</Project>
+		<Project>
+			<Name>Outro Projecto de Teste</Name>
+			<Path>C:\Users\Utilizador\Desktop\SDLab_GUI\TestProject2.sdproj</Path>
+			<CreationDate Date="2024-06-20" Time="15:30:00"/>
+			<LastOpened Date="2024-06-20" Time="15:30:00"/>
+		</Project>
+	</RecentProjects>
+</GLOBAL_CONFIGS>

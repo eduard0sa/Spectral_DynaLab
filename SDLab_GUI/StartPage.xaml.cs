@@ -1,25 +1,35 @@
-namespace SDLab_GUI;
+using SDLab_GUI.UIComponents.StartPageUIComponents;
 
-public partial class StartPage : ContentPage
+namespace SDLab_GUI
 {
-	public StartPage()
-	{
-		InitializeComponent();
-	}
-
-	private void StartEditorEnvironmentEvent(object? sender, EventArgs e)
-	{
-		Navigation.PushAsync(new MainPage());
-    }
-
-    /// <summary>
-    /// This method automatically unfocuses a slider element when it is focus, in order to avoid it from focusing on app start.
-    /// </summary>
-    /// <param name="sender">Slider sender object.</param>
-    /// <param name="e">Slider focus EventArguments.</param>
-    private void ButtonAutoUnfocusEvent(object? sender, FocusEventArgs e)
+    public partial class StartPage : ContentPage
     {
-        Button originButton = sender as Button;
-        originButton.Unfocus();
+        MainPage EditorInterfaceInstance = null;
+
+        public StartPage()
+        {
+            InitializeComponent();
+        }
+
+        private void StartEditorEnvironmentEvent(object? sender, EventArgs e)
+        {
+            if (EditorInterfaceInstance == null)
+            {
+                EditorInterfaceInstance = new MainPage();
+            }
+
+            Navigation.PushAsync(EditorInterfaceInstance);
+        }
+
+        /// <summary>
+        /// This method automatically unfocuses a slider element when it is focus, in order to avoid it from focusing on app start.
+        /// </summary>
+        /// <param name="sender">Slider sender object.</param>
+        /// <param name="e">Slider focus EventArguments.</param>
+        private void ButtonAutoUnfocusEvent(object? sender, FocusEventArgs e)
+        {
+            Button originButton = sender as Button;
+            originButton.Unfocus();
+        }
     }
 }

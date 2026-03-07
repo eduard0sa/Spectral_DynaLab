@@ -61,6 +61,12 @@ void _MIDITrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
         juce::dsp::ProcessContextReplacing<float> context(audioBlock);
 
         outputGain->process(context);
+
+        if (fillVisualizationArray) {
+            for (int i = 0; i < spec.maximumBlockSize; i++) {
+                visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+            }
+        }
     }
     else if (isRepeating == true) {
         currentSampleIndex = 0;
