@@ -27,7 +27,7 @@
             <VerticalStackLayout Grid.Row="0" Grid.Column="0" BackgroundColor="#000003" Padding="20, 0, 20, 0">
                 <Image Source="spectraldynalab_rect_v1.png" WidthRequest="300" Margin="0, 20, 0, 20"/>
                 <Button Text="INÍCIO" HeightRequest="75" CornerRadius="2" Margin="0, 10, 0, 0" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource DefaultPastelYellow}" BackgroundColor="{StaticResource DarkPastelRed}" BorderColor="{StaticResource DefaultPastelYellow}" BorderWidth="3" Focused="ButtonAutoUnfocusEvent"/>
-                <Button Text="PROJECTOS" HeightRequest="70" CornerRadius="2" Margin="0, 10, 0, 0" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelYellow}" BackgroundColor="Transparent" BorderColor="{StaticResource DefaultPastelYellow}" BorderWidth="3" Focused="ButtonAutoUnfocusEvent"/>
+                <Button Text="PROJETOS" HeightRequest="70" CornerRadius="2" Margin="0, 10, 0, 0" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelYellow}" BackgroundColor="Transparent" BorderColor="{StaticResource DefaultPastelYellow}" BorderWidth="3" Focused="ButtonAutoUnfocusEvent"/>
             </VerticalStackLayout>
 
             <Button Grid.Row="1" Grid.Column="0" Text="Definições" Padding="5, 5, 5, 5" CornerRadius="0" TextColor="White" BackgroundColor="{StaticResource Gray950}" Focused="ButtonAutoUnfocusEvent"/>
@@ -42,7 +42,7 @@
                 <VerticalStackLayout>
                     <VerticalStackLayout BackgroundColor="#000003" Margin="30, 50, 30, 0" Padding="0, 30, 0, 0">
                         <Label Padding="100, 0, 100, 0" Text="Experimenta o tutorial e cria a tua primeira música!" HorizontalTextAlignment="Center" FontSize="Large" FontFamily="Rubik" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelRed}"/>
-                        <Button Text="EXPERIMENTAR TUTORIAL" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="0, 70, 0, 30" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                        <Button Text="EXPERIMENTAR TUTORIAL" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="0, 70, 0, 30" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorTutorialEvent"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout>

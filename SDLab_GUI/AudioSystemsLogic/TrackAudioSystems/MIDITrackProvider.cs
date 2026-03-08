@@ -1,5 +1,5 @@
 ﻿using NAudio.Wave;
-using SDLab_InteropWrapper;
+using SDLab_GUI.InteropWrapper;
 using SDLab_GUI.UIComponents.TrackUIComponents;
 using static SDLab_GUI.Global;
 

@@ -1,7 +1,12 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
+using SDLab_GUI.InteropWrapper;
+using SDLab_GUI.Tutorials;
 using SDLab_GUI.UIComponents.Editors;
 using SDLab_GUI.UIComponents.TrackUIComponents;
-using SDLab_InteropWrapper;
+using System.Windows.Input;
+using Windows.ApplicationModel.DataTransfer.DragDrop.Core;
+using Windows.ApplicationModel.VoiceCommands;
+using static SDLab_GUI.Global;
 
 namespace SDLab_GUI
 {
@@ -17,10 +22,17 @@ namespace SDLab_GUI
     public partial class MainPage : ContentPage
     {
         private AudioEngineMGMT audioManager;
-
         private bool isUpdatingMasterVolumeSlider = false;
 
+        private ICommand midiTrackBTNClickCommand;
+
         private LoadingModalView newLoadingModal = new LoadingModalView();
+        private TutorialModalOverlayView editorTutorial;
+
+        private IDispatcherTimer highlightAnimationTimer;
+        private int zoomDirection = -1;
+
+        public ICommand MIDITrackBTNClickCommand { get => midiTrackBTNClickCommand; }
 
         public MainPage(enumEditorMode runMode)
         {
@@ -35,6 +47,14 @@ namespace SDLab_GUI
 
             masterVolumeSlider.Value = audioManager.vsp.Volume * 100;
             masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
+
+            midiTrackBTNClickCommand = new Command(addMIDITrackBTNClickedEvent);
+
+            if (runMode == enumEditorMode.Tutorial)
+            {
+                editorTutorial = new TutorialModalOverlayView(this);
+                Navigation.PushModalAsync(editorTutorial);
+            }
         }
 
         /// <summary>
@@ -170,7 +190,7 @@ namespace SDLab_GUI
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private async void addMIDITrackBTNClickedEvent(object sender, EventArgs e)
+        private async void addMIDITrackBTNClickedEvent()
         {
             MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this);
 
@@ -184,12 +204,68 @@ namespace SDLab_GUI
 
         private void closeEditorBTNClickedEvent(object sender, EventArgs e)
         {
-            if(mainPlayBTN.Source.ToString().Split(" ")[1] == "pause_button.png")
+            if (mainPlayBTN.Source.ToString().Split(" ")[1] == "pause_button.png")
             {
                 PlayPauseExternalWrapper();
             }
 
             Navigation.PopAsync();
+        }
+
+        public struct_elementBoundInfo highlightBTN(string _btnName)
+        {
+            Button targetButton = ((Button)FindByName(_btnName));
+
+            if(targetButton != null)
+            {
+                highlightAnimationTimer = Dispatcher.CreateTimer();
+                highlightAnimationTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20f);
+                highlightAnimationTimer.Tick += delegate
+                {
+                    if (targetButton.BackgroundColor.Alpha <= 0)
+                    {
+                        zoomDirection = 1;
+                    }
+                    if (targetButton.BackgroundColor.Alpha >= 1)
+                    {
+                        zoomDirection = -1;
+                    }
+
+                    targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(targetButton.BackgroundColor.Alpha + (0.1f * zoomDirection));
+                };
+
+                highlightAnimationTimer.Start();
+
+                struct_elementBoundInfo elementBoundInfo = new struct_elementBoundInfo
+                {
+                    Bounds = targetButton.Bounds,
+                    sourceElement = targetButton
+                };
+
+                return elementBoundInfo;
+            }
+
+            return new struct_elementBoundInfo();
+        }
+
+        public void stopBTNHighlight(string _btnName)
+        {
+            highlightAnimationTimer.Stop();
+
+            Button targetButton = ((Button)FindByName(_btnName));
+
+            if(targetButton != null)
+            {
+                targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(1.0f);
+            }
+        }
+
+        public void closeTutorialOverlay()
+        {
+            if (editorTutorial != null)
+            {
+                Navigation.PopModalAsync();
+            }
         }
     }
 }

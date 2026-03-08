@@ -1,7 +1,7 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
-using SDLab_InteropWrapper;
+using SDLab_GUI.InteropWrapper;
 
 namespace SDLab_GUI.AudioSystemsLogic
 {

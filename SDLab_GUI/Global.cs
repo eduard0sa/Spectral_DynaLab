@@ -107,5 +107,11 @@
             public int noteIndex;
             public int duration;
         }
+
+        public struct struct_elementBoundInfo
+        {
+            public Rect Bounds;
+            public Element sourceElement;
+        }
     }
 }

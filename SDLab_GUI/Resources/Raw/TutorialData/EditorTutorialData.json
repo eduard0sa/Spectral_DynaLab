@@ -1,0 +1,18 @@
+{
+  "steps": [
+    {
+      "captions": [
+        "Olá e bem vindo ao tutorial do SPECTRAL DYNALab!",
+        "Este tutorial ajudar-lhe-á a aprender as funcionalidades básicas do editor, assim como a produzir a sua própria música. Vamos começar!"
+      ],
+      "objectsToHighlight": [ "Começar" ]
+    },
+    {
+      "captions": [
+        "1º PASSO:",
+        "Clica em '+ Adicionar MIDI track' para adicionares uma faixa MIDI!"
+      ],
+      "objectsToHighlight": ["addMidiTrackBTN"]
+    }
+  ]
+}

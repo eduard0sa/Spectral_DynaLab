@@ -1,6 +1,6 @@
 ﻿using AUDIOPROCBRIDGE;
 
-namespace SDLab_InteropWrapper
+namespace SDLab_GUI.InteropWrapper
 {
     public class AudioEngineWrapper
     {
