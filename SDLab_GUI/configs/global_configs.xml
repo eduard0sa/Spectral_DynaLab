@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <GLOBAL_CONFIGS>
-	<FirstOpened>null</FirstOpened>
+	<FirstOpened Date="3301-01-01" Time="00:00:00"/>
+	<LastOpened Date="2024-06-20" Time="15:30:00"/>
 	<RecentProjects>
 		<Project>
 			<Name>Projecto de Teste</Name>
 			<Path>C:\Users\Utilizador\Desktop\SDLab_GUI\TestProject.sdproj</Path>
-			<CreationDate Date="2024-06-20" Time="15:30:00"/>
-			<LastOpened Date="2024-06-20" Time="15:30:00"/>
+			<CreationDateTime Date="2024-06-20" Time="15:30:00"/>
+			<LastOpenedDateTime Date="2024-06-20" Time="15:30:00"/>
 		</Project>
 		<Project>
 			<Name>Outro Projecto de Teste</Name>
 			<Path>C:\Users\Utilizador\Desktop\SDLab_GUI\TestProject2.sdproj</Path>
-			<CreationDate Date="2024-06-20" Time="15:30:00"/>
-			<LastOpened Date="2024-06-20" Time="15:30:00"/>
+			<CreationDateTime Date="2024-06-20" Time="15:30:00"/>
+			<LastOpenedDateTime Date="2024-06-20" Time="15:30:00"/>
 		</Project>
 	</RecentProjects>
 </GLOBAL_CONFIGS>

@@ -41,7 +41,7 @@
 
                 <VerticalStackLayout>
                     <VerticalStackLayout BackgroundColor="#000003" Margin="30, 50, 30, 0" Padding="0, 30, 0, 0">
-                        <Label Padding="100, 0, 100, 0" Text="Experimenta o tutorial e torna-te profissional em produção de música!" HorizontalTextAlignment="Center" FontSize="Large" FontFamily="Rubik" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelRed}"/>
+                        <Label Padding="100, 0, 100, 0" Text="Experimenta o tutorial e cria a tua primeira música!" HorizontalTextAlignment="Center" FontSize="Large" FontFamily="Rubik" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelRed}"/>
                         <Button Text="EXPERIMENTAR TUTORIAL" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="0, 70, 0, 30" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}"/>
                     </VerticalStackLayout>
 

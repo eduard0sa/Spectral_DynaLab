@@ -5,6 +5,12 @@ using SDLab_InteropWrapper;
 
 namespace SDLab_GUI
 {
+    public enum enumEditorMode
+    {
+        Default,
+        Tutorial
+    }
+
     /// <summary>
     /// Editor Suite Content Page
     /// </summary>
@@ -16,7 +22,7 @@ namespace SDLab_GUI
 
         private LoadingModalView newLoadingModal = new LoadingModalView();
 
-        public MainPage()
+        public MainPage(enumEditorMode runMode)
         {
             //Initialize UI
             InitializeComponent();
