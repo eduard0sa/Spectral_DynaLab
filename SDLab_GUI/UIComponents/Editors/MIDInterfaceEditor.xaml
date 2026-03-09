@@ -74,8 +74,8 @@
                     <VerticalStackLayout x:Name="MIDINoTemplateAudioProviderBanner" BackgroundColor="{StaticResource DarkPastelRed}">
                         <Label Text="Configure uma fonte válida de som para a MIDI." TextColor="{StaticResource White}" HorizontalTextAlignment="Center" Margin="0, 20, 0, 0"/>
                         <HorizontalStackLayout HorizontalOptions="Center" Margin="0, 20, 0, 0">
-                            <Button Text="+ Configurar sinal puro (OSCILLATOR)" WidthRequest="300" HeightRequest="10" CornerRadius="2" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="SetMIDITrackTemplateAP"/>
-                            <Button Text="+ Configurar sample externo" WidthRequest="300" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                            <Button Text="+ Configurar sinal puro (OSCILLATOR)" WidthRequest="300" HeightRequest="10" CornerRadius="2" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="SetMIDIOscillatorTrackTemplateAP"/>
+                            <Button Text="+ Configurar sample externo" WidthRequest="300" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="SetMIDIFileTrackTemplateAP"/>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
 

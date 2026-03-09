@@ -14,7 +14,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         private structSliderData pitchSliderData;
         private structSwitchData timePitchCouplingModeSwitchData;
 
-        public FileTrackItem(AudioEngineMGMT audioManager, MainPage mainPage, string _musicPath)
+        public FileTrackItem(AudioEngineMGMT audioManager, MainPage mainPage, string _musicPath, bool addToMixer = true, bool _activateWaveGraphMonitor = true)
         {
             sfxButton = new OscillatorItemSFXButtonArea(this);
             sfxButton.OpenSFXEditorEvent = openSFXEditorEvent;

@@ -112,12 +112,22 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             mainPageOBJ.Navigation.PopModalAsync();
         }
 
-        public TrackItem SetMIDITrackTemplateAP(enumEngineType templateAPType)
+        public async Task<TrackItem> SetMIDITrackTemplateAP(enumEngineType templateAPType)
         {
             switch (templateAPType)
             {
                 case enumEngineType.Oscillator:
                     templateAudioProvider = new OscillatorItem(audioEngineMGMT, mainPageOBJ, false, false);
+                    break;
+                case enumEngineType.FileTrack:
+                    var FileChoiceDialog = await FilePicker.PickAsync(new PickOptions
+                    {
+                        PickerTitle = "Selecionar ficheiro de audio (.mp3, .wav, .ogg, etc...)."
+                    });
+
+                    if (FileChoiceDialog == null) break;
+
+                    templateAudioProvider = new FileTrackItem(audioEngineMGMT, mainPageOBJ, FileChoiceDialog.FullPath, false, false);
                     break;
             }
 

@@ -12,7 +12,14 @@
         "1º PASSO:",
         "Clica em '+ Adicionar MIDI track' para adicionares uma faixa MIDI!"
       ],
-      "objectsToHighlight": ["addMidiTrackBTN"]
-    }
+      "objectsToHighlight": [ "addMidiTrackBTN" ]
+    }/*,
+    {
+      "captions": [
+        "2º PASSO:",
+        "Clica em 'Abrir MIDI' para iniciares o editor sequencial MIDI!"
+      ],
+      "objectsToHighlight": [ "addMidiTrackBTN" ]
+    }*/
   ]
 }

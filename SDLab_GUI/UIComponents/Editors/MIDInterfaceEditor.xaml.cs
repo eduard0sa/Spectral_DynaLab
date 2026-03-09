@@ -149,9 +149,16 @@ public partial class MIDIInterfaceEditor : ContentPage
         originSlider.Unfocus();
     }
 
-    private void SetMIDITrackTemplateAP(object? sender, EventArgs e)
+    private async void SetMIDIOscillatorTrackTemplateAP(object? sender, EventArgs e)
     {
-        TrackItem newTemplateAP = MIDIAudioTrack.SetMIDITrackTemplateAP(Global.enumEngineType.Oscillator);
+        TrackItem newTemplateAP = await MIDIAudioTrack.SetMIDITrackTemplateAP(Global.enumEngineType.Oscillator);
+        addMIDITrackTemplateComponentUI(newTemplateAP);
+        ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).SetMIDITemplateSamplingProvider(newTemplateAP.TrackAudioProvider);
+    }
+
+    private async void SetMIDIFileTrackTemplateAP(object? sender, EventArgs e)
+    {
+        TrackItem newTemplateAP = await MIDIAudioTrack.SetMIDITrackTemplateAP(Global.enumEngineType.FileTrack);
         addMIDITrackTemplateComponentUI(newTemplateAP);
         ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).SetMIDITemplateSamplingProvider(newTemplateAP.TrackAudioProvider);
     }

@@ -4,7 +4,7 @@
              x:Class="SDLab_GUI.Tutorials.TutorialModalOverlayView"
              BackgroundColor="Transparent">
 
-    <Grid x:Name="tutorialMainGrid" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#bb101413">
+    <Grid x:Name="tutorialMainGrid" HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#77101413">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="90*"/>

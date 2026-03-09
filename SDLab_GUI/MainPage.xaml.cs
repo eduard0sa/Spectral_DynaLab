@@ -4,8 +4,6 @@ using SDLab_GUI.Tutorials;
 using SDLab_GUI.UIComponents.Editors;
 using SDLab_GUI.UIComponents.TrackUIComponents;
 using System.Windows.Input;
-using Windows.ApplicationModel.DataTransfer.DragDrop.Core;
-using Windows.ApplicationModel.VoiceCommands;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI
@@ -25,6 +23,8 @@ namespace SDLab_GUI
         private bool isUpdatingMasterVolumeSlider = false;
 
         private ICommand midiTrackBTNClickCommand;
+        private ICommand fileTrackBTNClickCommand;
+        private ICommand oscillatorTrackBTNClickCommand;
 
         private LoadingModalView newLoadingModal = new LoadingModalView();
         private TutorialModalOverlayView editorTutorial;
@@ -32,7 +32,7 @@ namespace SDLab_GUI
         private IDispatcherTimer highlightAnimationTimer;
         private int zoomDirection = -1;
 
-        public ICommand MIDITrackBTNClickCommand { get => midiTrackBTNClickCommand; }
+        public ICommand MIDITrackBTNClickCommand { get => midiTrackBTNClickCommand; set => midiTrackBTNClickCommand = value; }
 
         public MainPage(enumEditorMode runMode)
         {
@@ -49,13 +49,67 @@ namespace SDLab_GUI
             masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
 
             midiTrackBTNClickCommand = new Command(addMIDITrackBTNClickedEvent);
+            fileTrackBTNClickCommand = new Command(addFileTrackBTNClickedEvent);
+            oscillatorTrackBTNClickCommand = new Command(addOscillatorBTNClickedEvent);
 
-            if (runMode == enumEditorMode.Tutorial)
-            {
-                editorTutorial = new TutorialModalOverlayView(this);
-                Navigation.PushModalAsync(editorTutorial);
-            }
+            addMidiTrackBTN.Command = MIDITrackBTNClickCommand;
+            addFileTrackBTN.Command = fileTrackBTNClickCommand;
+            addOscillatorTrackBTN.Command = oscillatorTrackBTNClickCommand;
+
+            if (runMode == enumEditorMode.Tutorial) showTutorialOverlay();
         }
+
+        #region PageNavigation
+
+        /// <summary>
+        /// This method is attached to the "Save Project" button in the editor interface. It handles mixing set save operations, saving the project information into an XML-Formated file.
+        /// </summary>
+        /// <param name="sender">The source save button.</param>
+        /// <param name="e">Event Handler's Event Args Object.</param>
+        private void saveProjectChangesBTNClickedEvent(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// This method navigates the user interface to the start page, popping the Editor from the Navigation Stack.
+        /// </summary>
+        /// <param name="sender">The source save button.</param>
+        /// <param name="e">Event Handler's Event Args Object.</param>
+        private void closeEditorBTNClickedEvent(object sender, EventArgs e)
+        {
+            if (mainPlayBTN.Source.ToString().Split(" ")[1] == "pause_button.png")
+            {
+                PlayPauseExternalWrapper();
+            }
+
+            Navigation.PopAsync();
+        }
+
+        #endregion PageNavigation
+
+        #region LoadingScreen
+
+        /// <summary>
+        /// This method shows a translucent loading screen, providing the user a visual feedback that the application is processing a certain operation.
+        /// </summary>
+        public void ShowLoadingModalSplashScreen()
+        {
+            newLoadingModal = new LoadingModalView();
+            Navigation.PushModalAsync(newLoadingModal);
+        }
+
+        /// <summary>
+        /// This method hides the loading screen, when the application finishes processing the operation that triggered the loading screen.
+        /// </summary>
+        public void HideLoadingModalSplashScreen()
+        {
+            Navigation.PopModalAsync();
+        }
+
+        #endregion LoadingScreen
+
+        #region MusicControl
 
         /// <summary>
         /// This method automatically unfocuses a slider element when it is focus, in order to avoid it from focusing on app start.
@@ -90,6 +144,9 @@ namespace SDLab_GUI
             }
         }
 
+        /// <summary>
+        /// This method wraps the PlayPauseMixerEvent method, allowing external classes to trigger play/pause method without providing event parameters.
+        /// </summary>
         public void PlayPauseExternalWrapper()
         {
             PlayPauseMixerEvent(new object(), new EventArgs());
@@ -143,23 +200,16 @@ namespace SDLab_GUI
             }
         }
 
-        public void ShowLoadingModalSplashScreen()
-        {
-            newLoadingModal = new LoadingModalView();
-            Navigation.PushModalAsync(newLoadingModal);
-        }
+        #endregion MusicControl
 
-        public void HideLoadingModalSplashScreen()
-        {
-            Navigation.PopModalAsync();
-        }
+        #region TrackProvidersAppend
 
         /// <summary>
         /// Handles the event when the add oscillator button is clicked by creating a new OscillatorItem and adding it to the track stack layout.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void addOscillatorBTNClickedEvent(object sender, EventArgs e)
+        private void addOscillatorBTNClickedEvent()
         {
             OscillatorItem newOscillator = new OscillatorItem(audioManager, this);
 
@@ -171,7 +221,7 @@ namespace SDLab_GUI
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private async void addFileTrackBTNClickedEvent(object sender, EventArgs e)
+        private async void addFileTrackBTNClickedEvent()
         {
             var FileChoiceDialog = await FilePicker.PickAsync(new PickOptions
             {
@@ -197,21 +247,35 @@ namespace SDLab_GUI
             trackStackLayout.Children.Add(newMIDITrack);
         }
 
-        private void saveProjectChangesBTNClickedEvent(object sender, EventArgs e)
-        {
+        #endregion TrackProvidersAppend
 
+        #region TutorialSystem
+
+        /// <summary>
+        /// This method shows the tutorial overlay, effectively starting up the dynamic tutorial system.
+        /// </summary>
+        private void showTutorialOverlay()
+        {
+            editorTutorial = new TutorialModalOverlayView(this);
+            Navigation.PushModalAsync(editorTutorial);
         }
 
-        private void closeEditorBTNClickedEvent(object sender, EventArgs e)
+        /// <summary>
+        /// This method hides the tutorial overlay, effectively finishing and closing the dynamic tutorial system.
+        /// </summary>
+        public void closeTutorialOverlay()
         {
-            if (mainPlayBTN.Source.ToString().Split(" ")[1] == "pause_button.png")
+            if (editorTutorial != null)
             {
-                PlayPauseExternalWrapper();
+                Navigation.PopModalAsync();
             }
-
-            Navigation.PopAsync();
         }
 
+        /// <summary>
+        /// This method highlights a button in the editor, when the tutorial system requests.
+        /// </summary>
+        /// <param name="_btnName"></param>
+        /// <returns></returns>
         public struct_elementBoundInfo highlightBTN(string _btnName)
         {
             Button targetButton = ((Button)FindByName(_btnName));
@@ -248,6 +312,10 @@ namespace SDLab_GUI
             return new struct_elementBoundInfo();
         }
 
+        /// <summary>
+        /// This method stops the highlight animation and restores the background opacity of the specified button.
+        /// </summary>
+        /// <param name="_btnName">The name of the button to stop highlighting.</param>
         public void stopBTNHighlight(string _btnName)
         {
             highlightAnimationTimer.Stop();
@@ -260,12 +328,6 @@ namespace SDLab_GUI
             }
         }
 
-        public void closeTutorialOverlay()
-        {
-            if (editorTutorial != null)
-            {
-                Navigation.PopModalAsync();
-            }
-        }
+        #endregion TutorialSystem
     }
 }
