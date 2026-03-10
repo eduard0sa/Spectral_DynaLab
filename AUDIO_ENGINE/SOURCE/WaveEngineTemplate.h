@@ -3,6 +3,7 @@
 #include<../JuceLibraryCode/JuceHeader.h>
 #include <../SOURCE/DSPProcessing.h>
 #include <RubberBandStretcher.h>
+#include <string>
 #include <stdlib.h>
 
 enum enum_engineTypes {
@@ -19,6 +20,7 @@ public:
 	virtual void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) abstract;
 	virtual void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray = true) abstract;
 	virtual void releaseResources() abstract;
+	virtual char getEngineType() abstract;
 
 	void changeGain(float newGain);
 
@@ -47,7 +49,6 @@ public:
 
 	void removeDSPEffect(void* effect);
 	void setBlockSize(int newBlockSize);
-	virtual string getEngineType() abstract;
 
 protected:
 	juce::dsp::ProcessSpec spec = juce::dsp::ProcessSpec();

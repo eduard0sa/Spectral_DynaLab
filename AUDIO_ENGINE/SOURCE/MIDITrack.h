@@ -1,6 +1,7 @@
 #pragma once
 
 #include <../SOURCE/WaveEngineTemplate.h>
+#include <../SOURCE/FileTrack.h>
 #include <../SOURCE/global.h>
 #include <string>
 
@@ -14,7 +15,7 @@ public:
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray) override;
 	void releaseResources() override;
-	string getEngineType() override;
+	char getEngineType() override;
 
 	void changeRepeatingMode(bool newRepeatState);
 	void changeFileTempo(float newTempo);

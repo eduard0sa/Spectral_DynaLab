@@ -95,8 +95,8 @@ void _Oscillator::changeWaveShapeFunction(enum_OscillatorWaveShapeType functionT
     waveShape = functionType;
 }
 
-string _Oscillator::getEngineType() {
-    return "OSCILLATOR";
+char _Oscillator::getEngineType() {
+    return 'O';
 }
 
 #pragma endregion

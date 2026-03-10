@@ -112,7 +112,10 @@ void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> no
             juce::AudioBuffer<float> currentNotePlanarBuffer = juce::AudioBuffer<float>(1, bufferLength);
             juce::AudioSourceChannelInfo bufferToFill = juce::AudioSourceChannelInfo(&currentNotePlanarBuffer, 0, bufferLength);
 
-            if(templateSamplingAudioProvider->getEngineType() == "FILETRACK") ((_FileTrack)templateSamplingAudioProvider)->resetTime();
+            if (templateSamplingAudioProvider->getEngineType() == 'F') {
+                ((_FileTrack*)templateSamplingAudioProvider)->resetTime();
+            }
+
             templateSamplingAudioProvider->setBlockSize(bufferLength);
 
             bufferToFill.buffer->clear();
@@ -165,8 +168,8 @@ void _MIDITrack::processFrequencyChange(const juce::AudioSourceChannelInfo& buff
     }
 }
 
-string _MIDITrack::getEngineType() {
-    return "MIDITRACK";
+char _MIDITrack::getEngineType() {
+    return 'M';
 }
 
 #pragma endregion

@@ -60,6 +60,11 @@ void _FileTrack::prepareToPlay(int samplesPerBlockExpected, double sampleRate, f
 
 void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray = true)
 {
+    /*if (!fillVisualizationArray) {
+        currentSampleIndex = 0;
+        currentSampleContinuousPosition = 0;
+    }*/
+
     bufferToFill.clearActiveBufferRegion();
 
     if (currentSampleIndex < tempBuffer.getNumSamples()) {
@@ -76,7 +81,7 @@ void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
                 break;
 
             int blockToFeed = juce::jmin(
-                512,
+                (int)spec.maximumBlockSize,
                 tempBuffer.getNumSamples() - currentSampleIndex
             );
 
@@ -111,12 +116,20 @@ void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
 
         outputGain->process(context);
 
-        for (int i = 0; i < 512; i++) {
-            visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+        if (fillVisualizationArray) {
+            for (int i = 0; i < spec.maximumBlockSize; i++) {
+                try {
+                    visSampleArraySTACK[i] = context.getOutputBlock().getChannelPointer(0)[i];
+                }
+                catch (error_code a) {
+                    break;
+                }
+            }
         }
     }
     else if (isRepeating == true) {
-        resetTime();
+        currentSampleIndex = 0;
+        currentSampleContinuousPosition = 0;
     }
 }
 
@@ -162,8 +175,8 @@ void _FileTrack::resetTime() {
     currentSampleContinuousPosition = 0;
 }
 
-string _FileTrack::getEngineType() {
-    return "FILETRACK";
+char _FileTrack::getEngineType() {
+    return 'F';
 }
 
 float _FileTrack::resampleSample(int channelIndex, float sampleIndex, float _pitchRatio)
