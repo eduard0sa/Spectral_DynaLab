@@ -22,6 +22,7 @@ class _Oscillator : _IEngine
 		void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
 		void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray) override;
 		void releaseResources() override;
+		string getEngineType() override;
 
 		void changeFrequency(float newFrequency);
 

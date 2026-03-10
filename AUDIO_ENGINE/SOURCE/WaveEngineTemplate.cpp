@@ -28,6 +28,10 @@ void _IEngine::removeDSPEffect(void* effect) {
 	}
 }
 
+void _IEngine::setBlockSize(int newBlockSize) {
+	spec.maximumBlockSize = newBlockSize;
+}
+
 bool _IEngine::checkExistantEffectID(int id) {
     for (int i = 0; i < DSPEffectChainLength; i++) {
         if (DSPEffectChain[i]->getEffectID() == id) {

@@ -13,11 +13,13 @@ public:
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray) override;
 	void releaseResources() override;
+	string getEngineType() override;
 
 	void changeRepeatingMode(bool newRepeatState);
 	void changeFileTimePitchCouplingMode(bool newFileTimePitchCouplingMode);
 	void changeFileTempo(float newTempo);
 	void changeFilePitch(float newPitch);
+	void resetTime();
 
 private:
 	juce::AudioFormatManager formatManager = juce::AudioFormatManager();

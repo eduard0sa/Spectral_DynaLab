@@ -116,8 +116,7 @@ void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
         }
     }
     else if (isRepeating == true) {
-        currentSampleIndex = 0;
-        currentSampleContinuousPosition = 0;
+        resetTime();
     }
 }
 
@@ -156,6 +155,15 @@ void _FileTrack::changeFilePitch(float newPitch) {
     setPitchRatio = newPitch;
     rbbStretcher->setPitchScale(setPitchRatio);
     if (timePitchCouplingMode) rbbStretcher->setTimeRatio(1 / setPitchRatio);
+}
+
+void _FileTrack::resetTime() {
+    currentSampleIndex = 0;
+    currentSampleContinuousPosition = 0;
+}
+
+string _FileTrack::getEngineType() {
+    return "FILETRACK";
 }
 
 float _FileTrack::resampleSample(int channelIndex, float sampleIndex, float _pitchRatio)

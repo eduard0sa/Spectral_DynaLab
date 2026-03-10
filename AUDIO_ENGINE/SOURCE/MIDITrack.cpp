@@ -112,6 +112,7 @@ void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> no
             juce::AudioBuffer<float> currentNotePlanarBuffer = juce::AudioBuffer<float>(1, bufferLength);
             juce::AudioSourceChannelInfo bufferToFill = juce::AudioSourceChannelInfo(&currentNotePlanarBuffer, 0, bufferLength);
 
+            if(templateSamplingAudioProvider->getEngineType() == "FILETRACK") ((_FileTrack)templateSamplingAudioProvider)->resetTime();
             templateSamplingAudioProvider->setBlockSize(bufferLength);
 
             bufferToFill.buffer->clear();
@@ -157,10 +158,15 @@ void _MIDITrack::processFrequencyChange(const juce::AudioSourceChannelInfo& buff
         std::vector<float*> output(numChannels);
 
         for (int ch = 0; ch < numChannels; ++ch)
-            output[ch] = bufferToFill.buffer->getWritePointer(ch, bufferToFill.startSample);
+            //output[ch] = bufferToFill.buffer->getWritePointer(ch, bufferToFill.startSample);
+            output[ch] = bufferToFill.buffer->getWritePointer(ch, 0);
 
         rbbStretcher->retrieve(output.data(), samplesToRetrieve);
     }
+}
+
+string _MIDITrack::getEngineType() {
+    return "MIDITRACK";
 }
 
 #pragma endregion
