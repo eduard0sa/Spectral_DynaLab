@@ -124,7 +124,7 @@ namespace SDLab_GUI.AudioSystemsLogic
         /// Initializes a new JuceAudioProvider with default frequency and gain, adds it to the mixer and oscillator list, and returns the provider.
         /// </summary>
         /// <returns>The newly created and configured JuceAudioProvider instance.</returns>
-        public JuceAudioProvider LaunchAudioEngine(string musicPath)
+        public JuceAudioProvider LaunchAudioEngine(string musicPath, bool addToMixer = true)
         {
             //Oscillator instantiation in the core audio engine
             AudioEngineOsc = _AudioEngineRef.CreateEngine(musicPath);
@@ -132,8 +132,8 @@ namespace SDLab_GUI.AudioSystemsLogic
 
             provider.changeGain(defaultGain);
 
-            //New oscillator instance append in mixer
-            mixer.AddMixerInput(provider);
+            //New file track instance append in mixer
+            if (addToMixer) mixer.AddMixerInput(provider); oscillators.Add(provider);
 
             oscillators.Add(provider);
             return provider;

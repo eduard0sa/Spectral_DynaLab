@@ -60,11 +60,6 @@ void _FileTrack::prepareToPlay(int samplesPerBlockExpected, double sampleRate, f
 
 void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray = true)
 {
-    /*if (!fillVisualizationArray) {
-        currentSampleIndex = 0;
-        currentSampleContinuousPosition = 0;
-    }*/
-
     bufferToFill.clearActiveBufferRegion();
 
     if (currentSampleIndex < tempBuffer.getNumSamples()) {

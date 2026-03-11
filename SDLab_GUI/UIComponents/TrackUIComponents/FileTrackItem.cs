@@ -8,13 +8,15 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     internal class FileTrackItem : TrackItem
     {
         private string musicPath;
+        private bool addToMixer, activateWaveGraphMonitor;
+
         private OscillatorItemSFXButtonArea sfxButton;
         private structSwitchData repeatTrackModeSwitchData;
         private structSliderData tempoSliderData;
         private structSliderData pitchSliderData;
         private structSwitchData timePitchCouplingModeSwitchData;
 
-        public FileTrackItem(AudioEngineMGMT audioManager, MainPage mainPage, string _musicPath, bool addToMixer = true, bool _activateWaveGraphMonitor = true)
+        public FileTrackItem(AudioEngineMGMT audioManager, MainPage mainPage, string _musicPath, bool _addToMixer = true, bool _activateWaveGraphMonitor = true)
         {
             sfxButton = new OscillatorItemSFXButtonArea(this);
             sfxButton.OpenSFXEditorEvent = openSFXEditorEvent;
@@ -25,10 +27,12 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             TrackItemControls = new List<TrackItemSliderControlGroup>();
             TrackItemControls.Add(new TrackItemSliderControlGroup(this));
 
-            trackAudioProvider = audioManager.LaunchAudioEngine(_musicPath);
+            trackAudioProvider = audioManager.LaunchAudioEngine(_musicPath, addToMixer: _addToMixer);
             audioEngineMGMT = audioManager;
             mainPageOBJ = mainPage;
             musicPath = _musicPath;
+            addToMixer = _addToMixer;
+            activateWaveGraphMonitor = _activateWaveGraphMonitor;
 
             TrackItemWaveVizualizerArea = new TrackItemWaveVizualizerArea(this, trackAudioProvider.pushOSCVisSampleArray, trackAudioProvider);
 
@@ -87,7 +91,10 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             Children.Add(TrackTriangleMark);
             Children.Add(TrackItemHeader);
-            Children.Add(TrackItemControls[0]);
+            if (addToMixer)
+            {
+                Children.Add(TrackItemControls[0]);
+            }
             Children.Add(TrackItemControls[1]);
             Children.Add(TrackItemControls[2]);
             Children.Add(sfxButton);

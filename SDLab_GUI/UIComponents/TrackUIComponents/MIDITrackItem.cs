@@ -23,7 +23,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             TrackItemControls = new List<TrackItemSliderControlGroup>();
             TrackItemControls.Add(new TrackItemSliderControlGroup(this));
 
-            trackAudioProvider = audioManager.LaunchAudioEngine(true);
+            trackAudioProvider = audioManager.LaunchAudioEngine(isMIDI: true);
             audioEngineMGMT = audioManager;
             mainPageOBJ = mainPage;
 
