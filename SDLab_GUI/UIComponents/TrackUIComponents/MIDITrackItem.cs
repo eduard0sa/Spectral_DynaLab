@@ -12,10 +12,12 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         private structSliderData tempoSliderData;
         private TrackItem templateAudioProvider; //UI Component for the MIDI Template Audio Provider (Oscillator/File Track)
 
+        internal MIDIItemSFXButtonArea OpenMIDIEditorButton { get => openMIDIEditorButton; }
+
         public MIDITrackItem(AudioEngineMGMT audioManager, MainPage mainPage)
         {
             openMIDIEditorButton = new MIDIItemSFXButtonArea(this);
-            openMIDIEditorButton.OpenSFXEditorEvent = openMIDIEditorEvent;
+            openMIDIEditorButton.OpenSFXEditorEvent = new Command(() => { openMIDIEditorEvent(new object(), new EventArgs()); });
 
             TrackTriangleMark = new TrackItemLeftIconMenu(this);
             TrackTriangleMark.ClickEventHandler = deleteTrackEvent;
@@ -117,7 +119,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             switch (templateAPType)
             {
                 case enumEngineType.Oscillator:
-                    templateAudioProvider = new OscillatorItem(audioEngineMGMT, mainPageOBJ, false, false);
+                    templateAudioProvider = new OscillatorItem(audioEngineMGMT, mainPageOBJ, initialFrequency: 261.63f, addToMixer: false, _activateWaveGraphMonitor: false);
                     break;
                 case enumEngineType.FileTrack:
                     var FileChoiceDialog = await FilePicker.PickAsync(new PickOptions
@@ -145,12 +147,12 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     internal class MIDIItemSFXButtonArea : FlexLayout
     {
         private Button openSFXBTN = new Button();
-        private EventHandler openSFXEditorEvent = delegate { };
+        private Command openSFXEditorEvent = new Command(() => { });
 
         /// <summary>
         /// This property holds the function that runs when the user clicks on the Open SFX Button.
         /// </summary>
-        public EventHandler OpenSFXEditorEvent
+        public Command OpenSFXEditorEvent
         {
             get
             {
@@ -158,11 +160,12 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             }
             set
             {
-                openSFXBTN.Clicked -= openSFXEditorEvent;
                 openSFXEditorEvent = value;
-                openSFXBTN.Clicked += openSFXEditorEvent;
+                OpenSFXBTN.Command = openSFXEditorEvent;
             }
         }
+
+        public Button OpenSFXBTN { get => openSFXBTN; }
 
         /// <summary>
         /// OscillatorItemSFXButtonArea class constructor.
@@ -175,16 +178,16 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             VerticalOptions = LayoutOptions.Fill;
             parentFLNode.SetGrow(this, 0.12f);
 
-            openSFXBTN.Text = "Abrir MIDI";
-            openSFXBTN.FontSize = Device.GetNamedSize(NamedSize.Subtitle, typeof(Label));
-            openSFXBTN.FontAttributes = FontAttributes.Bold;
-            openSFXBTN.FontFamily = "Orbitron";
-            openSFXBTN.CornerRadius = 0;
-            openSFXBTN.HeightRequest = 100;
-            openSFXBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelRed"];
-            this.SetGrow(openSFXBTN, 1.0f);
+            OpenSFXBTN.Text = "Abrir MIDI";
+            OpenSFXBTN.FontSize = Device.GetNamedSize(NamedSize.Subtitle, typeof(Label));
+            OpenSFXBTN.FontAttributes = FontAttributes.Bold;
+            OpenSFXBTN.FontFamily = "Orbitron";
+            OpenSFXBTN.CornerRadius = 0;
+            OpenSFXBTN.HeightRequest = 100;
+            OpenSFXBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+            this.SetGrow(OpenSFXBTN, 1.0f);
 
-            Children.Add(openSFXBTN);
+            Children.Add(OpenSFXBTN);
         }
     }
 }

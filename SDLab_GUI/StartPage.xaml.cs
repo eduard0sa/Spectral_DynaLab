@@ -31,6 +31,30 @@ namespace SDLab_GUI
             loadRecentProjectUIList();
         }
 
+        private void showMainDashboard(object? sender, EventArgs e)
+        {
+            StartPageMainDashboard.IsVisible = true;
+            StartPageProjectsDashboard.IsVisible = false;
+
+            Color newColor1 = (Color)Application.Current.Resources["DarkPastelRed"];
+            if (newColor1 != null) StartPageMainDashboardBTN.BackgroundColor = newColor1;
+
+            Color newColor2 = Colors.Transparent;
+            if (newColor2 != null) StartPageProjectsDashboardBTN.BackgroundColor = newColor2;
+        }
+
+        private void showProjectsDashboard(object? sender, EventArgs e)
+        {
+            StartPageMainDashboard.IsVisible = false;
+            StartPageProjectsDashboard.IsVisible = true;
+
+            Color newColor1 = Colors.Transparent;
+            if (newColor1 != null) StartPageMainDashboardBTN.BackgroundColor = newColor1;
+
+            Color newColor2 = (Color)Application.Current.Resources["DarkPastelRed"];
+            if (newColor2 != null) StartPageProjectsDashboardBTN.BackgroundColor = newColor2;
+        }
+
         private void checkGlobalConfigsFileExistance()
         {
             if (!File.Exists(configsFilePath))
@@ -51,7 +75,7 @@ namespace SDLab_GUI
             for(int i = 0; i < globalConfigurationSet.RecentProjects.Count; i++)
             {
                 ProjectRowItem projectRowItem = new ProjectRowItem(globalConfigurationSet.RecentProjects[i].Name, $"{globalConfigurationSet.RecentProjects[i].CreationDateTime.ToShortDateString()} {globalConfigurationSet.RecentProjects[i].CreationDateTime.ToShortTimeString()}", globalConfigurationSet.RecentProjects[i].Path);
-                StackLayout bottomSeparatorBorder = new StackLayout() { HeightRequest = 2, BackgroundColor = (Color)Application.Current.Resources["DefaultPastelRed"] };
+                StackLayout bottomSeparatorBorder = new StackLayout() { HeightRequest = 2, BackgroundColor = Colors.White };
 
                 RecentSetsFlexLayout.Children.Add(projectRowItem);
                 RecentSetsFlexLayout.Children.Add(bottomSeparatorBorder);

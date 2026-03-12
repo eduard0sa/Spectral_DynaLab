@@ -9,7 +9,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
         private float currentFrequency;
         private enumWaveShapeType waveShapeType = enumWaveShapeType.Sine;
 
-        public float CurrentFrequency { get => currentFrequency; }
+        public float CurrentFrequency { get => currentFrequency; set => currentFrequency = value; }
         public enumWaveShapeType WaveShapeType { get => waveShapeType; }
 
         public OscillatorAudioProvider(nint _engine, AudioEngineWrapper _engineBridgeRef, int _sampleRate, int _channels)

@@ -97,6 +97,7 @@ void _MIDITrack::SetMIDITemplateSamplingProvider(_IEngine* audioProvider) {
 }
 
 void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> notesPitchRatioArr, int notesCount, int maxNotesPerColumn) {
+    MIDITrackBuffer.setNotClear();
     MIDITrackBuffer.clear();
 
     samplesPerNoteUnit = (100 * spec.sampleRate) / 1000;
@@ -133,8 +134,6 @@ void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> no
 void _MIDITrack::processFrequencyChange(const juce::AudioSourceChannelInfo& bufferToFill, float pitchRatio) {
 	rbbStretcher->setPitchScale(pitchRatio);
 
-    rbbStretcher->reset();
-
     const int numChannels = bufferToFill.buffer->getNumChannels();
     const int requestedSamples = bufferToFill.numSamples;
 
@@ -161,7 +160,6 @@ void _MIDITrack::processFrequencyChange(const juce::AudioSourceChannelInfo& buff
         std::vector<float*> output(numChannels);
 
         for (int ch = 0; ch < numChannels; ++ch)
-            //output[ch] = bufferToFill.buffer->getWritePointer(ch, bufferToFill.startSample);
             output[ch] = bufferToFill.buffer->getWritePointer(ch, 0);
 
         rbbStretcher->retrieve(output.data(), samplesToRetrieve);

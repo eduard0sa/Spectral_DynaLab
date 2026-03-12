@@ -23,7 +23,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// </summary>
         /// <param name="audioManager">Reference to the audio manager instance from MainPage.</param>
         /// <param name="mainPage">Reference from the Main Page program instance.</param>
-        public OscillatorItem(AudioEngineMGMT audioManager, MainPage mainPage, bool addToMixer = true, bool _activateWaveGraphMonitor = true)
+        public OscillatorItem(AudioEngineMGMT audioManager, MainPage mainPage, float initialFrequency = 20, bool addToMixer = true, bool _activateWaveGraphMonitor = true)
         {
             TrackTriangleMark = new TrackItemLeftIconMenu(this);
             TrackTriangleMark.ClickEventHandler = deleteTrackEvent;
@@ -40,6 +40,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             activateWaveGraphMonitor = _activateWaveGraphMonitor;
 
             TrackItemWaveVizualizerArea = new TrackItemWaveVizualizerArea(this, trackAudioProvider.pushOSCVisSampleArray, trackAudioProvider, activateWaveGraphMonitor);
+
+            ((OscillatorAudioProvider)trackAudioProvider).CurrentFrequency = initialFrequency;
 
             frequencySliderData = new Global.structSliderData() {
                 minVal = 20f,

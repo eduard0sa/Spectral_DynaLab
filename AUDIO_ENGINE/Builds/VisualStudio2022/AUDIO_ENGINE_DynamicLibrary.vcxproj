@@ -40,7 +40,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\Dynamic Library\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AUDIO_ENGINE</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\x64\Debug\Dynamic Library</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\x64\Release\Dynamic Library</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\Dynamic Library\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AUDIO_ENGINE</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
@@ -134,8 +134,8 @@ xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic L
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LargeAddressAware>true</LargeAddressAware>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <ImportLibrary>.\x64\Debug\Dynamic Library\AUDIO_ENGINE.lib</ImportLibrary>
-      <AdditionalDependencies>$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library\rubberband-library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>.\x64\Release\Dynamic Library\AUDIO_ENGINE.lib</ImportLibrary>
+      <AdditionalDependencies>$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Release\Dynamic Library\rubberband-library.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -143,8 +143,9 @@ xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic L
     </Bscmake>
     <Lib />
     <PostBuildEvent>
-      <Command>xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library\AUDIO_ENGINE.dll" "$(SolutionDir)SDLab_GUI\bin\Debug\net9.0-windows10.0.19041.0\win10-x64"
-xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library\rubberband-library.lib" "$(SolutionDir)SDLab_GUI\bin\Debug\net9.0-windows10.0.19041.0\win10-x64"</Command>
+      <Command>xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Release\Dynamic Library\AUDIO_ENGINE.dll" "$(SolutionDir)SDLab_GUI\bin\Release\net9.0-windows10.0.19041.0\win10-x64"
+xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Release\Dynamic Library\rubberband-library.lib" "$(SolutionDir)SDLab_GUI\bin\Release\net9.0-windows10.0.19041.0\win10-x64"
+xcopy /Y "$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Release\Dynamic Library\AUDIO_ENGINE.dll" "$(SolutionDir)AUDIO_PROC_BRIDGE\x64\Release"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

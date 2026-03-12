@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SDLab_GUI.StartPage"
-             Title="">
+             Title=""
+             AutomationId="StartPage">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -24,45 +25,86 @@
                 <ColumnDefinition Width="100*"/>
             </Grid.ColumnDefinitions>
 
-            <VerticalStackLayout Grid.Row="0" Grid.Column="0" BackgroundColor="#000003" Padding="20, 0, 20, 0">
+            <VerticalStackLayout Grid.Row="0" Grid.Column="0" BackgroundColor="#000003">
                 <Image Source="spectraldynalab_rect_v1.png" WidthRequest="300" Margin="0, 20, 0, 20"/>
-                <Button Text="INÍCIO" HeightRequest="75" CornerRadius="2" Margin="0, 10, 0, 0" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource DefaultPastelYellow}" BackgroundColor="{StaticResource DarkPastelRed}" BorderColor="{StaticResource DefaultPastelYellow}" BorderWidth="3" Focused="ButtonAutoUnfocusEvent"/>
-                <Button Text="PROJETOS" HeightRequest="70" CornerRadius="2" Margin="0, 10, 0, 0" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelYellow}" BackgroundColor="Transparent" BorderColor="{StaticResource DefaultPastelYellow}" BorderWidth="3" Focused="ButtonAutoUnfocusEvent"/>
+                <Grid ColumnDefinitions="5,*" HeightRequest="75" Margin="0, 10, 0, 0">
+                    <BoxView Grid.Column="0" WidthRequest="5" BackgroundColor="{StaticResource DefaultPastelYellow}"/>
+                    <Button x:Name="StartPageMainDashboardBTN" Grid.Column="1" HorizontalOptions="Fill" Text="INÍCIO" CornerRadius="2" FontFamily="Rubik Mono One" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource DefaultPastelYellow}" BackgroundColor="{StaticResource DarkPastelRed}" Clicked="showMainDashboard"/>
+                </Grid>
+                <Grid ColumnDefinitions="5,*" HeightRequest="75" Margin="0, 10, 0, 0">
+                    <BoxView Grid.Column="0" BackgroundColor="{StaticResource DefaultPastelYellow}"/>
+                    <Button x:Name="StartPageProjectsDashboardBTN" Grid.Column="1" Text="PROJETOS" CornerRadius="2" FontFamily="Rubik Mono One" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource DefaultPastelYellow}" BackgroundColor="Transparent" Clicked="showProjectsDashboard"/>
+                </Grid>
             </VerticalStackLayout>
 
             <Button Grid.Row="1" Grid.Column="0" Text="Definições" Padding="5, 5, 5, 5" CornerRadius="0" TextColor="White" BackgroundColor="{StaticResource Gray950}" Focused="ButtonAutoUnfocusEvent"/>
         </Grid>
-        
-        <ScrollView Grid.Row="0" Grid.Column="1" BackgroundColor="{StaticResource Gray950}">
-            <VerticalStackLayout VerticalOptions="Fill">
-                <HorizontalStackLayout Padding="0, 10 , 0, 10" BackgroundColor="{StaticResource DarkPastelRed}">
-                    <Button Text="Novo Set" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorEnvironmentEvent"/>
-                </HorizontalStackLayout>
 
-                <VerticalStackLayout>
-                    <VerticalStackLayout BackgroundColor="#000003" Margin="30, 50, 30, 0" Padding="0, 30, 0, 0">
-                        <Label Padding="100, 0, 100, 0" Text="Experimenta o tutorial e cria a tua primeira música!" HorizontalTextAlignment="Center" FontSize="Large" FontFamily="Rubik" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelRed}"/>
-                        <Button Text="EXPERIMENTAR TUTORIAL" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="0, 70, 0, 30" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorTutorialEvent"/>
-                    </VerticalStackLayout>
+        <ScrollView Grid.Row="0" Grid.Column="1" BackgroundColor="{StaticResource Gray950}">
+            <VerticalStackLayout>
+                <VerticalStackLayout VerticalOptions="Fill" x:Name="StartPageMainDashboard">
+                    <HorizontalStackLayout Padding="0, 20, 0, 10" BackgroundColor="{StaticResource DarkPastelRed}">
+                        <Button Text="Novo Set" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorEnvironmentEvent"/>
+                    </HorizontalStackLayout>
 
                     <VerticalStackLayout>
-                        <Label Text="RECENTES" FontSize="Large" FontAttributes="Bold" Margin="30, 30, 0, 10" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
+                        <Grid Margin="30, 50, 30, 0" BackgroundColor="#000003" MaximumHeightRequest="500">
+                            <Image Source="banner_image.png" Aspect="AspectFill"/>
+                            <BoxView BackgroundColor="#AA000000"/>
 
-                        <FlexLayout x:Name="RecentSetsFlexLayout" Margin="30, 50, 30, 200" BackgroundColor="{StaticResource Gray900}" Direction="Column">
-                            <Grid HorizontalOptions="Fill" Padding="20, 20, 20, 20" BackgroundColor="{StaticResource DarkPastelRed}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="33*"/>
-                                    <ColumnDefinition Width="33*"/>
-                                    <ColumnDefinition Width="33*"/>
-                                </Grid.ColumnDefinitions>
+                            <FlexLayout Padding="0, 100, 0, 100" Direction="Column" JustifyContent="Center" AlignItems="Center" HorizontalOptions="Fill" VerticalOptions="Fill">
+                                <Label Padding="100, 0, 200, 0" Text="Experimenta o tutorial e cria a tua primeira música!" HorizontalTextAlignment="Center" FontSize="Large" FontFamily="Rubik Mono One" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelRed}"/>
+                                <Button Text="EXPERIMENTAR TUTORIAL" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="0, 70, 0, 30" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorTutorialEvent"/>
+                            </FlexLayout>
+                        </Grid>
 
-                                <Label Grid.Column="0" Text="Nome:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
-                                <Label Grid.Column="1" Text="Data de criação:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
-                                <Label Grid.Column="2" Text="Localização:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
-                            </Grid>
+                        <VerticalStackLayout Margin="30, 50, 30, 200" BackgroundColor="{StaticResource Gray900}">
+                            <Label Text="RECENTES" FontFamily="Rubik Mono One" FontSize="Large" FontAttributes="Bold" Margin="30, 30, 0, 0" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
 
-                            <StackLayout HeightRequest="2" BackgroundColor="{StaticResource DefaultPastelRed}"/>
-                        </FlexLayout>
+                            <FlexLayout x:Name="RecentSetsFlexLayout" Margin="0, 30, 0, 0" Direction="Column">
+                                <Grid HorizontalOptions="Fill" Padding="20, 20, 20, 20" BackgroundColor="{StaticResource DarkPastelRed}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33*"/>
+                                        <ColumnDefinition Width="33*"/>
+                                        <ColumnDefinition Width="33*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Text="Nome:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
+                                    <Label Grid.Column="1" Text="Data de criação:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
+                                    <Label Grid.Column="2" Text="Localização:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
+                                </Grid>
+
+                                <StackLayout HeightRequest="2" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                            </FlexLayout>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout VerticalOptions="Fill" x:Name="StartPageProjectsDashboard" IsVisible="False">
+                    <HorizontalStackLayout Padding="0, 20, 0, 10" BackgroundColor="{StaticResource DarkPastelRed}">
+                        <Button Text="Novo Set" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorEnvironmentEvent"/>
+                    </HorizontalStackLayout>
+
+                    <VerticalStackLayout>
+                        <VerticalStackLayout Margin="30, 50, 30, 200" BackgroundColor="{StaticResource Gray900}">
+                            <Label Text="Projetos" FontFamily="Rubik Mono One" FontSize="Large" FontAttributes="Bold" Margin="30, 30, 0, 0" StyleClass="LightGrayBodyText" TextColor="{StaticResource DefaultPastelRed}"/>
+
+                            <FlexLayout x:Name="FullSetsFlexLayout" Margin="0, 30, 0, 0" Direction="Column">
+                                <Grid HorizontalOptions="Fill" Padding="20, 20, 20, 20" BackgroundColor="{StaticResource DarkPastelRed}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33*"/>
+                                        <ColumnDefinition Width="33*"/>
+                                        <ColumnDefinition Width="33*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Text="Nome:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
+                                    <Label Grid.Column="1" Text="Data de criação:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
+                                    <Label Grid.Column="2" Text="Localização:" TextColor="{StaticResource DefaultPastelRed}" FontAttributes="Bold" FontSize="Micro"/>
+                                </Grid>
+
+                                <StackLayout HeightRequest="2" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                            </FlexLayout>
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </VerticalStackLayout>

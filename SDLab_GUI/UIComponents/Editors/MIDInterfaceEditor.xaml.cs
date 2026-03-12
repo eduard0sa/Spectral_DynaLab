@@ -70,6 +70,25 @@ public partial class MIDIInterfaceEditor : ContentPage
         {
             addMIDITrackTemplateComponentUI(templateSampleAudioProvider);
         }
+
+        this.Loaded += PageLoadedEvent;
+    }
+
+    private async void PageLoadedEvent(object? sender, EventArgs e)
+    {
+        // Get the visible viewport height
+        double viewportHeight = MIDIPianoRollScrollView.Height;
+
+        // Get the total content height
+        double contentHeight = MIDIPianoRollStackLayout.Height;
+
+        // Calculate the center position accounting for viewport size
+        double centerScrollPosition = (contentHeight / 2) - (viewportHeight / 2);
+
+        // Clamp to valid range (0 to max scrollable distance)
+        centerScrollPosition = Math.Max(0, Math.Min(centerScrollPosition, contentHeight - viewportHeight));
+
+        await MIDIPianoRollScrollView.ScrollToAsync(MIDIPianoRollScrollView.ScrollX, centerScrollPosition, animated: false);
     }
 
     /// <summary>

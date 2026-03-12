@@ -7,7 +7,7 @@ namespace SDLab_GUI.Tutorials
     /// <summary>
     /// Stores tutorial data from the retrieved JSON file.
     /// </summary>
-    struct struct_tutorialData
+    public struct struct_tutorialData
     {
         public List<struct_tutorialStep> steps { get; set; }
     }
@@ -15,10 +15,16 @@ namespace SDLab_GUI.Tutorials
     /// <summary>
     /// Stores tutorial individual step data from the retrieved JSON file.
     /// </summary>
-    struct struct_tutorialStep
+    public struct struct_tutorialStep
     {
         public List<string> captions { get; set; }
-        public List<string> objectsToHighlight { get; set; }
+        public List<struct_objectToHighlight> objectsToHighlight { get; set; }
+    }
+
+    public struct struct_objectToHighlight
+    {
+        public string objectName { get; set; }
+        public string objectSourceName { get; set; }
     }
 
     /// <summary>
@@ -28,6 +34,7 @@ namespace SDLab_GUI.Tutorials
     {
         private struct_tutorialData tutorialData;
         MainPage editorMainPageRefOBJ;
+        private bool alreadyLoaded = false;
 
         /// <summary>
         /// TutorialModalOverlayView class constructor.
@@ -40,8 +47,12 @@ namespace SDLab_GUI.Tutorials
             editorMainPageRefOBJ = _mainPageRefOBJ;
 
             Loaded += async delegate {
-                await loadTutorialDataJSON();
-                displayStep(0);
+                if (!alreadyLoaded)
+                {
+                    await loadTutorialDataJSON();
+                    displayStep(0);
+                    alreadyLoaded = true;
+                }
             };
         }
 
@@ -111,7 +122,7 @@ namespace SDLab_GUI.Tutorials
                 {
                     Button startTutorialBTN = new Button()
                     {
-                        Text = tutorialData.steps[stepIndex].objectsToHighlight[0],
+                        Text = tutorialData.steps[stepIndex].objectsToHighlight[0].objectName,
                         FontFamily = "Orbitron",
                         FontSize = 18,
                         BackgroundColor = (Color)Application.Current.Resources["DefaultPastelRed"],
@@ -139,23 +150,62 @@ namespace SDLab_GUI.Tutorials
 
                         buttonAreaClickGestureRecognizer.Tapped += (o, e) =>
                         {
-                            Point? position = e.GetPosition(targetButtonRectBounds.sourceElement);
-                            Button targetButton = (Button)editorMainPageRefOBJ.FindByName(tutorialData.steps[stepIndex].objectsToHighlight[currIndex]);
+                            Page targetPage = null;
 
-                            if (position != null && targetButton != null)
+                            for (int j = 0; j < Shell.Current.Navigation.NavigationStack.Count; j++)
                             {
-                                double x = position.Value.X;
-                                double y = position.Value.Y;
-
-                                if (x >= 0 && x <= targetButtonRectBounds.Bounds.Width && y >= 0 && y <= targetButtonRectBounds.Bounds.Height)
+                                if (Shell.Current.Navigation.NavigationStack[j] != null)
                                 {
-                                    targetButton.Command.Execute(null);
+                                    if (Shell.Current.Navigation.NavigationStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
+                                    {
+                                        targetPage = Shell.Current.Navigation.NavigationStack[j];
+                                    }
+                                }
+                            }
 
-                                    TutorialContentLayout.Children.Clear();
-                                    TutorialOpenAbsoluteSpace.Children.Clear();
-                                    editorMainPageRefOBJ.stopBTNHighlight(tutorialData.steps[stepIndex].objectsToHighlight[currIndex]);
+                            if (targetPage == null)
+                            {
+                                for (int j = 0; j < Shell.Current.Navigation.ModalStack.Count; j++)
+                                {
+                                    if (Shell.Current.Navigation.ModalStack[j] != null)
+                                    {
+                                        if (Shell.Current.Navigation.ModalStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
+                                        {
+                                            targetPage = Shell.Current.Navigation.ModalStack[j];
+                                        }
+                                    }
+                                }
+                            }
 
-                                    displayStep(stepIndex + 1);
+                            if (targetPage != null)
+                            {
+                                Point? position = e.GetPosition(targetButtonRectBounds.sourceElement);
+                                Button targetButton = (Button)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName);
+
+                                if (position != null && targetButton != null)
+                                {
+                                    double x = position.Value.X;
+                                    double y = position.Value.Y;
+
+                                    if (x >= 0 && x <= targetButtonRectBounds.Bounds.Width && y >= 0 && y <= targetButtonRectBounds.Bounds.Height)
+                                    {
+                                        editorMainPageRefOBJ.closeTutorialOverlay();
+                                        targetButton.Command.Execute(null);
+
+                                        TutorialContentLayout.Children.Clear();
+                                        TutorialOpenAbsoluteSpace.Children.Clear();
+                                        editorMainPageRefOBJ.stopBTNHighlight(tutorialData.steps[stepIndex].objectsToHighlight[currIndex]);
+
+                                        Microsoft.UI.Xaml.DispatcherTimer nextStepTimer = new Microsoft.UI.Xaml.DispatcherTimer();
+                                        nextStepTimer.Interval = TimeSpan.FromMilliseconds(500);
+                                        nextStepTimer.Tick += delegate
+                                        {
+                                            editorMainPageRefOBJ.showTutorialOverlay();
+                                            displayStep(stepIndex + 1);
+                                            nextStepTimer.Stop();
+                                        };
+                                        nextStepTimer.Start();
+                                    }
                                 }
                             }
                         };

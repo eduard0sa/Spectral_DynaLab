@@ -22,9 +22,9 @@ namespace SDLab_GUI.UIComponents.StartPageUIComponents
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(33, GridUnitType.Star) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(33, GridUnitType.Star) });
 
-            projectNameLabel = new Label() { Text = _name, TextColor = (Color)Application.Current.Resources["DefaultPastelRed"], FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) };
-            projectDateLabel = new Label() { Text = _creationDate, TextColor = (Color)Application.Current.Resources["DefaultPastelRed"], FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) };
-            projectPathLabel = new Label() { Text = _path, TextColor = (Color)Application.Current.Resources["DefaultPastelRed"], FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) };
+            projectNameLabel = new Label() { Text = _name, TextColor = Colors.White, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) };
+            projectDateLabel = new Label() { Text = _creationDate, TextColor = Colors.White, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) };
+            projectPathLabel = new Label() { Text = _path, TextColor = Colors.White, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) };
 
             Children.Add(projectNameLabel);
             Children.Add(projectDateLabel);

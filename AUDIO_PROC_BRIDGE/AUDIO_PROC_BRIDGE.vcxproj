@@ -24,7 +24,7 @@
     <ProjectGuid>{6866F04C-0287-8C8E-9627-2CEF42DDFDCC}</ProjectGuid>
     <Keyword>NetCoreCProj</Keyword>
     <RootNamespace>AUDIOPROCBRIDGE</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -121,11 +121,11 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\AUDIO_ENGINE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)AUDIO_ENGINE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>AUDIO_ENGINE.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\DATA\DATA\ficheiros\documentos\Informática\programação\C++\JUCE AUDIO LIBRARY - FirstProject\OSCILOSCOPE_WAVE_GEN\OSCILLOSCOPE_WAVE_GEN\AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Release\Dynamic Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

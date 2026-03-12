@@ -75,7 +75,7 @@
     <IntDir>Release\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Debug\Dynamic Library</OutDir>
+    <OutDir>$(SolutionDir)AUDIO_ENGINE\Builds\VisualStudio2022\x64\Release\Dynamic Library</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -5,21 +5,36 @@
         "Olá e bem vindo ao tutorial do SPECTRAL DYNALab!",
         "Este tutorial ajudar-lhe-á a aprender as funcionalidades básicas do editor, assim como a produzir a sua própria música. Vamos começar!"
       ],
-      "objectsToHighlight": [ "Começar" ]
+      "objectsToHighlight": [
+        {
+          "objectName": "Começar",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
     },
     {
       "captions": [
         "1º PASSO:",
         "Clica em '+ Adicionar MIDI track' para adicionares uma faixa MIDI!"
       ],
-      "objectsToHighlight": [ "addMidiTrackBTN" ]
-    }/*,
+      "objectsToHighlight": [
+        {
+          "objectName": "addMidiTrackBTN",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
     {
       "captions": [
         "2º PASSO:",
         "Clica em 'Abrir MIDI' para iniciares o editor sequencial MIDI!"
       ],
-      "objectsToHighlight": [ "addMidiTrackBTN" ]
-    }*/
+      "objectsToHighlight": [
+        {
+          "objectName": "track_0",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    }
   ]
 }

@@ -213,6 +213,8 @@ namespace SDLab_GUI
         {
             OscillatorItem newOscillator = new OscillatorItem(audioManager, this);
 
+            newOscillator.AutomationId = $"track_{trackStackLayout.Children.Count}";
+
             trackStackLayout.Children.Add(newOscillator);
         }
 
@@ -230,9 +232,11 @@ namespace SDLab_GUI
 
             if (FileChoiceDialog == null) return;
 
-            FileTrackItem newOscillator = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath);
+            FileTrackItem newFileTrack = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath);
 
-            trackStackLayout.Children.Add(newOscillator);
+            newFileTrack.AutomationId = $"track_{trackStackLayout.Children.Count}";
+
+            trackStackLayout.Children.Add(newFileTrack);
         }
 
         /// <summary>
@@ -243,6 +247,7 @@ namespace SDLab_GUI
         private async void addMIDITrackBTNClickedEvent()
         {
             MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this);
+            newMIDITrack.OpenMIDIEditorButton.OpenSFXBTN.AutomationId = $"track_{trackStackLayout.Children.Count}";
 
             trackStackLayout.Children.Add(newMIDITrack);
         }
@@ -254,9 +259,9 @@ namespace SDLab_GUI
         /// <summary>
         /// This method shows the tutorial overlay, effectively starting up the dynamic tutorial system.
         /// </summary>
-        private void showTutorialOverlay()
+        public void showTutorialOverlay()
         {
-            editorTutorial = new TutorialModalOverlayView(this);
+            if(editorTutorial == null) editorTutorial = new TutorialModalOverlayView(this);
             Navigation.PushModalAsync(editorTutorial);
         }
 
@@ -276,37 +281,69 @@ namespace SDLab_GUI
         /// </summary>
         /// <param name="_btnName"></param>
         /// <returns></returns>
-        public struct_elementBoundInfo highlightBTN(string _btnName)
+        public struct_elementBoundInfo highlightBTN(struct_objectToHighlight targetTutorialStep)
         {
-            Button targetButton = ((Button)FindByName(_btnName));
+            Page targetPage = null;
 
-            if(targetButton != null)
+            for (int i = 0; i < Navigation.NavigationStack.Count; i++)
             {
-                highlightAnimationTimer = Dispatcher.CreateTimer();
-                highlightAnimationTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20f);
-                highlightAnimationTimer.Tick += delegate
+                if (Navigation.NavigationStack[i] != null)
                 {
-                    if (targetButton.BackgroundColor.Alpha <= 0)
+                    if(Navigation.NavigationStack[i].AutomationId == targetTutorialStep.objectSourceName)
                     {
-                        zoomDirection = 1;
+                        targetPage = Navigation.NavigationStack[i];
                     }
-                    if (targetButton.BackgroundColor.Alpha >= 1)
-                    {
-                        zoomDirection = -1;
-                    }
+                }
+            }
 
-                    targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(targetButton.BackgroundColor.Alpha + (0.1f * zoomDirection));
-                };
-
-                highlightAnimationTimer.Start();
-
-                struct_elementBoundInfo elementBoundInfo = new struct_elementBoundInfo
+            if (targetPage == null)
+            {
+                for (int i = 0; i < Navigation.ModalStack.Count; i++)
                 {
-                    Bounds = targetButton.Bounds,
-                    sourceElement = targetButton
-                };
+                    if (Navigation.ModalStack[i] != null)
+                    {
+                        if (Navigation.ModalStack[i].AutomationId == targetTutorialStep.objectSourceName)
+                        {
+                            targetPage = Navigation.ModalStack[i];
+                        }
+                    }
+                }
+            }
 
-                return elementBoundInfo;
+            if (targetPage != null)
+            {
+                Button targetButton = (Button)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
+
+                if (targetButton == null) return new struct_elementBoundInfo();
+
+                if (targetButton != null)
+                {
+                    highlightAnimationTimer = Dispatcher.CreateTimer();
+                    highlightAnimationTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20f);
+                    highlightAnimationTimer.Tick += delegate
+                    {
+                        if (targetButton.BackgroundColor.Alpha <= 0)
+                        {
+                            zoomDirection = 1;
+                        }
+                        if (targetButton.BackgroundColor.Alpha >= 1)
+                        {
+                            zoomDirection = -1;
+                        }
+
+                        targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(targetButton.BackgroundColor.Alpha + (0.1f * zoomDirection));
+                    };
+
+                    highlightAnimationTimer.Start();
+
+                    struct_elementBoundInfo elementBoundInfo = new struct_elementBoundInfo
+                    {
+                        Bounds = targetButton.Bounds,
+                        sourceElement = targetButton
+                    };
+
+                    return elementBoundInfo;
+                }
             }
 
             return new struct_elementBoundInfo();
@@ -315,16 +352,46 @@ namespace SDLab_GUI
         /// <summary>
         /// This method stops the highlight animation and restores the background opacity of the specified button.
         /// </summary>
-        /// <param name="_btnName">The name of the button to stop highlighting.</param>
-        public void stopBTNHighlight(string _btnName)
+        /// <param name="targetTutorialStep">The name of the button to stop highlighting.</param>
+        public void stopBTNHighlight(struct_objectToHighlight targetTutorialStep)
         {
-            highlightAnimationTimer.Stop();
+            Page targetPage = null;
 
-            Button targetButton = ((Button)FindByName(_btnName));
-
-            if(targetButton != null)
+            for (int i = 0; i < Navigation.NavigationStack.Count; i++)
             {
-                targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(1.0f);
+                if (Navigation.NavigationStack[i] != null)
+                {
+                    if (Navigation.NavigationStack[i].AutomationId == targetTutorialStep.objectSourceName)
+                    {
+                        targetPage = Navigation.NavigationStack[i];
+                    }
+                }
+            }
+
+            if (targetPage == null)
+            {
+                for (int i = 0; i < Navigation.ModalStack.Count; i++)
+                {
+                    if (Navigation.ModalStack[i] != null)
+                    {
+                        if (Navigation.ModalStack[i].AutomationId == targetTutorialStep.objectSourceName)
+                        {
+                            targetPage = Navigation.ModalStack[i];
+                        }
+                    }
+                }
+            }
+
+            if (targetPage != null)
+            {
+                highlightAnimationTimer.Stop();
+
+                Button targetButton = (Button)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
+
+                if (targetButton != null)
+                {
+                    targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(1.0f);
+                }
             }
         }
 
