@@ -108,4 +108,8 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Resources\Raw\SDLabExternalSamples\NOISIA\" />
+	</ItemGroup>
+
 </Project>

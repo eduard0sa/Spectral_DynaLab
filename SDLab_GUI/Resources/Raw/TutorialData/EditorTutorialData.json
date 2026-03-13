@@ -8,6 +8,7 @@
       "objectsToHighlight": [
         {
           "objectName": "Começar",
+          "objectType": "VisualElement",
           "objectSourceName": "EditorMainPage"
         }
       ]
@@ -15,11 +16,12 @@
     {
       "captions": [
         "1º PASSO:",
-        "Clica em '+ Adicionar MIDI track' para adicionares uma faixa MIDI!"
+        "Clica em '+ Adicionar MIDI track' para adicionar uma faixa MIDI!"
       ],
       "objectsToHighlight": [
         {
           "objectName": "addMidiTrackBTN",
+          "objectType": "VisualElement",
           "objectSourceName": "EditorMainPage"
         }
       ]
@@ -27,12 +29,52 @@
     {
       "captions": [
         "2º PASSO:",
-        "Clica em 'Abrir MIDI' para iniciares o editor sequencial MIDI!"
+        "Clica em 'Repetir Faixa' para ativar o modo de repetição da MIDI!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "repeatMIDI1",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "3º PASSO:",
+        "Clica em 'Abrir MIDI' para iniciar o editor sequencial MIDI!"
       ],
       "objectsToHighlight": [
         {
           "objectName": "track_0",
+          "objectType": "VisualElement",
           "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "4º PASSO:",
+        "Clica em '+ Configurar sample externo' para iniciar o sample a ser utilizado pela MIDI! Procura o ficheiro feel_good_inc_bass.mp3!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "MIDIConfigureExternalSample",
+          "objectType": "VisualElement",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "5º PASSO:",
+        "Clica em '+ Configurar sample externo' para iniciar o sample a ser utilizado pela MIDI! Procura o ficheiro feel_good_inc_bass.mp3!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "MIDIConfigureExternalSample",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
         }
       ]
     }

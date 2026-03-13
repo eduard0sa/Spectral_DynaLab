@@ -22,6 +22,8 @@ namespace SDLab_GUI
         private AudioEngineMGMT audioManager;
         private bool isUpdatingMasterVolumeSlider = false;
 
+        private enumEditorMode currentEditorMode;
+
         private ICommand midiTrackBTNClickCommand;
         private ICommand fileTrackBTNClickCommand;
         private ICommand oscillatorTrackBTNClickCommand;
@@ -42,6 +44,7 @@ namespace SDLab_GUI
             //Initiallize audio Engine/Mixer
             AudioEngineWrapper audioEngineWrapper = new AudioEngineWrapper();
             audioManager = new AudioEngineMGMT(this);
+            currentEditorMode = runMode;
 
             audioManager.initMixer();
 
@@ -246,7 +249,7 @@ namespace SDLab_GUI
         /// <param name="e">The event data.</param>
         private async void addMIDITrackBTNClickedEvent()
         {
-            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this);
+            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this, currentEditorMode == enumEditorMode.Tutorial ? true : false);
             newMIDITrack.OpenMIDIEditorButton.OpenSFXBTN.AutomationId = $"track_{trackStackLayout.Children.Count}";
 
             trackStackLayout.Children.Add(newMIDITrack);
@@ -312,7 +315,7 @@ namespace SDLab_GUI
 
             if (targetPage != null)
             {
-                Button targetButton = (Button)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
+                VisualElement targetButton = (VisualElement)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
 
                 if (targetButton == null) return new struct_elementBoundInfo();
 
@@ -322,16 +325,19 @@ namespace SDLab_GUI
                     highlightAnimationTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20f);
                     highlightAnimationTimer.Tick += delegate
                     {
-                        if (targetButton.BackgroundColor.Alpha <= 0)
+                        if(targetButton.BackgroundColor != null)
                         {
-                            zoomDirection = 1;
-                        }
-                        if (targetButton.BackgroundColor.Alpha >= 1)
-                        {
-                            zoomDirection = -1;
-                        }
+                            if (targetButton.BackgroundColor.Alpha <= 0)
+                            {
+                                zoomDirection = 1;
+                            }
+                            if (targetButton.BackgroundColor.Alpha >= 1)
+                            {
+                                zoomDirection = -1;
+                            }
 
-                        targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(targetButton.BackgroundColor.Alpha + (0.1f * zoomDirection));
+                            targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(targetButton.BackgroundColor.Alpha + (0.1f * zoomDirection));
+                        }
                     };
 
                     highlightAnimationTimer.Start();
@@ -386,11 +392,14 @@ namespace SDLab_GUI
             {
                 highlightAnimationTimer.Stop();
 
-                Button targetButton = (Button)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
+                VisualElement targetButton = targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
 
                 if (targetButton != null)
                 {
-                    targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(1.0f);
+                    if(targetButton.BackgroundColor != null)
+                    {
+                        targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(1.0f);
+                    }
                 }
             }
         }

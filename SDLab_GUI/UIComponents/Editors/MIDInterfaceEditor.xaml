@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SDLab_GUI.UIComponents.Editors.MIDIInterfaceEditor"
              Title="MIDInterfaceEditor"
-             BackgroundColor="Transparent">
+             BackgroundColor="Transparent"
+             AutomationId="MIDIInterfaceEditorModal">
 
     <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#aa101413">
         <Grid.RowDefinitions>
@@ -74,8 +75,8 @@
                     <VerticalStackLayout x:Name="MIDINoTemplateAudioProviderBanner" BackgroundColor="{StaticResource DarkPastelRed}">
                         <Label Text="Configure uma fonte válida de som para a MIDI." TextColor="{StaticResource White}" HorizontalTextAlignment="Center" Margin="0, 20, 0, 0"/>
                         <HorizontalStackLayout HorizontalOptions="Center" Margin="0, 20, 0, 0">
-                            <Button Text="+ Configurar sinal puro (OSCILLATOR)" WidthRequest="300" HeightRequest="10" CornerRadius="2" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="SetMIDIOscillatorTrackTemplateAP"/>
-                            <Button Text="+ Configurar sample externo" WidthRequest="300" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="SetMIDIFileTrackTemplateAP"/>
+                            <Button x:Name="MIDIConfigureOscilatorSignal" AutomationId="MIDIConfigureOscilatorSignal" Text="+ Configurar sinal puro (OSCILLATOR)" WidthRequest="300" HeightRequest="10" CornerRadius="2" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                            <Button x:Name="MIDIConfigureExternalSample" AutomationId="MIDIConfigureExternalSample" Text="+ Configurar sample externo" WidthRequest="300" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="SetMIDIFileTrackTemplateAP"/>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
 

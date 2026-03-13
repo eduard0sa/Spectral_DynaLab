@@ -3,6 +3,7 @@ using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
 using SDLab_GUI.UIComponents.Editors;
 using static SDLab_GUI.Global;
 
+
 namespace SDLab_GUI.UIComponents.TrackUIComponents
 {
     public class MIDITrackItem : TrackItem
@@ -11,10 +12,11 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         private structSwitchData repeatTrackModeSwitchData;
         private structSliderData tempoSliderData;
         private TrackItem templateAudioProvider; //UI Component for the MIDI Template Audio Provider (Oscillator/File Track)
+        private bool isTutorial;
 
         internal MIDIItemSFXButtonArea OpenMIDIEditorButton { get => openMIDIEditorButton; }
 
-        public MIDITrackItem(AudioEngineMGMT audioManager, MainPage mainPage)
+        public MIDITrackItem(AudioEngineMGMT audioManager, MainPage mainPage, bool _isTutorial = false)
         {
             openMIDIEditorButton = new MIDIItemSFXButtonArea(this);
             openMIDIEditorButton.OpenSFXEditorEvent = new Command(() => { openMIDIEditorEvent(new object(), new EventArgs()); });
@@ -28,6 +30,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             trackAudioProvider = audioManager.LaunchAudioEngine(isMIDI: true);
             audioEngineMGMT = audioManager;
             mainPageOBJ = mainPage;
+            isTutorial = _isTutorial;
 
             TrackItemWaveVizualizerArea = new TrackItemWaveVizualizerArea(this, trackAudioProvider.pushOSCVisSampleArray, trackAudioProvider);
 
@@ -66,7 +69,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             //Adding Slider Controls to the main Control Group.
             TrackItemControls[0].addSliderControl("Gain:", enumBaseColor.GREEN, gainSliderData, gainChangeEvent);
-            TrackItemControls[0].addSwitchControl("Repeat Track:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent);
+            TrackItemControls[0].addSwitchControl("Repeat Track:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent, isTutorial ? "repeatMIDI1": null);
             TrackItemControls.Add(new TrackItemSliderControlGroup(this));
             TrackItemControls[1].addSliderControl("BPM:", enumBaseColor.GREEN, tempoSliderData, tempoChangeEvent);
 

@@ -179,7 +179,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="switchLabel">The label string for the picker control.</param>
         /// <param name="switchData">The numeric data group for the picker control setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed by the event handler when the value of the picker is changed.</param>
-        public void addSwitchControl(string switchLabel, enumBaseColor color, Global.structSwitchData switchData, EventHandler<ToggledEventArgs> _valueChangedEvent)
+        public void addSwitchControl(string switchLabel, enumBaseColor color, Global.structSwitchData switchData, EventHandler<ToggledEventArgs> _valueChangedEvent, string automationName = null)
         {
             TrackItemSwitchControl switchControl = new TrackItemSwitchControl(switchLabel, color, switchData, _valueChangedEvent);
 
@@ -190,6 +190,11 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             };
 
             controlList.Add(switchControlDataUnit);
+
+            if(automationName != null)
+            {
+                switchControl.switchControlSwitch.AutomationId = automationName;
+            }
 
             //Update the vertical size of the other controls in the control group
             updateControlsFlexGrow();
@@ -412,7 +417,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
     public class TrackItemSwitchControl : HorizontalStackLayout
     {
         Label switchControlLabel = new Label();
-        Switch switchControlSwitch = new Switch();
+        public Switch switchControlSwitch = new Switch();
         Global.structSwitchData _numericSwitchData_;
 
         /// <summary>

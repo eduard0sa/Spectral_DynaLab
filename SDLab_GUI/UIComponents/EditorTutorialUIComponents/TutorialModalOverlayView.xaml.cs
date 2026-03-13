@@ -24,6 +24,7 @@ namespace SDLab_GUI.Tutorials
     public struct struct_objectToHighlight
     {
         public string objectName { get; set; }
+        public string objectType { get; set; }
         public string objectSourceName { get; set; }
     }
 
@@ -180,7 +181,7 @@ namespace SDLab_GUI.Tutorials
                             if (targetPage != null)
                             {
                                 Point? position = e.GetPosition(targetButtonRectBounds.sourceElement);
-                                Button targetButton = (Button)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName);
+                                VisualElement targetButton = targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName);
 
                                 if (position != null && targetButton != null)
                                 {
@@ -190,7 +191,14 @@ namespace SDLab_GUI.Tutorials
                                     if (x >= 0 && x <= targetButtonRectBounds.Bounds.Width && y >= 0 && y <= targetButtonRectBounds.Bounds.Height)
                                     {
                                         editorMainPageRefOBJ.closeTutorialOverlay();
-                                        targetButton.Command.Execute(null);
+                                        if(targetButton is Button)
+                                        {
+                                            ((Button)targetButton).Command.Execute(null);
+                                        }
+                                        else if(targetButton is Switch)
+                                        {
+                                            ((Switch)targetButton).IsToggled = !((Switch)targetButton).IsToggled;
+                                        }
 
                                         TutorialContentLayout.Children.Clear();
                                         TutorialOpenAbsoluteSpace.Children.Clear();

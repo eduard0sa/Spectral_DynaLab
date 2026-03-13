@@ -89,6 +89,9 @@ public partial class MIDIInterfaceEditor : ContentPage
         centerScrollPosition = Math.Max(0, Math.Min(centerScrollPosition, contentHeight - viewportHeight));
 
         await MIDIPianoRollScrollView.ScrollToAsync(MIDIPianoRollScrollView.ScrollX, centerScrollPosition, animated: false);
+
+        MIDIConfigureOscilatorSignal.Command = new Command(() => { SetMIDIOscillatorTrackTemplateAP(new object(), new EventArgs()); });
+        MIDIConfigureExternalSample.Command = new Command(() => { SetMIDIFileTrackTemplateAP(new object(), new EventArgs()); });
     }
 
     /// <summary>
@@ -178,38 +181,42 @@ public partial class MIDIInterfaceEditor : ContentPage
     private async void SetMIDIFileTrackTemplateAP(object? sender, EventArgs e)
     {
         TrackItem newTemplateAP = await MIDIAudioTrack.SetMIDITrackTemplateAP(Global.enumEngineType.FileTrack);
+        if(newTemplateAP == null) return;
         addMIDITrackTemplateComponentUI(newTemplateAP);
         ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).SetMIDITemplateSamplingProvider(newTemplateAP.TrackAudioProvider);
     }
 
     private void addMIDITrackTemplateComponentUI(TrackItem newTemplateAP)
     {
-        if (newTemplateAP != null) MIDITemplateAudioProviderLayout.Children.Add(newTemplateAP);
+        if (newTemplateAP != null)
+        {
+            MIDITemplateAudioProviderLayout.Children.Add(newTemplateAP);
 
-        MIDINoTemplateAudioProviderBanner.IsVisible = false;
-        MIDITemplateAudioProviderLayout.IsVisible = true;
+            MIDINoTemplateAudioProviderBanner.IsVisible = false;
+            MIDITemplateAudioProviderLayout.IsVisible = true;
 
-        mainPlayBTN.Clicked += async delegate {
-            mainPageRefObj.ShowLoadingModalSplashScreen();
+            mainPlayBTN.Clicked += async delegate {
+                mainPageRefObj.ShowLoadingModalSplashScreen();
 
-            switch (mainPlayBTN.Source.ToString().Split(" ")[1])
-            {
-                case "pause_button.png":
-                    mainPlayBTN.Source = "play_solid_full.png";
-                    ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PauseMIDI();
-                    break;
+                switch (mainPlayBTN.Source.ToString().Split(" ")[1])
+                {
+                    case "pause_button.png":
+                        mainPlayBTN.Source = "play_solid_full.png";
+                        ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PauseMIDI();
+                        break;
 
-                case "play_solid_full.png":
-                    mainPlayBTN.Source = "pause_button.png";
-                    await Task.Run(() => {
-                        ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).renderMIDIWaveform(newTemplateAP.TrackAudioProvider);
-                        ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PlayMIDI();
-                    });
-                    break;
-            }
+                    case "play_solid_full.png":
+                        mainPlayBTN.Source = "pause_button.png";
+                        await Task.Run(() => {
+                            ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).renderMIDIWaveform(newTemplateAP.TrackAudioProvider);
+                            ((MIDITrackProvider)MIDIAudioTrack.TrackAudioProvider).PlayMIDI();
+                        });
+                        break;
+                }
 
-            mainPageRefObj.HideLoadingModalSplashScreen();
-        };
+                mainPageRefObj.HideLoadingModalSplashScreen();
+            };
+        }
     }
 }
 
