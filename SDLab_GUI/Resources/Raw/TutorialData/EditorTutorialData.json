@@ -33,7 +33,7 @@
       ],
       "objectsToHighlight": [
         {
-          "objectName": "repeatMIDI1",
+          "objectName": "repeatMIDI_0",
           "objectType": "VisualElement",
           "objectSourceName": "EditorMainPage"
         }
@@ -68,11 +68,167 @@
     {
       "captions": [
         "5º PASSO:",
-        "Clica em '+ Configurar sample externo' para iniciar o sample a ser utilizado pela MIDI! Procura o ficheiro feel_good_inc_bass.mp3!"
+        "Clica nas notas pre-marcadas na MIDI, e assim podes compor uma melodia!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "midiNote_0-7_40",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_8-10_40",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_10-12_42",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_12-16_43",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_16-20_48",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_20-37_47",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_37-44_45",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_45-47_45",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_47-49_48",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_49-53_47",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_53-57_43",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_57-67_40",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "6º PASSO:",
+        "Clica no botão destacado para o programa processar a tua composição!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "midiWaveformRenderBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "7º PASSO:",
+        "Clica no X para fechar o editor MIDI!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "modalBoxCloseBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "8º PASSO:",
+        "Clica em '+ Adicionar MIDI track' para criar uma nova beat!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "addMidiTrackBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "9º PASSO:",
+        "Clica em 'Repetir Faixa' para ativar o modo de repetição da MIDI!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "repeatMIDI_1",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "10º PASSO:",
+        "Clica em 'Abrir MIDI' para criar uma nova beat!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "track_1",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "11º PASSO:",
+        "Clica em '+ Configurar sample externo' para iniciar o sample a ser utilizado pela MIDI! Procura o ficheiro TSP_NOISIA_snare_uneef_edit100.mp3!"
       ],
       "objectsToHighlight": [
         {
           "objectName": "MIDIConfigureExternalSample",
+          "objectType": "VisualElement",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "12º PASSO:",
+        "Clica nas notas pre-marcadas na MIDI, e assim podes compor uma melodia!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "midiNote_0-7_36",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_14-21_36",
+          "objectType": "MIDINote",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        },
+        {
+          "objectName": "midiNote_28-29_36",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         }

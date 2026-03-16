@@ -66,6 +66,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
 		<PackageReference Include="NAudio" Version="2.2.1" />
+		
+		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -111,5 +113,13 @@
 	<ItemGroup>
 	  <Folder Include="Resources\Raw\SDLabExternalSamples\NOISIA\" />
 	</ItemGroup>
+
+	<Target Name="RemoveSatelliteAssemblies" AfterTargets="Build">
+		<ItemGroup>
+			<_SatelliteFolders Include="$(OutputPath)*\*-*" />
+			<_SatelliteFolders Include="$(OutputPath)*\*_*" />
+		</ItemGroup>
+		<RemoveDir Directories="@(_SatelliteFolders)" />
+	</Target>
 
 </Project>

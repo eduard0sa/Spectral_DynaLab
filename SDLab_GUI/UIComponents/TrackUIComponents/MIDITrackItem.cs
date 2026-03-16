@@ -16,10 +16,11 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
         internal MIDIItemSFXButtonArea OpenMIDIEditorButton { get => openMIDIEditorButton; }
 
-        public MIDITrackItem(AudioEngineMGMT audioManager, MainPage mainPage, bool _isTutorial = false)
+        public MIDITrackItem(AudioEngineMGMT audioManager, MainPage mainPage, bool _isTutorial = false, string _openMIDIBTNAutomationName = "")
         {
             openMIDIEditorButton = new MIDIItemSFXButtonArea(this);
             openMIDIEditorButton.OpenSFXEditorEvent = new Command(() => { openMIDIEditorEvent(new object(), new EventArgs()); });
+            OpenMIDIEditorButton.OpenSFXBTN.AutomationId = _openMIDIBTNAutomationName;
 
             TrackTriangleMark = new TrackItemLeftIconMenu(this);
             TrackTriangleMark.ClickEventHandler = deleteTrackEvent;
@@ -69,14 +70,16 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             //Adding Slider Controls to the main Control Group.
             TrackItemControls[0].addSliderControl("Gain:", enumBaseColor.GREEN, gainSliderData, gainChangeEvent);
-            TrackItemControls[0].addSwitchControl("Repeat Track:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent, isTutorial ? "repeatMIDI1": null);
-            TrackItemControls.Add(new TrackItemSliderControlGroup(this));
-            TrackItemControls[1].addSliderControl("BPM:", enumBaseColor.GREEN, tempoSliderData, tempoChangeEvent);
+
+            string repeatTrackAutomationID = isTutorial ? $"repeatMIDI_{OpenMIDIEditorButton.OpenSFXBTN.AutomationId[OpenMIDIEditorButton.OpenSFXBTN.AutomationId.Length - 1]}" : null;
+            TrackItemControls[0].addSwitchControl("Repetir faixa:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent, repeatTrackAutomationID);
+            /*TrackItemControls.Add(new TrackItemSliderControlGroup(this));
+            TrackItemControls[1].addSliderControl("BPM:", enumBaseColor.GREEN, tempoSliderData, tempoChangeEvent);*/
 
             Children.Add(TrackTriangleMark);
             Children.Add(TrackItemHeader);
             Children.Add(TrackItemControls[0]);
-            Children.Add(TrackItemControls[1]);
+            //Children.Add(TrackItemControls[1]);
             Children.Add(openMIDIEditorButton);
             Children.Add(TrackItemWaveVizualizerArea);
         }
@@ -112,8 +115,9 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             MIDIEditor.ModalBoxCloseEvent = closeMIDIEditorEvent;
         }
 
-        private void closeMIDIEditorEvent(object? sender, EventArgs e)
+        private void closeMIDIEditorEvent()
         {
+            ((MIDITrackProvider)trackAudioProvider).PauseMIDI();
             mainPageOBJ.Navigation.PopModalAsync();
         }
 
@@ -130,7 +134,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
                         PickerTitle = "Selecionar ficheiro de audio (.mp3, .wav, .ogg, etc...)."
                     });
 
-                    if (FileChoiceDialog == null) break;
+                    if (FileChoiceDialog == null) return null;
 
                     templateAudioProvider = new FileTrackItem(audioEngineMGMT, mainPageOBJ, FileChoiceDialog.FullPath, false, false);
                     break;

@@ -3,6 +3,7 @@
 #include <../SOURCE/WaveEngineTemplate.h>
 #include <../SOURCE/FileTrack.h>
 #include <../SOURCE/global.h>
+#include <math.h>
 #include <string>
 
 class _MIDITrack : _IEngine

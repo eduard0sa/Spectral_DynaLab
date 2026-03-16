@@ -44,7 +44,6 @@ void _MIDITrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
     bufferToFill.clearActiveBufferRegion();
 
     if (currentSampleIndex < MIDITrackBuffer.getNumSamples()) {
-        bufferToFill.clearActiveBufferRegion();
         for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
         {
             float* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
@@ -97,14 +96,18 @@ void _MIDITrack::SetMIDITemplateSamplingProvider(_IEngine* audioProvider) {
 }
 
 void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> notesPitchRatioArr, int notesCount, int maxNotesPerColumn) {
-    MIDITrackBuffer.setNotClear();
-    MIDITrackBuffer.clear();
-
     samplesPerNoteUnit = (100 * spec.sampleRate) / 1000;
 
     MIDITrackBuffer.setSize(1, samplesPerNoteUnit * notesCount);
 
     float* buffer = MIDITrackBuffer.getWritePointer(0, 0);
+
+    for (int i = 0; i < samplesPerNoteUnit * notesCount; i++) {
+		buffer[i] = 0.0f;
+    }
+
+    currentSampleIndex = 0;
+    currentSampleContinuousPosition = 0;
 
     for (int i = 0; i < notesCount; i++) {
         for (int j = 0; j < notesPitchRatioArr[i].size(); j++) {
@@ -113,19 +116,62 @@ void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> no
             juce::AudioBuffer<float> currentNotePlanarBuffer = juce::AudioBuffer<float>(1, bufferLength);
             juce::AudioSourceChannelInfo bufferToFill = juce::AudioSourceChannelInfo(&currentNotePlanarBuffer, 0, bufferLength);
 
+            templateSamplingAudioProvider->setBlockSize(bufferLength);
+            bufferToFill.buffer->clear();
+
             if (templateSamplingAudioProvider->getEngineType() == 'F') {
                 ((_FileTrack*)templateSamplingAudioProvider)->resetTime();
+                ((_FileTrack*)templateSamplingAudioProvider)->getBulkAudioBlock(bufferToFill, 0);
+                
             }
-
-            templateSamplingAudioProvider->setBlockSize(bufferLength);
-
-            bufferToFill.buffer->clear();
-            templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
+            else {
+                templateSamplingAudioProvider->getNextAudioBlock(bufferToFill, false);
+            }
             
 			processFrequencyChange(bufferToFill, notesPitchRatioArr[i][j].pitchRatio);
             
+            /*for (int k = 0; k < bufferLength; k++) {
+                buffer[i * samplesPerNoteUnit + k] = (float)bufferToFill.buffer->getSample(0, k);
+            }*/
+
+            /*int count = 0;
+            float value = 0;
+            const int maxSearchSamples = std::min(static_cast<int>(bufferLength * 0.1f), 4410); // Search first 10% or 100ms max
+
+            while (count < maxSearchSamples && value <= 0.0001f) {
+                value = std::abs(bufferToFill.buffer->getSample(0, count));
+                count++;
+            }
+
+            // Safety check: if no attack found, start from 0
+            if (count >= maxSearchSamples) {
+                count = 0;
+            }
+
+            const float attackNReleaseTime = 20.0f;
+            const int fadeLength = static_cast<int>((attackNReleaseTime * spec.sampleRate) / 1000.0f); // Use actual sample rate
+            const int remainingSamples = bufferLength - count;
+            const int safeFadeLength = std::min(fadeLength, remainingSamples / 2); // Prevent fade from exceeding available samples
+
+            for (int k = 0; k < remainingSamples; k++) {
+                float envelope = 1.0f;
+                
+                if (k < safeFadeLength && safeFadeLength > 0) {
+                    // Attack: smooth quadratic fade-in
+                    float attackPhase = static_cast<float>(k) / safeFadeLength;
+                    envelope = attackPhase * attackPhase;
+                }
+                else if (k > remainingSamples - safeFadeLength && safeFadeLength > 0) {
+                    // Release: smooth quadratic fade-out
+                    float releasePhase = static_cast<float>(remainingSamples - k) / safeFadeLength;
+                    envelope = releasePhase * releasePhase;
+                }
+                
+                buffer[i * samplesPerNoteUnit + k] = static_cast<float>(bufferToFill.buffer->getSample(0, count + k)) * envelope;
+            }*/
+
             for (int k = 0; k < bufferLength; k++) {
-				buffer[i * samplesPerNoteUnit + k] += (float)bufferToFill.buffer->getSample(0, k);
+                buffer[i * samplesPerNoteUnit + k] = bufferToFill.buffer->getSample(0, k);
             }
         }
     }

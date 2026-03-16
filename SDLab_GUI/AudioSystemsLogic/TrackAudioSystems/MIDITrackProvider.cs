@@ -53,7 +53,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
             engineBridgeRef._setMIDITemplateSamplingProvider(engine, templateSamplingProvider.Engine);
         }
 
-        public void renderMIDIWaveform(JuceAudioProvider templateSamplingProvider)
+        public float renderMIDIWaveform(JuceAudioProvider templateSamplingProvider)
         {
             int maxValidNoteBlockColumnIndex = 0;
             int maxColumnNoteIndex = 6 * 12;
@@ -110,6 +110,8 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
             }
 
             engineBridgeRef._renderMIDIWaveform(engine, finalPianoRollMatrix, maxValidNoteBlockColumnIndex + 1, maxColumnNoteIndex + 1);
+
+            return (maxValidNoteBlockColumnIndex + 1);
         }
 
         public void PlayMIDI()

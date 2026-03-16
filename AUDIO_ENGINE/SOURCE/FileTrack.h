@@ -12,6 +12,7 @@ public:
 
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate, float initFrequency, float initGain) override;
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, bool fillVisualizationArray) override;
+	void getBulkAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, int startSampleIndex);
 	void releaseResources() override;
 	char getEngineType() override;
 

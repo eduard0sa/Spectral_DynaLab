@@ -249,8 +249,7 @@ namespace SDLab_GUI
         /// <param name="e">The event data.</param>
         private async void addMIDITrackBTNClickedEvent()
         {
-            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this, currentEditorMode == enumEditorMode.Tutorial ? true : false);
-            newMIDITrack.OpenMIDIEditorButton.OpenSFXBTN.AutomationId = $"track_{trackStackLayout.Children.Count}";
+            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this, _isTutorial: currentEditorMode == enumEditorMode.Tutorial ? true : false, _openMIDIBTNAutomationName: $"track_{trackStackLayout.Children.Count}");
 
             trackStackLayout.Children.Add(newMIDITrack);
         }
@@ -315,40 +314,72 @@ namespace SDLab_GUI
 
             if (targetPage != null)
             {
-                VisualElement targetButton = (VisualElement)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
-
-                if (targetButton == null) return new struct_elementBoundInfo();
-
-                if (targetButton != null)
+                switch(targetTutorialStep.objectType)
                 {
-                    highlightAnimationTimer = Dispatcher.CreateTimer();
-                    highlightAnimationTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20f);
-                    highlightAnimationTimer.Tick += delegate
-                    {
-                        if(targetButton.BackgroundColor != null)
+                    case "VisualElement":
+                        VisualElement targetButton = (VisualElement)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
+
+                        if (targetButton == null) return new struct_elementBoundInfo();
+
+                        if (targetButton != null)
                         {
-                            if (targetButton.BackgroundColor.Alpha <= 0)
+                            highlightAnimationTimer = Dispatcher.CreateTimer();
+                            highlightAnimationTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20f);
+                            highlightAnimationTimer.Tick += delegate
                             {
-                                zoomDirection = 1;
-                            }
-                            if (targetButton.BackgroundColor.Alpha >= 1)
-                            {
-                                zoomDirection = -1;
-                            }
+                                if (targetButton.BackgroundColor != null)
+                                {
+                                    if (targetButton.BackgroundColor.Alpha <= 0)
+                                    {
+                                        zoomDirection = 1;
+                                    }
+                                    if (targetButton.BackgroundColor.Alpha >= 1)
+                                    {
+                                        zoomDirection = -1;
+                                    }
 
-                            targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(targetButton.BackgroundColor.Alpha + (0.1f * zoomDirection));
+                                    targetButton.BackgroundColor = targetButton.BackgroundColor.WithAlpha(targetButton.BackgroundColor.Alpha + (0.1f * zoomDirection));
+                                }
+                            };
+
+                            highlightAnimationTimer.Start();
+
+                            struct_elementBoundInfo elementBoundInfo = new struct_elementBoundInfo
+                            {
+                                Bounds = targetButton.Bounds,
+                                sourceElement = targetButton
+                            };
+
+                            return elementBoundInfo;
                         }
-                    };
 
-                    highlightAnimationTimer.Start();
+                        break;
 
-                    struct_elementBoundInfo elementBoundInfo = new struct_elementBoundInfo
-                    {
-                        Bounds = targetButton.Bounds,
-                        sourceElement = targetButton
-                    };
+                    case "MIDINote":
+                        int initX = int.Parse(targetTutorialStep.objectName.Split("_")[1].Split("-")[0]);
+                        int endX = int.Parse(targetTutorialStep.objectName.Split("_")[1].Split("-")[1]);
+                        int Y = int.Parse(targetTutorialStep.objectName.Split("_")[2]);
 
-                    return elementBoundInfo;
+                        PianoRollGraphicsView targetPianoRoll = ((targetPage as MIDIInterfaceEditor).PianoRoll);
+
+                        Global.struct_elementBoundInfo noteBound = new Global.struct_elementBoundInfo
+                        {
+                            Bounds = new Rect(initX * ((PianoRollDrawable)targetPianoRoll.Drawable).TI.timeUnitSquareWidth, Y, endX - initX, 20),
+                            sourceElement = targetPianoRoll
+                        };
+
+                        for (int i = initX; i < endX; i++)
+                        {
+                            Global.struct_coordinates noteCoordinates = new Global.struct_coordinates
+                            {
+                                x = i,
+                                y = Y
+                            };
+
+                            ((MIDIInterfaceEditor)targetPage).PianoRoll.highlightNote(noteCoordinates);
+                        }
+
+                        return noteBound;
                 }
             }
 

@@ -128,6 +128,21 @@ void _FileTrack::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToF
     }
 }
 
+void _FileTrack::getBulkAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill, int startSampleIndex) {
+	int bufferLength = bufferToFill.numSamples;
+
+	float* targetBuffer = bufferToFill.buffer->getWritePointer(0, 0);
+
+    for (int i = 0; i < bufferLength; i++) {
+        if (i >= tempBuffer.getNumSamples()) {
+            targetBuffer[i] = 0.0f;
+        }
+        else {
+            targetBuffer[i] = (float)tempBuffer.getSample(0, startSampleIndex + i);
+        }
+    }
+}
+
 void _FileTrack::releaseResources()
 {
     // Release any resources if needed

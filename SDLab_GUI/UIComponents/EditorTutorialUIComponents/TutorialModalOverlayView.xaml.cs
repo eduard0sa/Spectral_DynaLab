@@ -1,5 +1,6 @@
-using System.Text.Json;
 using Microsoft.Maui.Controls.Shapes;
+using SDLab_GUI.UIComponents.Editors;
+using System.Text.Json;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.Tutorials
@@ -101,7 +102,7 @@ namespace SDLab_GUI.Tutorials
         /// <param name="stepIndex">Step int index (beggins with 0).</param>
         private void displayStep(int stepIndex)
         {
-            if(stepIndex < tutorialData.steps.Count)
+            if (stepIndex < tutorialData.steps.Count)
             {
                 for (int i = 0; i < tutorialData.steps[stepIndex].captions.Count; i++)
                 {
@@ -139,86 +140,148 @@ namespace SDLab_GUI.Tutorials
                 }
                 else
                 {
+                    int countMidiHightlightObjects = 0;
                     for (int i = 0; i < tutorialData.steps[stepIndex].objectsToHighlight.Count; i++)
                     {
                         int currIndex = (int)i;
 
                         struct_elementBoundInfo targetButtonRectBounds = editorMainPageRefOBJ.highlightBTN(tutorialData.steps[stepIndex].objectsToHighlight[i]);
 
-                        drawButtonHighlighter(targetButtonRectBounds);
-
-                        TapGestureRecognizer buttonAreaClickGestureRecognizer = new TapGestureRecognizer();
-
-                        buttonAreaClickGestureRecognizer.Tapped += (o, e) =>
+                        if (tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectType == "VisualElement")
                         {
-                            Page targetPage = null;
+                            drawButtonHighlighter(targetButtonRectBounds);
 
-                            for (int j = 0; j < Shell.Current.Navigation.NavigationStack.Count; j++)
-                            {
-                                if (Shell.Current.Navigation.NavigationStack[j] != null)
-                                {
-                                    if (Shell.Current.Navigation.NavigationStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
-                                    {
-                                        targetPage = Shell.Current.Navigation.NavigationStack[j];
-                                    }
-                                }
-                            }
+                            TapGestureRecognizer buttonAreaClickGestureRecognizer = new TapGestureRecognizer();
 
-                            if (targetPage == null)
+                            buttonAreaClickGestureRecognizer.Tapped += (o, e) =>
                             {
-                                for (int j = 0; j < Shell.Current.Navigation.ModalStack.Count; j++)
+                                Page targetPage = null;
+
+                                for (int j = 0; j < Shell.Current.Navigation.NavigationStack.Count; j++)
                                 {
-                                    if (Shell.Current.Navigation.ModalStack[j] != null)
+                                    if (Shell.Current.Navigation.NavigationStack[j] != null)
                                     {
-                                        if (Shell.Current.Navigation.ModalStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
+                                        if (Shell.Current.Navigation.NavigationStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
                                         {
-                                            targetPage = Shell.Current.Navigation.ModalStack[j];
+                                            targetPage = Shell.Current.Navigation.NavigationStack[j];
                                         }
                                     }
                                 }
-                            }
 
-                            if (targetPage != null)
-                            {
-                                Point? position = e.GetPosition(targetButtonRectBounds.sourceElement);
-                                VisualElement targetButton = targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName);
-
-                                if (position != null && targetButton != null)
+                                if (targetPage == null)
                                 {
-                                    double x = position.Value.X;
-                                    double y = position.Value.Y;
-
-                                    if (x >= 0 && x <= targetButtonRectBounds.Bounds.Width && y >= 0 && y <= targetButtonRectBounds.Bounds.Height)
+                                    for (int j = 0; j < Shell.Current.Navigation.ModalStack.Count; j++)
                                     {
-                                        editorMainPageRefOBJ.closeTutorialOverlay();
-                                        if(targetButton is Button)
+                                        if (Shell.Current.Navigation.ModalStack[j] != null)
                                         {
-                                            ((Button)targetButton).Command.Execute(null);
+                                            if (Shell.Current.Navigation.ModalStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
+                                            {
+                                                targetPage = Shell.Current.Navigation.ModalStack[j];
+                                            }
                                         }
-                                        else if(targetButton is Switch)
-                                        {
-                                            ((Switch)targetButton).IsToggled = !((Switch)targetButton).IsToggled;
-                                        }
-
-                                        TutorialContentLayout.Children.Clear();
-                                        TutorialOpenAbsoluteSpace.Children.Clear();
-                                        editorMainPageRefOBJ.stopBTNHighlight(tutorialData.steps[stepIndex].objectsToHighlight[currIndex]);
-
-                                        Microsoft.UI.Xaml.DispatcherTimer nextStepTimer = new Microsoft.UI.Xaml.DispatcherTimer();
-                                        nextStepTimer.Interval = TimeSpan.FromMilliseconds(500);
-                                        nextStepTimer.Tick += delegate
-                                        {
-                                            editorMainPageRefOBJ.showTutorialOverlay();
-                                            displayStep(stepIndex + 1);
-                                            nextStepTimer.Stop();
-                                        };
-                                        nextStepTimer.Start();
                                     }
                                 }
-                            }
+
+                                if (targetPage != null)
+                                {
+                                    Point? position = e.GetPosition(targetButtonRectBounds.sourceElement);
+                                    VisualElement targetButton = targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName);
+
+                                    if (position != null && targetButton != null)
+                                    {
+                                        double x = position.Value.X;
+                                        double y = position.Value.Y;
+
+                                        if (x >= 0 && x <= targetButtonRectBounds.Bounds.Width && y >= 0 && y <= targetButtonRectBounds.Bounds.Height)
+                                        {
+                                            editorMainPageRefOBJ.closeTutorialOverlay();
+                                            if (targetButton is Button)
+                                            {
+                                                ((Button)targetButton).Command.Execute(null);
+                                            }
+                                            else if(targetButton is ImageButton)
+                                            {
+                                                ((ImageButton)targetButton).Command.Execute(null);
+                                            }
+                                            else if (targetButton is Switch)
+                                            {
+                                                ((Switch)targetButton).IsToggled = !((Switch)targetButton).IsToggled;
+                                            }
+
+                                            TutorialContentLayout.Children.Clear();
+                                            TutorialOpenAbsoluteSpace.Children.Clear();
+                                            editorMainPageRefOBJ.stopBTNHighlight(tutorialData.steps[stepIndex].objectsToHighlight[currIndex]);
+
+                                            Microsoft.UI.Xaml.DispatcherTimer nextStepTimer = new Microsoft.UI.Xaml.DispatcherTimer();
+                                            nextStepTimer.Interval = TimeSpan.FromMilliseconds(500);
+                                            nextStepTimer.Tick += delegate
+                                            {
+                                                editorMainPageRefOBJ.showTutorialOverlay();
+                                                displayStep(stepIndex + 1);
+                                                nextStepTimer.Stop();
+                                            };
+                                            nextStepTimer.Start();
+                                        }
+                                    }
+                                }
+                            };
+
+                            tutorialMainGrid.GestureRecognizers.Add(buttonAreaClickGestureRecognizer);
+                        }
+                        else
+                        {
+                            countMidiHightlightObjects++;
+                        }
+                    }
+
+                    if(countMidiHightlightObjects > 0)
+                    {
+                        Button okBTN = new Button()
+                        {
+                            Text = "OK!",
+                            FontFamily = "Orbitron",
+                            FontSize = 18,
+                            BackgroundColor = (Color)Application.Current.Resources["DefaultPastelRed"],
+                            CornerRadius = 5,
+                            HeightRequest = 50,
+                            WidthRequest = 150,
+                            Margin = new Thickness(0, 0, 0, 20)
                         };
 
-                        tutorialMainGrid.GestureRecognizers.Add(buttonAreaClickGestureRecognizer);
+                        okBTN.Clicked += delegate {
+                            editorMainPageRefOBJ.closeTutorialOverlay();
+                        };
+
+                        Page targetPage = null;
+
+                        if (targetPage == null)
+                        {
+                            for (int j = 0; j < Shell.Current.Navigation.ModalStack.Count; j++)
+                            {
+                                if (Shell.Current.Navigation.ModalStack[j] != null)
+                                {
+                                    if (Shell.Current.Navigation.ModalStack[j].AutomationId == "MIDIInterfaceEditorModal")
+                                    {
+                                        targetPage = Shell.Current.Navigation.ModalStack[j];
+                                    }
+                                }
+                            }
+                        }
+
+                        if(targetPage != null)
+                        {
+                            ((MIDIInterfaceEditor)targetPage).PianoRoll.EndNotesHighlightTutorialTaskAction = delegate
+                            {
+                                editorMainPageRefOBJ.showTutorialOverlay();
+
+                                TutorialContentLayout.Children.Clear();
+                                TutorialOpenAbsoluteSpace.Children.Clear();
+
+                                displayStep(stepIndex + 1);
+                            };
+                        }
+
+                        TutorialContentLayout.Children.Add(okBTN);
                     }
                 }
             }
@@ -255,12 +318,12 @@ namespace SDLab_GUI.Tutorials
                 WidthRequest = targetButtonRectBounds.Bounds.Width,
                 HeightRequest = targetButtonRectBounds.Bounds.Height,
                 TranslationX = absoluteHighlightBoxPosition.x,
-                TranslationY = absoluteHighlightBoxPosition.y
+                TranslationY = absoluteHighlightBoxPosition.y,
+                Stroke = Color.FromArgb("#fffb42"),
             };
             highlightBorder.StrokeShape = new RoundRectangle()
             {
                 CornerRadius = 5,
-                BackgroundColor = Colors.White
             };
             highlightBorder.StrokeThickness = 5;
 

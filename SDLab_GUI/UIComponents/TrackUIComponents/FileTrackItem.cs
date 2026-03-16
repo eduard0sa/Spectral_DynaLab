@@ -82,12 +82,12 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             //Adding Slider Controls to the main Control Group.
             TrackItemControls[0].addSliderControl("Gain:", enumBaseColor.GREEN, gainSliderData, gainChangeEvent);
-            TrackItemControls[0].addSwitchControl("Repeat Track:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent);
+            TrackItemControls[0].addSwitchControl("Repetir faixa:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent);
             TrackItemControls.Add(new TrackItemSliderControlGroup(this));
             TrackItemControls[1].addSliderControl("Tempo:", enumBaseColor.GREEN, tempoSliderData, tempoChangeEvent);
             TrackItemControls[1].addSliderControl("Pitch:", enumBaseColor.GREEN, pitchSliderData, pitchChangeEvent);
             TrackItemControls.Add(new TrackItemSliderControlGroup(this));
-            TrackItemControls[2].addSwitchControl("Time-Pitch Coupling", enumBaseColor.GREEN, timePitchCouplingModeSwitchData, TimePitchCouplingChangeEvent);
+            TrackItemControls[2].addSwitchControl("Ligação Time-Pitch", enumBaseColor.GREEN, timePitchCouplingModeSwitchData, TimePitchCouplingChangeEvent);
 
             Children.Add(TrackTriangleMark);
             Children.Add(TrackItemHeader);

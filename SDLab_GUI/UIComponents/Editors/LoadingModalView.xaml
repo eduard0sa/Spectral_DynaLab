@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SDLab_GUI.UIComponents.Editors.LoadingModalView"
              Title="LoadingModalView"
-             BackgroundColor="Transparent">
+             BackgroundColor="Transparent"
+             AutomationId="LoadingScreenModal">
 
     <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#bb101413">
         <Grid.RowDefinitions>
