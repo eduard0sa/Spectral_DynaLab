@@ -3,7 +3,7 @@
     {
       "captions": [
         "Olá e bem vindo ao tutorial do SPECTRAL DYNALab!",
-        "Este tutorial ajudar-lhe-á a aprender as funcionalidades básicas do editor, assim como a produzir a sua própria música. Vamos começar!"
+        "Este tutorial ajudar-te-á a aprender as funcionalidades básicas do editor, assim como a produzir a tua própria música. Vamos começar!"
       ],
       "objectsToHighlight": [
         {
@@ -231,6 +231,45 @@
           "objectName": "midiNote_28-29_36",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "13º PASSO:",
+        "Clica no botão destacado para o programa processar a tua composição!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "midiWaveformRenderBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "14º PASSO:",
+        "Clica no X para fechar o editor MIDI!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "modalBoxCloseBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "MIDIInterfaceEditorModal"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "15º PASSO:",
+        "Clica no botão play!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "mainPlayBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
         }
       ]
     }
