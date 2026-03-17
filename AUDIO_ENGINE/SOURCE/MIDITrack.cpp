@@ -129,22 +129,17 @@ void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> no
             }
             
 			processFrequencyChange(bufferToFill, notesPitchRatioArr[i][j].pitchRatio);
-            
-            /*for (int k = 0; k < bufferLength; k++) {
-                buffer[i * samplesPerNoteUnit + k] = (float)bufferToFill.buffer->getSample(0, k);
-            }*/
 
-            /*int count = 0;
+            int count = 0;
             float value = 0;
-            const int maxSearchSamples = std::min(static_cast<int>(bufferLength * 0.1f), 4410); // Search first 10% or 100ms max
 
-            while (count < maxSearchSamples && value <= 0.0001f) {
+            while (count < bufferLength && value <= 0.0001f) {
                 value = std::abs(bufferToFill.buffer->getSample(0, count));
                 count++;
             }
 
             // Safety check: if no attack found, start from 0
-            if (count >= maxSearchSamples) {
+            if (count >= bufferLength) {
                 count = 0;
             }
 
@@ -159,19 +154,15 @@ void _MIDITrack::RenderMIDIWaveform(std::vector<std::vector<struct_noteInfo>> no
                 if (k < safeFadeLength && safeFadeLength > 0) {
                     // Attack: smooth quadratic fade-in
                     float attackPhase = static_cast<float>(k) / safeFadeLength;
-                    envelope = attackPhase * attackPhase;
+                    envelope = pow(MathConstants<float>().euler, (attackPhase - 1000) / 40.0f);
                 }
                 else if (k > remainingSamples - safeFadeLength && safeFadeLength > 0) {
                     // Release: smooth quadratic fade-out
                     float releasePhase = static_cast<float>(remainingSamples - k) / safeFadeLength;
-                    envelope = releasePhase * releasePhase;
+                    envelope = pow(MathConstants<float>().euler, (releasePhase - 1000) / 40.0f);
                 }
                 
                 buffer[i * samplesPerNoteUnit + k] = static_cast<float>(bufferToFill.buffer->getSample(0, count + k)) * envelope;
-            }*/
-
-            for (int k = 0; k < bufferLength; k++) {
-                buffer[i * samplesPerNoteUnit + k] = bufferToFill.buffer->getSample(0, k);
             }
         }
     }

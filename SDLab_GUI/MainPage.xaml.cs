@@ -24,6 +24,7 @@ namespace SDLab_GUI
 
         private enumEditorMode currentEditorMode;
 
+        private ICommand mainPlayButtonCommand;
         private ICommand midiTrackBTNClickCommand;
         private ICommand fileTrackBTNClickCommand;
         private ICommand oscillatorTrackBTNClickCommand;
@@ -35,6 +36,7 @@ namespace SDLab_GUI
         private int zoomDirection = -1;
 
         public ICommand MIDITrackBTNClickCommand { get => midiTrackBTNClickCommand; set => midiTrackBTNClickCommand = value; }
+        public enumEditorMode CurrentEditorMode { get => currentEditorMode; set => currentEditorMode = value; }
 
         public MainPage(enumEditorMode runMode)
         {
@@ -44,17 +46,19 @@ namespace SDLab_GUI
             //Initiallize audio Engine/Mixer
             AudioEngineWrapper audioEngineWrapper = new AudioEngineWrapper();
             audioManager = new AudioEngineMGMT(this);
-            currentEditorMode = runMode;
+            CurrentEditorMode = runMode;
 
             audioManager.initMixer();
 
             masterVolumeSlider.Value = audioManager.vsp.Volume * 100;
             masterVolumeSliderValueLabel.Text = $"{masterVolumeSlider.Value}%";
 
+            mainPlayButtonCommand = new Command(PlayPauseMixerEvent);
             midiTrackBTNClickCommand = new Command(addMIDITrackBTNClickedEvent);
             fileTrackBTNClickCommand = new Command(addFileTrackBTNClickedEvent);
             oscillatorTrackBTNClickCommand = new Command(addOscillatorBTNClickedEvent);
 
+            mainPlayBTN.Command = mainPlayButtonCommand;
             addMidiTrackBTN.Command = MIDITrackBTNClickCommand;
             addFileTrackBTN.Command = fileTrackBTNClickCommand;
             addOscillatorTrackBTN.Command = oscillatorTrackBTNClickCommand;
@@ -129,9 +133,7 @@ namespace SDLab_GUI
         /// This method is attached to the play/pause button at the top of the suite interface.
         /// It tells the audio mixer to pause or play music.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlayPauseMixerEvent(object? sender, EventArgs e)
+        private void PlayPauseMixerEvent()
         {
             switch (mainPlayBTN.Source.ToString().Split(" ")[1])
             {
@@ -152,7 +154,7 @@ namespace SDLab_GUI
         /// </summary>
         public void PlayPauseExternalWrapper()
         {
-            PlayPauseMixerEvent(new object(), new EventArgs());
+            PlayPauseMixerEvent();
         }
 
         /// <summary>
@@ -249,7 +251,7 @@ namespace SDLab_GUI
         /// <param name="e">The event data.</param>
         private async void addMIDITrackBTNClickedEvent()
         {
-            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this, _isTutorial: currentEditorMode == enumEditorMode.Tutorial ? true : false, _openMIDIBTNAutomationName: $"track_{trackStackLayout.Children.Count}");
+            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this, _isTutorial: CurrentEditorMode == enumEditorMode.Tutorial ? true : false, _openMIDIBTNAutomationName: $"track_{trackStackLayout.Children.Count}");
 
             trackStackLayout.Children.Add(newMIDITrack);
         }

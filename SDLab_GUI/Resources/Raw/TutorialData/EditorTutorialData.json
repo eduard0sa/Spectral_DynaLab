@@ -72,7 +72,7 @@
       ],
       "objectsToHighlight": [
         {
-          "objectName": "midiNote_0-7_40",
+          "objectName": "midiNote_0-6_40",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
@@ -97,37 +97,37 @@
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_20-37_47",
+          "objectName": "midiNote_20-36_47",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_37-44_45",
+          "objectName": "midiNote_36-42_45",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_45-47_45",
+          "objectName": "midiNote_44-46_45",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_47-49_48",
+          "objectName": "midiNote_46-48_48",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_49-53_47",
+          "objectName": "midiNote_48-52_47",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_53-57_43",
+          "objectName": "midiNote_52-56_43",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_57-67_40",
+          "objectName": "midiNote_56-71_40",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         }
@@ -218,17 +218,17 @@
       ],
       "objectsToHighlight": [
         {
-          "objectName": "midiNote_0-7_36",
+          "objectName": "midiNote_5-9_36",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_14-21_36",
+          "objectName": "midiNote_14-18_36",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         },
         {
-          "objectName": "midiNote_28-29_36",
+          "objectName": "midiNote_23-27_36",
           "objectType": "MIDINote",
           "objectSourceName": "MIDIInterfaceEditorModal"
         }

@@ -88,6 +88,10 @@ namespace SDLab_GUI
             {
                 EditorInterfaceInstance = new MainPage(enumEditorMode.Default);
             }
+            else if(EditorInterfaceInstance.CurrentEditorMode == enumEditorMode.Tutorial)
+            {
+                EditorInterfaceInstance = new MainPage(enumEditorMode.Default);
+            }
 
             Navigation.PushAsync(EditorInterfaceInstance);
         }

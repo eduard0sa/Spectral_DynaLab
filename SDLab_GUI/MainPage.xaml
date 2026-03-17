@@ -26,7 +26,7 @@
 
             <FlexLayout FlexLayout.Grow="0.34" Direction="Row" JustifyContent="Center" AlignItems="Center">
                 <ImageButton Source="prev_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
-                <ImageButton x:Name="mainPlayBTN" Source="play_solid_full.png" Clicked="PlayPauseMixerEvent" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
+                <ImageButton x:Name="mainPlayBTN" AutomationId="mainPlayBTN" Source="play_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
                 <ImageButton Source="for_solid_full.png" Padding="15" WidthRequest="50" HeightRequest="50" Margin="0, 0, 5, 0" BackgroundColor="#21232a" CornerRadius="5"/>
             </FlexLayout>
 
