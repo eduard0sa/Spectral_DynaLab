@@ -32,9 +32,8 @@ namespace SDLab_GUI.Configurations
             {
                 firstOpenedDateTime = DateTime.Parse($"{globalConfigs.DocumentElement.ChildNodes[0].Attributes[0].InnerText} {globalConfigs.DocumentElement.ChildNodes[0].Attributes[1].InnerText}");
                 lastOpenedDateTime = DateTime.Parse($"{globalConfigs.DocumentElement.ChildNodes[1].Attributes[0].InnerText} {globalConfigs.DocumentElement.ChildNodes[1].Attributes[1].InnerText}");
-                XmlNodeList recentProjects;
 
-                recentProjects = globalConfigs.DocumentElement.ChildNodes[2].ChildNodes;
+                XmlNodeList recentProjects = globalConfigs.DocumentElement.ChildNodes[2].ChildNodes;
 
                 for (int i = 0; i < recentProjects.Count; i++)
                 {

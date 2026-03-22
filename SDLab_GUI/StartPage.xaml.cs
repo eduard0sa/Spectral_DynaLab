@@ -1,6 +1,7 @@
 using SDLab_GUI.UIComponents.StartPageUIComponents;
 using SDLab_GUI.Configurations;
 using System.Xml;
+using SDLab_GUI.UIComponents.Editors;
 
 namespace SDLab_GUI
 {
@@ -9,6 +10,11 @@ namespace SDLab_GUI
         MainPage EditorInterfaceInstance = null;
         GlobalConfigs globalConfigurationSet;
         string configsFilePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/SPECTRAL_DYNALab/configs/global_configs.xml";
+
+        string editorConfigsFilePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/SPECTRAL_DYNALab/configs/editor_settings.xml";
+        EditorConfigs editorConfigurationSet;
+
+        SettingsModalEditor settingsEditorModal;
 
         public StartPage()
         {
@@ -29,6 +35,11 @@ namespace SDLab_GUI
             globalConfigurationSet.updateGlobalConfigsXML();
 
             loadRecentProjectUIList();
+
+            checkEditorConfigsFileExistance();
+
+            editorConfigurationSet = new EditorConfigs(editorConfigsFilePath);
+            editorConfigurationSet.loadConfigsFromFile();
         }
 
         private void showMainDashboard(object? sender, EventArgs e)
@@ -71,6 +82,22 @@ namespace SDLab_GUI
             }
         }
 
+        private void checkEditorConfigsFileExistance()
+        {
+            if (!File.Exists(configsFilePath))
+            {
+                XmlDocument globalConfigs = new XmlDocument();
+                globalConfigs.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\r\n<EDITOR_CONFIGS>\r\n\t<GENERAL_SETTINGS>\r\n\t\t<DefaultGeneralVolume>100</DefaultGeneralVolume>\r\n\t</GENERAL_SETTINGS>\r\n\t\r\n\t<OSCILLATOR_SETTINGS>\r\n\t\t<DefaultFrequency>30</DefaultFrequency>\r\n\t\t<DefaultGain>0.50</DefaultGain>\r\n\t\t<DefaultWaveFormat>Sine</DefaultWaveFormat>\r\n\t</OSCILLATOR_SETTINGS>\r\n\r\n\t<FILE_TRACK_SETTINGS>\r\n\t\t<DefaultGain>0.50</DefaultGain>\r\n\t\t<DefaultRepeatMode>true</DefaultRepeatMode>\r\n\t\t<DefaultTempo>1.0</DefaultTempo>\r\n\t\t<DefaultPitch>1.0</DefaultPitch>\r\n\t\t<DefaultTimePitchCouplingMode>true</DefaultTimePitchCouplingMode>\r\n\t</FILE_TRACK_SETTINGS>\r\n\r\n\t<MIDI_TRACK_SETTINGS>\r\n\t\t<DefaultGain>0.50</DefaultGain>\r\n\t\t<DefaultRepeatMode>true</DefaultRepeatMode>\r\n\t\t<DefaultOscillatorBaseFrequency>262.63</DefaultOscillatorBaseFrequency>\r\n\t\t<DefaultOscillatorBaseGain>0.50</DefaultOscillatorBaseGain>\r\n\t\t<DefaultOscillatorWaveFormat>Sine</DefaultOscillatorWaveFormat>\r\n\t\t<DefaultFileTrackBaseTempo>1.0</DefaultFileTrackBaseTempo>\r\n\t\t<DefaultFileTrackBasePitch>1.0</DefaultFileTrackBasePitch>\r\n\t\t<DefaultFileTrackBaseTimePitchCouplingMode>true</DefaultFileTrackBaseTimePitchCouplingMode>\r\n\t</MIDI_TRACK_SETTINGS>\r\n\t\r\n\t<DSP_SETTINGS>\r\n\t\t<DISTORTION_SETTINGS>\r\n\t\t\t<DefaultDistortionDrive>10.0</DefaultDistortionDrive>\r\n\t\t\t<DefaultDistortionType>SoftClip</DefaultDistortionType>\r\n\t\t</DISTORTION_SETTINGS>\r\n\t\t\r\n\t\t<COMPRESSOR_SETTINGS>\r\n\t\t\t<DefaultThreshold>-10</DefaultThreshold>\r\n\t\t\t<DefaultRatio>2.0</DefaultRatio>\r\n\t\t\t<DefaultAttack>20.00</DefaultAttack>\r\n\t\t\t<DefaultRelease>500.00</DefaultRelease>\r\n\t\t</COMPRESSOR_SETTINGS>\r\n\t\t\r\n\t\t<REVERB_SETTINGS>\r\n\t\t\t<DefaultRoomSize>0.50</DefaultRoomSize>\r\n\t\t\t<DefaultDamping>0.50</DefaultDamping>\r\n\t\t\t<DefaultWetLevel>0.50</DefaultWetLevel>\r\n\t\t\t<DefaultDryLevel>1.0</DefaultDryLevel>\r\n\t\t\t<DefaultWidth>0.50</DefaultWidth>\r\n\t\t\t<DefaultFreezeMode>false</DefaultFreezeMode>\r\n\t\t</REVERB_SETTINGS>\r\n\r\n\t\t<CHORUS_SETTINGS>\r\n\t\t\t<DefaultRate>0.80</DefaultRate>\r\n\t\t\t<DefaultDepth>0.40</DefaultDepth>\r\n\t\t\t<DefaultDelay>25.00</DefaultDelay>\r\n\t\t\t<DefaultFeedback>0.00</DefaultFeedback>\r\n\t\t\t<DefaultMix>0.50</DefaultMix>\r\n\t\t</CHORUS_SETTINGS>\r\n\t</DSP_SETTINGS>\r\n</EDITOR_CONFIGS>");
+
+                if (!Directory.Exists(Path.GetDirectoryName(configsFilePath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(configsFilePath));
+                }
+
+                globalConfigs.Save(configsFilePath);
+            }
+        }
+
         private void loadRecentProjectUIList() {
             for(int i = 0; i < globalConfigurationSet.RecentProjects.Count; i++)
             {
@@ -84,15 +111,20 @@ namespace SDLab_GUI
 
         private void StartEditorEnvironmentEvent(object? sender, EventArgs e)
         {
-            if (EditorInterfaceInstance == null)
-            {
-                EditorInterfaceInstance = new MainPage(enumEditorMode.Default);
-            }
-            else if(EditorInterfaceInstance.CurrentEditorMode == enumEditorMode.Tutorial)
+            EditorInterfaceInstance = new MainPage(enumEditorMode.Default);
+
+            if(EditorInterfaceInstance.CurrentEditorMode == enumEditorMode.Tutorial)
             {
                 EditorInterfaceInstance = new MainPage(enumEditorMode.Default);
             }
 
+            ShowEditorEnvironmentBTN.IsVisible = true;
+
+            Navigation.PushAsync(EditorInterfaceInstance);
+        }
+
+        private void ShowEditorEnvironmentEvent(object? sender, EventArgs e)
+        {
             Navigation.PushAsync(EditorInterfaceInstance);
         }
 
@@ -101,6 +133,12 @@ namespace SDLab_GUI
             EditorInterfaceInstance = new MainPage(enumEditorMode.Tutorial);
 
             Navigation.PushAsync(EditorInterfaceInstance);
+        }
+
+        private void OpenSettingsModal(object? sender, EventArgs e)
+        {
+            settingsEditorModal = new SettingsModalEditor(editorConfigurationSet);
+            Navigation.PushModalAsync(settingsEditorModal);
         }
 
         /// <summary>

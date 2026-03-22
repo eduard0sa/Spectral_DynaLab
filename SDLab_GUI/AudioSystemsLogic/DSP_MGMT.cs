@@ -1,4 +1,5 @@
-﻿using SDLab_GUI.InteropWrapper;
+﻿using SDLab_GUI.Configurations;
+using SDLab_GUI.InteropWrapper;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.AudioSystemsLogic
@@ -14,7 +15,7 @@ namespace SDLab_GUI.AudioSystemsLogic
         /// <summary>
         /// Specifies the types of audio distortion effects.
         /// </summary>
-        enum enum_distortionType
+        public enum enum_distortionType
         {
             SoftClip,
             HardClip,
@@ -46,10 +47,16 @@ namespace SDLab_GUI.AudioSystemsLogic
         internal structPickerData DistortionTypePickerData { get => distortionTypePickerData; set => distortionTypePickerData = value; }
         public nint DistortionDSPProcessor { get => distortionDSPProcessor; }
 
-        public DistortionDSP(nint engine, AudioEngineWrapper engineBridgeRef)
+        public DistortionDSP(nint engine, AudioEngineWrapper engineBridgeRef, EditorConfigs defaultSettings)
         {
             this.engineBridgeRef = engineBridgeRef;
             distortionDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.DISTORTION);
+
+            distortionDriveSliderData.defVal = defaultSettings._DspSettings.DistortionSettings.DefaultDistortionDrive;
+            engineBridgeRef.ChangeDistortionDrive(distortionDSPProcessor, distortionDriveSliderData.defVal);
+
+            distortionTypePickerData.defValIndex = (int)defaultSettings._DspSettings.DistortionSettings.DefaultDistortionType1;
+            engineBridgeRef.ChangeDistortionFunctionToUse(distortionDSPProcessor, distortionTypePickerData.defValIndex);
         }
 
         /// <summary>
@@ -145,10 +152,19 @@ namespace SDLab_GUI.AudioSystemsLogic
 
         public nint CompressorDSPProcessor { get => compressorDSPProcessor; }
 
-        public CompressorDSP(nint engine, AudioEngineWrapper engineBridgeRef)
+        public CompressorDSP(nint engine, AudioEngineWrapper engineBridgeRef, EditorConfigs defaultSettings)
         {
             this.engineBridgeRef = engineBridgeRef;
             compressorDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.COMPRESSOR);
+
+            compressorThresholdSliderData.defVal = defaultSettings._DspSettings.CompressorSettings.DefaultThreshold;
+            engineBridgeRef.ChangeCompressorThreshold(compressorDSPProcessor, compressorThresholdSliderData.defVal);
+            compressorRatioSliderData.defVal = defaultSettings._DspSettings.CompressorSettings.DefaultRatio;
+            engineBridgeRef.ChangeCompressorRatio(compressorDSPProcessor, compressorRatioSliderData.defVal);
+            compressorAttackSliderData.defVal = defaultSettings._DspSettings.CompressorSettings.DefaultAttack;
+            engineBridgeRef.ChangeCompressorAttack(compressorDSPProcessor, compressorAttackSliderData.defVal);
+            compressorReleaseSliderData.defVal = defaultSettings._DspSettings.CompressorSettings.DefaultRelease;
+            engineBridgeRef.ChangeCompressorRelease(compressorDSPProcessor, compressorReleaseSliderData.defVal);
         }
 
         /// <summary>
@@ -286,10 +302,23 @@ namespace SDLab_GUI.AudioSystemsLogic
         internal structSliderData ReverbWidthSliderData { get => reverbWidthSliderData; set => reverbWidthSliderData = value; }
         internal structSwitchData ReverbFreezeModeSliderData { get => reverbFreezeModeSliderData; set => reverbFreezeModeSliderData = value; }
 
-        public ReverbDSP(nint engine, AudioEngineWrapper engineBridgeRef)
+        public ReverbDSP(nint engine, AudioEngineWrapper engineBridgeRef, EditorConfigs defaultSettings)
         {
             this.engineBridgeRef = engineBridgeRef;
             reverbDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.REVERB);
+
+            reverbRoomSizeSliderData.defVal = defaultSettings._DspSettings.ReverbSettings.DefaultRoomSize;
+            engineBridgeRef.ChangeReverbRoomSize(reverbDSPProcessor, reverbRoomSizeSliderData.defVal);
+            reverbDampingSliderData.defVal = defaultSettings._DspSettings.ReverbSettings.DefaultDamping;
+            engineBridgeRef.ChangeReverbDamping(reverbDSPProcessor, reverbDampingSliderData.defVal);
+            reverbWetLevelSliderData.defVal = defaultSettings._DspSettings.ReverbSettings.DefaultWetLevel;
+            engineBridgeRef.ChangeReverbWetLevel(reverbDSPProcessor, reverbWetLevelSliderData.defVal);
+            reverbDryLevelSliderData.defVal = defaultSettings._DspSettings.ReverbSettings.DefaultDryLevel;
+            engineBridgeRef.ChangeReverbDryLevel(reverbDSPProcessor, reverbDryLevelSliderData.defVal);
+            reverbWidthSliderData.defVal = defaultSettings._DspSettings.ReverbSettings.DefaultWidth;
+            engineBridgeRef.ChangeReverbWidth(reverbDSPProcessor, reverbWidthSliderData.defVal);
+            reverbFreezeModeSliderData.defValIndex = defaultSettings._DspSettings.ReverbSettings.DefaultFreezeMode;
+            engineBridgeRef.ChangeReverbFreezeMode(reverbDSPProcessor, reverbFreezeModeSliderData.defValIndex);
         }
 
         /// <summary>
@@ -442,10 +471,21 @@ namespace SDLab_GUI.AudioSystemsLogic
         public structSliderData ChorusFeedbackSliderData { get => chorusFeedbackSliderData; set => chorusFeedbackSliderData = value; }
         public structSliderData ChorusMixSliderData { get => chorusMixSliderData; set => chorusMixSliderData = value; }
 
-        public ChorusDSP(nint engine, AudioEngineWrapper engineBridgeRef)
+        public ChorusDSP(nint engine, AudioEngineWrapper engineBridgeRef, EditorConfigs defaultSettings)
         {
             this.engineBridgeRef = engineBridgeRef;
             chorusDSPProcessor = engineBridgeRef.AddDSPEffect(engine, (int)enumDSPType.CHORUS);
+
+            chorusRateSliderData.defVal = defaultSettings._DspSettings.ChorusSettings.DefaultRate;
+            engineBridgeRef.ChangeChorusRate(chorusDSPProcessor, chorusRateSliderData.defVal);
+            chorusDepthSliderData.defVal = defaultSettings._DspSettings.ChorusSettings.DefaultDepth;
+            engineBridgeRef.ChangeChorusDepth(chorusDSPProcessor, chorusDepthSliderData.defVal);
+            chorusCenterDelaySliderData.defVal = defaultSettings._DspSettings.ChorusSettings.DefaultDelay;
+            engineBridgeRef.ChangeChorusCenterDelay(chorusDSPProcessor, chorusCenterDelaySliderData.defVal);
+            chorusFeedbackSliderData.defVal = defaultSettings._DspSettings.ChorusSettings.DefaultFeedback;
+            engineBridgeRef.ChangeChorusFeedback(chorusDSPProcessor, chorusFeedbackSliderData.defVal);
+            chorusMixSliderData.defVal = defaultSettings._DspSettings.ChorusSettings.DefaultMix;
+            engineBridgeRef.ChangeChorusMix(chorusDSPProcessor, chorusMixSliderData.defVal);
         }
 
         /// <summary>

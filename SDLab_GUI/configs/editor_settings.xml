@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<EDITOR_CONFIGS>
+	<GENERAL_SETTINGS>
+		<DefaultGeneralVolume>100</DefaultGeneralVolume>
+	</GENERAL_SETTINGS>
+	
+	<OSCILLATOR_SETTINGS>
+		<DefaultFrequency>30</DefaultFrequency>
+		<DefaultGain>0.50</DefaultGain>
+		<DefaultWaveFormat>Sine</DefaultWaveFormat>
+	</OSCILLATOR_SETTINGS>
+
+	<FILE_TRACK_SETTINGS>
+		<DefaultGain>0.50</DefaultGain>
+		<DefaultRepeatMode>true</DefaultRepeatMode>
+		<DefaultTempo>1.0</DefaultTempo>
+		<DefaultPitch>1.0</DefaultPitch>
+		<DefaultTimePitchCouplingMode>true</DefaultTimePitchCouplingMode>
+	</FILE_TRACK_SETTINGS>
+
+	<MIDI_TRACK_SETTINGS>
+		<DefaultGain>0.50</DefaultGain>
+		<DefaultRepeatMode>true</DefaultRepeatMode>
+		<DefaultOscillatorBaseFrequency>262.63</DefaultOscillatorBaseFrequency>
+		<DefaultOscillatorBaseGain>0.50</DefaultOscillatorBaseGain>
+		<DefaultOscillatorWaveFormat>Sine</DefaultOscillatorWaveFormat>
+		<DefaultFileTrackBaseTempo>1.0</DefaultFileTrackBaseTempo>
+		<DefaultFileTrackBasePitch>1.0</DefaultFileTrackBasePitch>
+		<DefaultFileTrackBaseTimePitchCouplingMode>true</DefaultFileTrackBaseTimePitchCouplingMode>
+	</MIDI_TRACK_SETTINGS>
+	
+	<DSP_SETTINGS>
+		<DISTORTION_SETTINGS>
+			<DefaultDistortionDrive>10.0</DefaultDistortionDrive>
+			<DefaultDistortionType>SoftClip</DefaultDistortionType>
+		</DISTORTION_SETTINGS>
+		
+		<COMPRESSOR_SETTINGS>
+			<DefaultThreshold>-10</DefaultThreshold>
+			<DefaultRatio>2.0</DefaultRatio>
+			<DefaultAttack>20.00</DefaultAttack>
+			<DefaultRelease>500.00</DefaultRelease>
+		</COMPRESSOR_SETTINGS>
+		
+		<REVERB_SETTINGS>
+			<DefaultRoomSize>0.50</DefaultRoomSize>
+			<DefaultDamping>0.50</DefaultDamping>
+			<DefaultWetLevel>0.50</DefaultWetLevel>
+			<DefaultDryLevel>1.0</DefaultDryLevel>
+			<DefaultWidth>0.50</DefaultWidth>
+			<DefaultFreezeMode>false</DefaultFreezeMode>
+		</REVERB_SETTINGS>
+
+		<CHORUS_SETTINGS>
+			<DefaultRate>0.80</DefaultRate>
+			<DefaultDepth>0.40</DefaultDepth>
+			<DefaultDelay>25.00</DefaultDelay>
+			<DefaultFeedback>0.00</DefaultFeedback>
+			<DefaultMix>0.50</DefaultMix>
+		</CHORUS_SETTINGS>
+	</DSP_SETTINGS>
+</EDITOR_CONFIGS>

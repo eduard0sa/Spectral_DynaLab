@@ -12,19 +12,21 @@ namespace SDLab_GUI.UIComponents.Editors
         private AudioEngineMGMT audioEngineMGMT;
         private JuceAudioProvider audioProviderOBJ;
         private EventHandler modalBoxCloseEvent;
+        private MainPage MainPageOBJ;
 
         /// <summary>
         /// DSPModalEditor class constructor
         /// </summary>
         /// <param name="audioManager">Reference of the audioManager object, initialized in MainPage.xaml.cs.</param>
         /// <param name="audioProvider">Reference of the target oscillator audio provider.</param>
-        public DSPModalEditor(AudioEngineMGMT audioManager, JuceAudioProvider audioProvider)
+        public DSPModalEditor(AudioEngineMGMT audioManager, JuceAudioProvider audioProvider, MainPage _mainPageOBJ)
         {
             InitializeComponent();
 
             // Additional initialization code can be added here
             audioEngineMGMT = audioManager;
             audioProviderOBJ = audioProvider;
+            MainPageOBJ = _mainPageOBJ;
 
             dspChainStackLayout.Children.Clear();
 
@@ -90,7 +92,7 @@ namespace SDLab_GUI.UIComponents.Editors
         /// <param name="e"></param>
         private void addDistortionDSPBTNEvent(object? sender, EventArgs e)
         {
-            Global.structVariableDataTypeUnit distortionDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.DISTORTION);
+            Global.structVariableDataTypeUnit distortionDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.DISTORTION, MainPageOBJ.EditorConfigurationSet);
 
             dspChainStackLayout.Children.Add(distortionDSPUnit.dataUnit as DSPEffectItem<DistortionDSP>);
         }
@@ -102,7 +104,7 @@ namespace SDLab_GUI.UIComponents.Editors
         /// <param name="e"></param>
         private void addCompressorDSPBTNEvent(object? sender, EventArgs e)
         {
-            Global.structVariableDataTypeUnit compressorDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.COMPRESSOR);
+            Global.structVariableDataTypeUnit compressorDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.COMPRESSOR, MainPageOBJ.EditorConfigurationSet);
 
             dspChainStackLayout.Children.Add(compressorDSPUnit.dataUnit as DSPEffectItem<CompressorDSP>);
         }
@@ -114,7 +116,7 @@ namespace SDLab_GUI.UIComponents.Editors
         /// <param name="e"></param>
         private void addReverbDSPBTNEvent(object? sender, EventArgs e)
         {
-            Global.structVariableDataTypeUnit reverbDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.REVERB);
+            Global.structVariableDataTypeUnit reverbDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.REVERB, MainPageOBJ.EditorConfigurationSet);
 
             dspChainStackLayout.Children.Add(reverbDSPUnit.dataUnit as DSPEffectItem<ReverbDSP>);
         }
@@ -126,7 +128,7 @@ namespace SDLab_GUI.UIComponents.Editors
         /// <param name="e"></param>
         private void addChorusDSPBTNEvent(object? sender, EventArgs e)
         {
-            Global.structVariableDataTypeUnit chorusDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.CHORUS);
+            Global.structVariableDataTypeUnit chorusDSPUnit = audioProviderOBJ.addDSPEffect(Global.enumDSPType.CHORUS, MainPageOBJ.EditorConfigurationSet);
 
             dspChainStackLayout.Children.Add(chorusDSPUnit.dataUnit as DSPEffectItem<ChorusDSP>);
         }

@@ -93,6 +93,9 @@
 	  <MauiXaml Update="StartPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="UIComponents\Editors\SettingsModalEditor.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="UIComponents\EditorTutorialUIComponents\TutorialModalOverlayView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

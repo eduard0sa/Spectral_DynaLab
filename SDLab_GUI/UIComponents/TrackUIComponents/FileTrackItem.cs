@@ -176,7 +176,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="e"></param>
         private void openSFXEditorEvent(object? sender, EventArgs e)
         {
-            DSPModalEditor OscSFXDSPEditor = new DSPModalEditor(audioEngineMGMT, trackAudioProvider);
+            DSPModalEditor OscSFXDSPEditor = new DSPModalEditor(audioEngineMGMT, trackAudioProvider, mainPageOBJ);
             mainPageOBJ.Navigation.PushModalAsync(OscSFXDSPEditor);
             OscSFXDSPEditor.ModalBoxCloseEvent += closeSFXEditorEvent;
         }
@@ -196,6 +196,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             TrackItemWaveVizualizerArea.UpdateFrameTimer.Stop();
             audioEngineMGMT.removeAudioEngine(trackAudioProvider);
             (Parent as VerticalStackLayout).Children.Remove(this);
+
+            mainPageOBJ.checkEmptyTrackListMessageVisibility();
         }
     }
 }

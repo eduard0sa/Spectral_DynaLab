@@ -69,7 +69,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             Margin = new Thickness(0, 10, 0, 0);
 
             //Adding Slider Controls to the main Control Group.
-            TrackItemControls[0].addSliderControl("Gain:", enumBaseColor.GREEN, gainSliderData, gainChangeEvent);
+            TrackItemControls[0].addSliderControl("Ganho/Volume:", enumBaseColor.GREEN, gainSliderData, gainChangeEvent);
 
             string repeatTrackAutomationID = isTutorial ? $"repeatMIDI_{OpenMIDIEditorButton.OpenSFXBTN.AutomationId[OpenMIDIEditorButton.OpenSFXBTN.AutomationId.Length - 1]}" : null;
             TrackItemControls[0].addSwitchControl("Repetir faixa:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent, repeatTrackAutomationID);
@@ -148,6 +148,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             TrackItemWaveVizualizerArea.UpdateFrameTimer.Stop();
             audioEngineMGMT.removeAudioEngine(trackAudioProvider);
             (Parent as VerticalStackLayout).Children.Remove(this);
+
+            mainPageOBJ.checkEmptyTrackListMessageVisibility();
         }
     }
 

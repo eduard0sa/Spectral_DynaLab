@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SDLab_GUI.UIComponents.Editors.SettingsModalEditor"
+             Title="SettingsModalEditor"
+             BackgroundColor="Transparent"
+             AutomationId="SettingsModalEditor">
+
+    <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="#bb101413">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="70*"/>
+            <ColumnDefinition Width="15*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="1" BackgroundColor="#161c1b">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="75*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" BackgroundColor="Transparent" Padding="20, 20, 20, 20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="50*"/>
+                </Grid.RowDefinitions>
+                
+                <FlexLayout Grid.Row="0" Direction="Row" JustifyContent="SpaceBetween" AlignItems="Center" Padding="0, 0, 0, 10">
+                    <Label Text="Editor de Configurações" FontSize="Large" FontAttributes="Bold" TextColor="#72b550"/>
+                    <ImageButton x:Name="modalBoxCloseBTN" Source="close_xmark.png" WidthRequest="3" HeightRequest="3" BackgroundColor="Transparent" Clicked="CloseModalBTN_Clicked"/>
+                </FlexLayout>
+
+                <FlexLayout Grid.Row="1" HorizontalOptions="Fill" Direction="Row" JustifyContent="SpaceBetween" Padding="0">
+                    <Button Text="Configurações do Editor" Padding="10, 5, 10, 5" TextColor="Beige" FontAttributes="Bold" BackgroundColor="#aa72b550" BorderColor="#72b550" BorderWidth="2" CornerRadius="2"/>
+                    <Button Text="Salvar Alterações" Padding="10, 5, 10, 5" TextColor="Beige" FontAttributes="Bold" BackgroundColor="#aa72b550" BorderColor="#72b550" BorderWidth="2" CornerRadius="2" Clicked="saveChangesBTN_Clicked"/>
+                </FlexLayout>
+            </Grid>
+
+            <ScrollView Grid.Row="1" Padding="30, 20, 0, 0" BackgroundColor="#101413">
+                <VerticalStackLayout Margin="0, 20, 0, 0">
+                    <!--OSCILLATOR-->
+                    <VerticalStackLayout>
+                        <Label Text="Oscillator:" FontSize="Medium" TextColor="Beige"/>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Frequência predefinida:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="oscillatorDefaultFrequency" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Ganho/Volume predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="oscillatorDefaultGain" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Formato de onda predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Picker x:Name="oscillatorDefaultWaveFormat" WidthRequest="200" Margin="20, 0, 0, 0" TextColor="#72b550" SelectedIndex="0" SelectedIndexChanged="pickerPropertyChangedEvent">
+                                <Picker.Items>
+                                    <x:String>Seno</x:String>
+                                    <x:String>Quadrada</x:String>
+                                    <x:String>Triangular</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!--FILE TRACK-->
+                    <VerticalStackLayout Margin="0, 50, 0, 0">
+                        <Label Text="File Track:" FontSize="Medium" TextColor="Beige"/>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Ganho/Volume predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="fileTrackDefaultGain" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Modo de Repetição predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Switch x:Name="fileTrackDefaultRepeatMode" WidthRequest="100" Margin="20, 0, 0, 0" ThumbColor="#72b550" OnColor="#72b550" Toggled="switchPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Tempo (velocidade) predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="fileTrackDefaultTempo" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Pitch (tonalidade) predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="fileTrackDefaultPitch" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Modo de ligação Time-Pitch predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Switch x:Name="fileTrackDefaultTimePitchCouplingMode" WidthRequest="100" Margin="20, 0, 0, 0" ThumbColor="#72b550" OnColor="#72b550" Toggled="switchPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!--MIDI TRACK-->
+                    <VerticalStackLayout Margin="0, 50, 0, 0">
+                        <Label Text="MIDI Track:" FontSize="Medium" TextColor="Beige"/>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Ganho/Volume predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="MIDITrackDefaultGain" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Modo de Repetição predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Switch x:Name="MIDITrackDefaultRepeatMode" WidthRequest="100" Margin="20, 0, 0, 0" ThumbColor="#72b550" OnColor="#72b550" Toggled="switchPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Frequencia-base predefinida (oscillator):" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="MIDITrackDefaultOscillatorBaseFrequency" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Volume-base predefinido (oscillator):" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="MIDITrackDefaultOscillatorGain" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Formato de onda predefinido (oscillator):" TextColor="Beige" VerticalOptions="Center"/>
+                            <Picker x:Name="MIDITrackDefaultOscillatorWaveFormat" WidthRequest="200" Margin="20, 0, 0, 0" TextColor="#72b550" SelectedIndex="0" SelectedIndexChanged="pickerPropertyChangedEvent">
+                                <Picker.Items>
+                                    <x:String>Seno</x:String>
+                                    <x:String>Quadrada</x:String>
+                                    <x:String>Triangular</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Tempo (velocidade) predefinido (file track):" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="MIDITrackDefaultFileTrackTempo" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+                        
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Pitch (tonalidade) predefinido (file track):" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="MIDITrackDefaultFileTrackPitch" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="10, 20, 0, 0">
+                            <Label Text="Modo de ligação Time-Pitch predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Switch x:Name="MIDITrackDefaultFileTrackTimePitchCouplingMode" WidthRequest="100" Margin="20, 0, 0, 0" ThumbColor="#72b550" OnColor="#72b550" Toggled="switchPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!--DSPs-->
+                    <VerticalStackLayout Margin="0, 50, 0, 0">
+                        <Label Text="DSPs:" FontSize="Medium" TextColor="Beige"/>
+
+                        <!--DISTORTION-->
+                        <Label Text="Distortion:" FontSize="Micro" Margin="10, 20, 0, 0" TextColor="White"/>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Drive predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultDistortionDrive" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Tipo de distorção predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Picker x:Name="DefaultDistortionType" WidthRequest="200" Margin="20, 0, 0, 0" TextColor="#72b550" SelectedIndex="0" SelectedIndexChanged="pickerPropertyChangedEvent">
+                                <Picker.Items>
+                                    <x:String>SoftClip</x:String>
+                                    <x:String>HardClip</x:String>
+                                    <x:String>Foldback</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <!--COMPRESSOR-->
+                        <Label Text="Compressor:" FontSize="Micro" Margin="10, 20, 0, 0" TextColor="White"/>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Threshold predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultCompressorThreshold" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Ratio predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultCompressorRatio" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Attack predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultCompressorAttack" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Release predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultCompressorRelease" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <!--REVERB-->
+                        <Label Text="Reverb:" FontSize="Micro" Margin="10, 20, 0, 0" TextColor="White"/>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Room Size predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultReverbRoomSize" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Damping predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultReverbDamping" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Wet Level predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultReverbWetLevel" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Dry Level predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultReverbDryLevel" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Largura predefinida:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultReverbWidth" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Modo de congelamento predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Switch x:Name="DefaultReverbFreezeMode" WidthRequest="100" Margin="20, 0, 0, 0" ThumbColor="#72b550" OnColor="#72b550" Toggled="switchPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <!--CHORUS-->
+                        <Label Text="Chorus:" FontSize="Micro" Margin="10, 20, 0, 0" TextColor="White"/>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Rate predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultChorusRate" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Profundidade predefinida:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultChorusDepth" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Delay predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultChorusDelay" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Feedback predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultChorusFeedback" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Margin="20, 20, 0, 0">
+                            <Label Text="Mix predefinido:" TextColor="Beige" VerticalOptions="Center"/>
+                            <Entry x:Name="DefaultChorusMix" WidthRequest="100" Margin="20, 0, 0, 0" TextColor="Beige" TextChanged="textPropertyChangedEvent"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

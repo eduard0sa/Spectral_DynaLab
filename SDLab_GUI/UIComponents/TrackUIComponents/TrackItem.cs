@@ -277,6 +277,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             Padding = new Thickness(20, 0, 0, 0);
 
+            sliderControlLabel.TextColor = Colors.Beige;
             sliderControlLabel.Text = controlLabel;
 
             sliderControlSlider.WidthRequest = 200;

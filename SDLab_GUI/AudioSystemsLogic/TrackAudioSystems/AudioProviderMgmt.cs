@@ -2,6 +2,7 @@
 using SDLab_GUI.UIComponents.TrackUIComponents;
 using SDLab_GUI.InteropWrapper;
 using static SDLab_GUI.Global;
+using SDLab_GUI.Configurations;
 
 namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
 {
@@ -20,7 +21,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
         public WaveFormat WaveFormat { get; protected set; }
 
         public nint Engine { get => engine; }
-        public float CurrentGain { get => currentGain; }
+        public float CurrentGain { get => currentGain; set => currentGain = value; }
         public List<structVariableDataTypeUnit> DspProcessors { get => dspProcessors; }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
         /// </summary>
         /// <param name="dspEffectType">The type of DSP effect to add.</param>
         /// <returns>A structVariableDataTypeUnit representing the added DSP effect.</returns>
-        public structVariableDataTypeUnit addDSPEffect(enumDSPType dspEffectType)
+        public structVariableDataTypeUnit addDSPEffect(enumDSPType dspEffectType, EditorConfigs defaultSettings)
         {
             structVariableDataTypeUnit dspUnit = new structVariableDataTypeUnit();
 
@@ -78,7 +79,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
             {
                 case enumDSPType.DISTORTION:
                     //New DistotionDSP audio processing class instance
-                    DistortionDSP newDistortionProcessor = new DistortionDSP(engine, engineBridgeRef);
+                    DistortionDSP newDistortionProcessor = new DistortionDSP(engine, engineBridgeRef, defaultSettings);
                     //New DistortionDSP UI component class instance
                     DSPEffectItem<DistortionDSP> newDistortionDSP = new DSPEffectItem<DistortionDSP>(this, dspEffectType, newDistortionProcessor, newDistortionProcessor.pushVisSampleArray);
 
@@ -98,7 +99,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
                     return dspUnit;
 
                 case enumDSPType.COMPRESSOR:
-                    CompressorDSP newCompressorProcessor = new CompressorDSP(engine, engineBridgeRef);
+                    CompressorDSP newCompressorProcessor = new CompressorDSP(engine, engineBridgeRef, defaultSettings);
                     DSPEffectItem<CompressorDSP> newCompressorDSP = new DSPEffectItem<CompressorDSP>(this, dspEffectType, newCompressorProcessor, newCompressorProcessor.pushVisSampleArray);
 
                     newCompressorDSP.addControlGroup();
@@ -118,7 +119,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
                     return dspUnit;
 
                 case enumDSPType.REVERB:
-                    ReverbDSP newReverbProcessor = new ReverbDSP(engine, engineBridgeRef);
+                    ReverbDSP newReverbProcessor = new ReverbDSP(engine, engineBridgeRef, defaultSettings);
                     DSPEffectItem<ReverbDSP> newReverbDSP = new DSPEffectItem<ReverbDSP>(this, dspEffectType, newReverbProcessor, newReverbProcessor.pushVisSampleArray);
 
                     newReverbDSP.addControlGroup();
@@ -141,7 +142,7 @@ namespace SDLab_GUI.AudioSystemsLogic.TrackAudioSystems
                     return dspUnit;
 
                 case enumDSPType.CHORUS:
-                    ChorusDSP newChorusProcessor = new ChorusDSP(engine, engineBridgeRef);
+                    ChorusDSP newChorusProcessor = new ChorusDSP(engine, engineBridgeRef, defaultSettings);
                     DSPEffectItem<ChorusDSP> newChorusDSP = new DSPEffectItem<ChorusDSP>(this, dspEffectType, newChorusProcessor, newChorusProcessor.pushVisSampleArray);
 
                     newChorusDSP.addControlGroup();

@@ -1,7 +1,7 @@
 ﻿using SDLab_GUI.AudioSystemsLogic;
 using SDLab_GUI.AudioSystemsLogic.TrackAudioSystems;
+using SDLab_GUI.Configurations;
 using SDLab_GUI.UIComponents.Editors;
-using Windows.Networking.Vpn;
 using static SDLab_GUI.Global;
 
 namespace SDLab_GUI.UIComponents.TrackUIComponents
@@ -46,16 +46,35 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             frequencySliderData = new Global.structSliderData() {
                 minVal = 20f,
                 maxVal = 2000f,
-                defVal = ((OscillatorAudioProvider)trackAudioProvider).CurrentFrequency,
+                defVal = mainPageOBJ.EditorConfigurationSet._OscillatorSettigns.DefaultFrequency,
                 numDisplayDecPlaces = 0
             };
+
+            ((OscillatorAudioProvider)trackAudioProvider).changeFrequency(frequencySliderData.defVal);
 
             gainSliderData = new Global.structSliderData() {
                 minVal = 0f,
                 maxVal = 0.5f,
-                defVal = trackAudioProvider.CurrentGain,
+                defVal = mainPageOBJ.EditorConfigurationSet._OscillatorSettigns.DefaultVolume,
                 numDisplayDecPlaces = 2
             };
+
+            trackAudioProvider.changeGain(gainSliderData.defVal);
+
+            ((OscillatorAudioProvider)trackAudioProvider).changeWaveShapeFunction(mainPageOBJ.EditorConfigurationSet._OscillatorSettigns.DefaultWaveFormat);
+
+            switch (mainPageOBJ.EditorConfigurationSet._OscillatorSettigns.DefaultWaveFormat)
+            {
+                case enumWaveShapeType.Sine:
+                    _oscillatorItemWaveShapeControls.highlightButton(_oscillatorItemWaveShapeControls.SineWaveBTN);
+                    break;
+                case enumWaveShapeType.Square:
+                    _oscillatorItemWaveShapeControls.highlightButton(_oscillatorItemWaveShapeControls.SquareWaveBTN);
+                    break;
+                case enumWaveShapeType.Triangle:
+                    _oscillatorItemWaveShapeControls.highlightButton(_oscillatorItemWaveShapeControls.TriangleWaveBTN);
+                    break;
+            }
 
             UIPaint();
         }
@@ -73,8 +92,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             Margin = new Thickness(0, 10, 0, 0);
 
             //Adding Slider Controls to the main Control Group.
-            TrackItemControls[0].addSliderControl("Frequency:", enumBaseColor.YELLOW, frequencySliderData, frequencyChangeEvent);
-            TrackItemControls[0].addSliderControl("Gain:", enumBaseColor.YELLOW, gainSliderData, gainChangeEvent);
+            TrackItemControls[0].addSliderControl("Frequência:", enumBaseColor.YELLOW, frequencySliderData, frequencyChangeEvent);
+            TrackItemControls[0].addSliderControl("Ganho/Volume:", enumBaseColor.YELLOW, gainSliderData, gainChangeEvent);
 
             Children.Add(TrackTriangleMark);
             Children.Add(TrackItemHeader);
@@ -121,6 +140,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             }
             audioEngineMGMT.removeAudioEngine(trackAudioProvider);
             (Parent as VerticalStackLayout).Children.Remove(this);
+
+            mainPageOBJ.checkEmptyTrackListMessageVisibility();
         }
 
         /// <summary>
@@ -130,7 +151,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="e"></param>
         private void openSFXEditorEvent(object? sender, EventArgs e)
         {
-            DSPModalEditor OscSFXDSPEditor = new DSPModalEditor(audioEngineMGMT, trackAudioProvider);
+            DSPModalEditor OscSFXDSPEditor = new DSPModalEditor(audioEngineMGMT, trackAudioProvider, mainPageOBJ);
             mainPageOBJ.Navigation.PushModalAsync(OscSFXDSPEditor);
             OscSFXDSPEditor.ModalBoxCloseEvent += closeSFXEditorEvent;
         }
@@ -194,43 +215,50 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             AlignItems = Microsoft.Maui.Layouts.FlexAlignItems.Center;
             VerticalOptions = LayoutOptions.Fill;
 
-            sineWaveBTN.Source = "sine_wave.png";
-            sineWaveBTN.Padding = 15;
-            sineWaveBTN.WidthRequest = 50;
-            sineWaveBTN.HeightRequest = 50;
-            sineWaveBTN.Margin = new Thickness(0, 0, 5, 0);
-            sineWaveBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
-            sineWaveBTN.CornerRadius = 5;
-            sineWaveBTN.Clicked += waveTypeBTNClickEH;
+            SineWaveBTN.Source = "sine_wave.png";
+            SineWaveBTN.Padding = 15;
+            SineWaveBTN.WidthRequest = 50;
+            SineWaveBTN.HeightRequest = 50;
+            SineWaveBTN.Margin = new Thickness(0, 0, 5, 0);
+            SineWaveBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
+            SineWaveBTN.CornerRadius = 5;
+            SineWaveBTN.Clicked += waveTypeBTNClickEH;
+            SineWaveBTN.AutomationId = "sineWaveFormatBTN";
 
-            squareWaveBTN.Source = "digital_wave.png";
-            squareWaveBTN.Padding = 15;
-            squareWaveBTN.WidthRequest = 50;
-            squareWaveBTN.HeightRequest = 50;
-            squareWaveBTN.Margin = new Thickness(0, 0, 5, 0);
-            squareWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
-            squareWaveBTN.CornerRadius = 5;
-            squareWaveBTN.Clicked += waveTypeBTNClickEH;
+            SquareWaveBTN.Source = "digital_wave.png";
+            SquareWaveBTN.Padding = 15;
+            SquareWaveBTN.WidthRequest = 50;
+            SquareWaveBTN.HeightRequest = 50;
+            SquareWaveBTN.Margin = new Thickness(0, 0, 5, 0);
+            SquareWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            SquareWaveBTN.CornerRadius = 5;
+            SquareWaveBTN.Clicked += waveTypeBTNClickEH;
+            SquareWaveBTN.AutomationId = "squareWaveFormatBTN";
 
-            triangleWaveBTN.Source = "triangle_wave.png";
-            triangleWaveBTN.Padding = 15;
-            triangleWaveBTN.WidthRequest = 50;
-            triangleWaveBTN.HeightRequest = 50;
-            triangleWaveBTN.Margin = new Thickness(0, 0, 5, 0);
-            triangleWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
-            triangleWaveBTN.CornerRadius = 5;
-            triangleWaveBTN.Clicked += waveTypeBTNClickEH;
+            TriangleWaveBTN.Source = "triangle_wave.png";
+            TriangleWaveBTN.Padding = 15;
+            TriangleWaveBTN.WidthRequest = 50;
+            TriangleWaveBTN.HeightRequest = 50;
+            TriangleWaveBTN.Margin = new Thickness(0, 0, 5, 0);
+            TriangleWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            TriangleWaveBTN.CornerRadius = 5;
+            TriangleWaveBTN.Clicked += waveTypeBTNClickEH;
+            TriangleWaveBTN.AutomationId = "triangleWaveFormatBTN";
 
-            Children.Add(sineWaveBTN);
-            Children.Add(squareWaveBTN);
-            Children.Add(triangleWaveBTN);
+            Children.Add(SineWaveBTN);
+            Children.Add(SquareWaveBTN);
+            Children.Add(TriangleWaveBTN);
         }
+
+        public ImageButton SineWaveBTN { get => sineWaveBTN; internal set => sineWaveBTN = value; }
+        public ImageButton SquareWaveBTN { get => squareWaveBTN; internal set => squareWaveBTN = value; }
+        public ImageButton TriangleWaveBTN { get => triangleWaveBTN; internal set => triangleWaveBTN = value; }
 
         public void highlightButton(ImageButton targetBTN)
         {
-            sineWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
-            squareWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
-            triangleWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            SineWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            SquareWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
+            TriangleWaveBTN.BackgroundColor = Color.FromArgb("#21232a");
             targetBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelYellow"];
         }
     }

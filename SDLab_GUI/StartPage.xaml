@@ -37,7 +37,7 @@
                 </Grid>
             </VerticalStackLayout>
 
-            <Button Grid.Row="1" Grid.Column="0" Text="Definições" Padding="5, 5, 5, 5" CornerRadius="0" TextColor="White" BackgroundColor="{StaticResource Gray950}" Focused="ButtonAutoUnfocusEvent"/>
+            <Button Grid.Row="1" Grid.Column="0" Text="Configurações" Padding="5, 5, 5, 5" CornerRadius="0" TextColor="White" BackgroundColor="{StaticResource Gray950}" Clicked="OpenSettingsModal"/>
         </Grid>
 
         <ScrollView Grid.Row="0" Grid.Column="1" BackgroundColor="{StaticResource Gray950}">
@@ -45,6 +45,7 @@
                 <VerticalStackLayout VerticalOptions="Fill" x:Name="StartPageMainDashboard">
                     <HorizontalStackLayout Padding="0, 20, 0, 10" BackgroundColor="{StaticResource DarkPastelRed}">
                         <Button Text="Novo Set" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorEnvironmentEvent"/>
+                        <Button x:Name="ShowEditorEnvironmentBTN" Text="Voltar ao Editor" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultManaGreen}" Clicked="ShowEditorEnvironmentEvent" IsVisible="false"/>
                     </HorizontalStackLayout>
 
                     <VerticalStackLayout>
