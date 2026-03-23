@@ -42,7 +42,7 @@ namespace SDLab_GUI.Tutorials
         /// TutorialModalOverlayView class constructor.
         /// </summary>
         /// <param name="_mainPageRefOBJ"></param>
-        public TutorialModalOverlayView(MainPage _mainPageRefOBJ)
+        public TutorialModalOverlayView(MainPage _mainPageRefOBJ, int tutorialIndex)
         {
             InitializeComponent();
 
@@ -51,7 +51,7 @@ namespace SDLab_GUI.Tutorials
             Loaded += async delegate {
                 if (!alreadyLoaded)
                 {
-                    await loadTutorialDataJSON();
+                    await loadTutorialDataJSON(tutorialIndex);
                     displayStep(0);
                     alreadyLoaded = true;
                 }
@@ -86,9 +86,20 @@ namespace SDLab_GUI.Tutorials
         /// This asynchronous method loads the tutorial data from the JSON source file, deserializing it into the tutorialData struct.
         /// </summary>
         /// <returns>The async task data.</returns>
-        private async Task loadTutorialDataJSON()
+        private async Task loadTutorialDataJSON(int tutorialIndex)
         {
-            using var stream = await FileSystem.OpenAppPackageFileAsync("TutorialData/EditorTutorialData.json");
+            var stream = await FileSystem.OpenAppPackageFileAsync("TutorialData/EditorTutorialData.json");
+
+            switch (tutorialIndex)
+            {
+                case 0:
+                    stream = await FileSystem.OpenAppPackageFileAsync("TutorialData/EditorTutorialBasicsData.json");
+                    break;
+                case 1:
+                    stream = await FileSystem.OpenAppPackageFileAsync("TutorialData/EditorTutorialData.json");
+                    break;
+            }
+
             using var reader = new StreamReader(stream);
 
             string contents = reader.ReadToEnd();
@@ -145,92 +156,130 @@ namespace SDLab_GUI.Tutorials
                     {
                         int currIndex = (int)i;
 
-                        struct_elementBoundInfo targetButtonRectBounds = editorMainPageRefOBJ.highlightBTN(tutorialData.steps[stepIndex].objectsToHighlight[i]);
-
-                        if (tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectType == "VisualElement")
+                        Action a = delegate
                         {
-                            drawButtonHighlighter(targetButtonRectBounds);
+                            struct_elementBoundInfo targetButtonRectBounds = editorMainPageRefOBJ.highlightBTN(tutorialData.steps[stepIndex].objectsToHighlight[i]);
 
-                            TapGestureRecognizer buttonAreaClickGestureRecognizer = new TapGestureRecognizer();
-
-                            buttonAreaClickGestureRecognizer.Tapped += (o, e) =>
+                            if (tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectType == "VisualElement" || tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectType.Split("_")[0] == "Entry")
                             {
-                                Page targetPage = null;
+                                drawButtonHighlighter(targetButtonRectBounds);
 
-                                for (int j = 0; j < Shell.Current.Navigation.NavigationStack.Count; j++)
-                                {
-                                    if (Shell.Current.Navigation.NavigationStack[j] != null)
-                                    {
-                                        if (Shell.Current.Navigation.NavigationStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
-                                        {
-                                            targetPage = Shell.Current.Navigation.NavigationStack[j];
-                                        }
-                                    }
-                                }
+                                TapGestureRecognizer buttonAreaClickGestureRecognizer = new TapGestureRecognizer();
 
-                                if (targetPage == null)
+                                buttonAreaClickGestureRecognizer.Tapped += (o, e) =>
                                 {
-                                    for (int j = 0; j < Shell.Current.Navigation.ModalStack.Count; j++)
+                                    Page targetPage = null;
+
+                                    for (int j = 0; j < Shell.Current.Navigation.NavigationStack.Count; j++)
                                     {
-                                        if (Shell.Current.Navigation.ModalStack[j] != null)
+                                        if (Shell.Current.Navigation.NavigationStack[j] != null)
                                         {
-                                            if (Shell.Current.Navigation.ModalStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
+                                            if (Shell.Current.Navigation.NavigationStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
                                             {
-                                                targetPage = Shell.Current.Navigation.ModalStack[j];
+                                                targetPage = Shell.Current.Navigation.NavigationStack[j];
                                             }
                                         }
                                     }
-                                }
 
-                                if (targetPage != null)
-                                {
-                                    Point? position = e.GetPosition(targetButtonRectBounds.sourceElement);
-                                    VisualElement targetButton = targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName);
-
-                                    if (position != null && targetButton != null)
+                                    if (targetPage == null)
                                     {
-                                        double x = position.Value.X;
-                                        double y = position.Value.Y;
-
-                                        if (x >= 0 && x <= targetButtonRectBounds.Bounds.Width && y >= 0 && y <= targetButtonRectBounds.Bounds.Height)
+                                        for (int j = 0; j < Shell.Current.Navigation.ModalStack.Count; j++)
                                         {
-                                            editorMainPageRefOBJ.closeTutorialOverlay();
-                                            if (targetButton is Button)
+                                            if (Shell.Current.Navigation.ModalStack[j] != null)
                                             {
-                                                ((Button)targetButton).Command.Execute(null);
+                                                if (Shell.Current.Navigation.ModalStack[j].AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectSourceName)
+                                                {
+                                                    targetPage = Shell.Current.Navigation.ModalStack[j];
+                                                }
                                             }
-                                            else if(targetButton is ImageButton)
-                                            {
-                                                ((ImageButton)targetButton).Command.Execute(null);
-                                            }
-                                            else if (targetButton is Switch)
-                                            {
-                                                ((Switch)targetButton).IsToggled = !((Switch)targetButton).IsToggled;
-                                            }
-
-                                            TutorialContentLayout.Children.Clear();
-                                            TutorialOpenAbsoluteSpace.Children.Clear();
-                                            editorMainPageRefOBJ.stopBTNHighlight(tutorialData.steps[stepIndex].objectsToHighlight[currIndex]);
-
-                                            Microsoft.UI.Xaml.DispatcherTimer nextStepTimer = new Microsoft.UI.Xaml.DispatcherTimer();
-                                            nextStepTimer.Interval = TimeSpan.FromMilliseconds(500);
-                                            nextStepTimer.Tick += delegate
-                                            {
-                                                editorMainPageRefOBJ.showTutorialOverlay();
-                                                displayStep(stepIndex + 1);
-                                                nextStepTimer.Stop();
-                                            };
-                                            nextStepTimer.Start();
                                         }
                                     }
-                                }
-                            };
 
-                            tutorialMainGrid.GestureRecognizers.Add(buttonAreaClickGestureRecognizer);
+                                    if (targetPage != null)
+                                    {
+                                        Point? position = e.GetPosition(targetButtonRectBounds.sourceElement);
+                                        VisualElement targetButton = targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName);
+
+                                        if (position != null && targetButton != null)
+                                        {
+                                            double x = position.Value.X;
+                                            double y = position.Value.Y;
+
+                                            if (x >= 0 && x <= targetButtonRectBounds.Bounds.Width && y >= 0 && y <= targetButtonRectBounds.Bounds.Height)
+                                            {
+                                                editorMainPageRefOBJ.closeTutorialOverlay();
+                                                if (targetButton is Button)
+                                                {
+                                                    ((Button)targetButton).Command.Execute(null);
+                                                }
+                                                else if (targetButton is ImageButton)
+                                                {
+                                                    ((ImageButton)targetButton).Command.Execute(null);
+                                                }
+                                                else if (targetButton is Switch)
+                                                {
+                                                    ((Switch)targetButton).IsToggled = !((Switch)targetButton).IsToggled;
+                                                }
+
+                                                TutorialContentLayout.Children.Clear();
+                                                TutorialOpenAbsoluteSpace.Children.Clear();
+                                                editorMainPageRefOBJ.stopBTNHighlight(tutorialData.steps[stepIndex].objectsToHighlight[currIndex]);
+
+                                                if (tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectType.Split("_")[0] == "Entry")
+                                                {
+                                                    EventHandler<TextChangedEventArgs> textChangedAction = null;
+                                                    textChangedAction = delegate
+                                                    {
+                                                        if ((targetButton as Entry).Text == tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectType.Split("_")[1])
+                                                        {
+                                                            Microsoft.UI.Xaml.DispatcherTimer nextStepTimer = new Microsoft.UI.Xaml.DispatcherTimer();
+                                                            nextStepTimer.Interval = TimeSpan.FromMilliseconds(500);
+                                                            nextStepTimer.Tick += delegate
+                                                            {
+                                                                editorMainPageRefOBJ.showTutorialOverlay();
+                                                                displayStep(stepIndex + 1);
+                                                                (targetButton as Entry).TextChanged -= textChangedAction;
+                                                                nextStepTimer.Stop();
+                                                            };
+                                                            nextStepTimer.Start();
+                                                        }
+                                                    };
+
+                                                    (targetButton as Entry).TextChanged += textChangedAction;
+                                                }
+                                                else
+                                                {
+                                                    Microsoft.UI.Xaml.DispatcherTimer nextStepTimer = new Microsoft.UI.Xaml.DispatcherTimer();
+                                                    nextStepTimer.Interval = TimeSpan.FromMilliseconds(500);
+                                                    nextStepTimer.Tick += delegate
+                                                    {
+                                                        editorMainPageRefOBJ.showTutorialOverlay();
+                                                        displayStep(stepIndex + 1);
+                                                        nextStepTimer.Stop();
+                                                    };
+                                                    nextStepTimer.Start();
+                                                }
+                                            }
+                                        }
+                                    }
+                                };
+
+                                tutorialMainGrid.GestureRecognizers.Add(buttonAreaClickGestureRecognizer);
+                            }
+                            else
+                            {
+                                countMidiHightlightObjects++;
+                            }
+                        };
+
+                        if (!tutorialData.steps[stepIndex].objectsToHighlight[currIndex].objectName.StartsWith("repeatFile"))
+                        {
+                            a();
                         }
                         else
                         {
-                            countMidiHightlightObjects++;
+                            Global.actionHolder = a;
+                            return;
                         }
                     }
 

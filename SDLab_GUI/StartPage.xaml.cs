@@ -128,9 +128,16 @@ namespace SDLab_GUI
             Navigation.PushAsync(EditorInterfaceInstance);
         }
 
-        private void StartEditorTutorialEvent(object? sender, EventArgs e)
+        private void StartEditorBasicsTutorialEvent(object? sender, EventArgs e)
         {
-            EditorInterfaceInstance = new MainPage(enumEditorMode.Tutorial);
+            EditorInterfaceInstance = new MainPage(enumEditorMode.Tutorial, 0);
+
+            Navigation.PushAsync(EditorInterfaceInstance);
+        }
+
+        private void StartEditorAdvancedTutorialEvent(object? sender, EventArgs e)
+        {
+            EditorInterfaceInstance = new MainPage(enumEditorMode.Tutorial, 1);
 
             Navigation.PushAsync(EditorInterfaceInstance);
         }

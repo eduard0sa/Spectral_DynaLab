@@ -1,0 +1,95 @@
+{
+  "steps": [
+    {
+      "captions": [
+        "Olá e bem vindo ao primeiro tutorial do SPECTRAL DYNALab!",
+        "Este tutorial ajudar-te-á a aprender as funcionalidades básicas do editor. Vamos começar!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "Começar",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "1º PASSO:",
+        "Clica em '+ Gerar Sinal Puro (OSCILLATOR)' para gerares o teu primeiro som - uma símples onda sinusoidal!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "addOscillatorTrackBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "2º PASSO:",
+        "Atribui o valor 40 á frequência da tua onda (no input destacado)."
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "oscillatorFrequency_0",
+          "objectType": "Entry_40",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "3º PASSO:",
+        "Clica no botão play!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "mainPlayBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "4º PASSO:",
+        "Clica no botão pause!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "mainPlayBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "5º PASSO:",
+        "Clica em '+ Importar ficheiro de audio' para adicionares uma faixa mp3! Seleciona o ficheiro NOISIA_DRUMBREAK.mp3."
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "addFileTrackBTN",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    },
+    {
+      "captions": [
+        "6º PASSO:",
+        "Clica em 'Repetir faixa' para que o ficheiro mp3 seja reproduzido em repeat!"
+      ],
+      "objectsToHighlight": [
+        {
+          "objectName": "repeatFile_1",
+          "objectType": "VisualElement",
+          "objectSourceName": "EditorMainPage"
+        }
+      ]
+    }
+  ]
+}

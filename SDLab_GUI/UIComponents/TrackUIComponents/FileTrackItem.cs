@@ -16,10 +16,13 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         private structSliderData pitchSliderData;
         private structSwitchData timePitchCouplingModeSwitchData;
 
-        public FileTrackItem(AudioEngineMGMT audioManager, MainPage mainPage, string _musicPath, bool _addToMixer = true, bool _activateWaveGraphMonitor = true)
+        private bool IsTutorial;
+
+        public FileTrackItem(AudioEngineMGMT audioManager, MainPage mainPage, string _musicPath, bool _addToMixer = true, bool _activateWaveGraphMonitor = true, bool isTutorial = false, string automationName = "")
         {
             sfxButton = new OscillatorItemSFXButtonArea(this);
             sfxButton.OpenSFXEditorEvent = openSFXEditorEvent;
+            sfxButton.AutomationId = automationName;
 
             TrackTriangleMark = new TrackItemLeftIconMenu(this);
             TrackTriangleMark.ClickEventHandler = deleteTrackEvent;
@@ -68,6 +71,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
                 defValIndex = true
             };
 
+            IsTutorial = isTutorial;
+
             UIPaint();
         }
 
@@ -82,7 +87,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             //Adding Slider Controls to the main Control Group.
             TrackItemControls[0].addSliderControl("Gain:", enumBaseColor.GREEN, gainSliderData, gainChangeEvent);
-            TrackItemControls[0].addSwitchControl("Repetir faixa:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent);
+            string repeatTrackAutomationID = IsTutorial ? $"repeatFile_{sfxButton.AutomationId[sfxButton.AutomationId.Length - 1]}" : null;
+            TrackItemControls[0].addSwitchControl("Repetir faixa:", enumBaseColor.GREEN, repeatTrackModeSwitchData, repeatModeChangeEvent, automationName: repeatTrackAutomationID);
             TrackItemControls.Add(new TrackItemSliderControlGroup(this));
             TrackItemControls[1].addSliderControl("Tempo:", enumBaseColor.GREEN, tempoSliderData, tempoChangeEvent);
             TrackItemControls[1].addSliderControl("Pitch:", enumBaseColor.GREEN, pitchSliderData, pitchChangeEvent);

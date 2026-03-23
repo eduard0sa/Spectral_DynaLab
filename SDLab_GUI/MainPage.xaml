@@ -45,8 +45,8 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>
-                <Button x:Name="addOscillatorTrackBTN" Text="+ Gerar Sinal Puro (OSCILLATOR)" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
-                <Button x:Name="addFileTrackBTN" Text="+ Importar ficheiro de audio" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                <Button x:Name="addOscillatorTrackBTN" AutomationId="addOscillatorTrackBTN" Text="+ Gerar Sinal Puro (OSCILLATOR)" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
+                <Button x:Name="addFileTrackBTN" AutomationId="addFileTrackBTN" Text="+ Importar ficheiro de audio" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
                 <Button x:Name="addMidiTrackBTN" AutomationId="addMidiTrackBTN" Text="+ Adicionar MIDI track" HeightRequest="10" CornerRadius="2" Margin="10, 0, 10, 0" BackgroundColor="{StaticResource DefaultPastelRed}"/>
             </HorizontalStackLayout>
         </FlexLayout>

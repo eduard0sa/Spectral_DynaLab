@@ -43,6 +43,8 @@ namespace SDLab_GUI
 
         SettingsModalEditor settingsEditorModal;
 
+        private int TutorialIndex;
+
         //Properties
         public ICommand MIDITrackBTNClickCommand { get => midiTrackBTNClickCommand; set => midiTrackBTNClickCommand = value; }
         public enumEditorMode CurrentEditorMode { get => currentEditorMode; set => currentEditorMode = value; }
@@ -52,7 +54,7 @@ namespace SDLab_GUI
         /// MainPage class constructor.
         /// </summary>
         /// <param name="runMode"></param>
-        public MainPage(enumEditorMode runMode)
+        public MainPage(enumEditorMode runMode, int tutorialIndex = 0)
         {
             //Initialize UI
             InitializeComponent();
@@ -82,7 +84,9 @@ namespace SDLab_GUI
             EditorConfigurationSet = new EditorConfigs(configsFilePath);
             EditorConfigurationSet.loadConfigsFromFile();
 
-            if (runMode == enumEditorMode.Tutorial) showTutorialOverlay();
+            TutorialIndex = tutorialIndex;
+
+            if (runMode == enumEditorMode.Tutorial) showTutorialOverlay(tutorialIndex);
         }
 
         #region PageNavigation
@@ -284,11 +288,25 @@ namespace SDLab_GUI
 
             if (FileChoiceDialog == null) return;
 
-            FileTrackItem newFileTrack = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath);
+            FileTrackItem newFileTrack = null;
+            if (currentEditorMode == enumEditorMode.Tutorial)
+            {
+                newFileTrack = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath, isTutorial: true, automationName: $"repeatFile_{trackStackLayout.Children.Count - 1}");
+            }
+            else
+            {
+                newFileTrack = new FileTrackItem(audioManager, this, FileChoiceDialog.FullPath);
+            }
 
             newFileTrack.AutomationId = $"track_{trackStackLayout.Children.Count}";
 
             trackStackLayout.Children.Add(newFileTrack);
+
+            if (currentEditorMode == enumEditorMode.Tutorial)
+            {
+                Global.actionHolder();
+                Global.actionHolder = null;
+            }
 
             checkEmptyTrackListMessageVisibility();
         }
@@ -300,7 +318,7 @@ namespace SDLab_GUI
         /// <param name="e">The event data.</param>
         private void addMIDITrackBTNClickedEvent()
         {
-            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this, _isTutorial: CurrentEditorMode == enumEditorMode.Tutorial ? true : false, _openMIDIBTNAutomationName: $"track_{trackStackLayout.Children.Count}");
+            MIDITrackItem newMIDITrack = new MIDITrackItem(audioManager, this, _isTutorial: CurrentEditorMode == enumEditorMode.Tutorial ? true : false, _openMIDIBTNAutomationName: $"track_{trackStackLayout.Children.Count - 1}");
 
             trackStackLayout.Children.Add(newMIDITrack);
 
@@ -319,9 +337,9 @@ namespace SDLab_GUI
         /// <summary>
         /// This method shows the tutorial overlay, effectively starting up the dynamic tutorial system.
         /// </summary>
-        public void showTutorialOverlay()
+        public void showTutorialOverlay(int tutorialIndex = 0)
         {
-            if(editorTutorial == null) editorTutorial = new TutorialModalOverlayView(this);
+            if(editorTutorial == null) editorTutorial = new TutorialModalOverlayView(this, tutorialIndex);
             Navigation.PushModalAsync(editorTutorial);
         }
 
@@ -406,6 +424,45 @@ namespace SDLab_GUI
                             {
                                 Bounds = targetButton.Bounds,
                                 sourceElement = targetButton
+                            };
+
+                            return elementBoundInfo;
+                        }
+
+                        break;
+
+                    case string s when s.StartsWith("Entry_"):
+                        VisualElement targetEntry = (VisualElement)targetPage.GetVisualTreeDescendants().OfType<VisualElement>().FirstOrDefault(e => e.AutomationId == targetTutorialStep.objectName);
+
+                        if (targetEntry == null) return new struct_elementBoundInfo();
+
+                        if (targetEntry != null)
+                        {
+                            highlightAnimationTimer = Dispatcher.CreateTimer();
+                            highlightAnimationTimer.Interval = TimeSpan.FromMilliseconds(1000 / 20f);
+                            highlightAnimationTimer.Tick += delegate
+                            {
+                                if (targetEntry.BackgroundColor != null)
+                                {
+                                    if (targetEntry.BackgroundColor.Alpha <= 0)
+                                    {
+                                        zoomDirection = 1;
+                                    }
+                                    if (targetEntry.BackgroundColor.Alpha >= 1)
+                                    {
+                                        zoomDirection = -1;
+                                    }
+
+                                    targetEntry.BackgroundColor = targetEntry.BackgroundColor.WithAlpha(targetEntry.BackgroundColor.Alpha + (0.1f * zoomDirection));
+                                }
+                            };
+
+                            highlightAnimationTimer.Start();
+
+                            struct_elementBoundInfo elementBoundInfo = new struct_elementBoundInfo
+                            {
+                                Bounds = targetEntry.Bounds,
+                                sourceElement = targetEntry
                             };
 
                             return elementBoundInfo;

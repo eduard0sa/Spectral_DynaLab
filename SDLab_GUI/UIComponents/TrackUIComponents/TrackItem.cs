@@ -131,9 +131,14 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         /// <param name="sliderLabel">The Label string for the slider control.</param>
         /// <param name="numericSliderData">The numeric data for slider control's setup.</param>
         /// <param name="_valueChangedEvent">Provides the function that is executed when the slider value is changed by the user.</param>
-        public void addSliderControl(string sliderLabel, enumBaseColor color, structSliderData numericSliderData, EventHandler<ValueChangedEventArgs> _valueChangedEvent)
+        public void addSliderControl(string sliderLabel, enumBaseColor color, structSliderData numericSliderData, EventHandler<ValueChangedEventArgs> _valueChangedEvent, string automationName = "")
         {
             TrackItemSliderControl sliderControl = new TrackItemSliderControl(sliderLabel, color, numericSliderData, _valueChangedEvent);
+
+            if(automationName != "")
+            {
+                sliderControl.SliderControlEntry.AutomationId = automationName;
+            }
 
             Global.structVariableDataTypeUnit sliderControlDataUnit = new Global.structVariableDataTypeUnit()
             {
@@ -261,6 +266,8 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
         structSliderData _numericSliderData_;
 
         bool isUpdatingEntry = false;
+
+        public Entry SliderControlEntry { get => sliderControlEntry; }
 
         /// <summary>
         /// TrackItemSliderControl class constructor.

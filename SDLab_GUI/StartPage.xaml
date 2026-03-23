@@ -55,7 +55,10 @@
 
                             <FlexLayout Padding="0, 100, 0, 100" Direction="Column" JustifyContent="Center" AlignItems="Center" HorizontalOptions="Fill" VerticalOptions="Fill">
                                 <Label Padding="100, 0, 200, 0" Text="Experimenta o tutorial e cria a tua primeira música!" HorizontalTextAlignment="Center" FontSize="Large" FontFamily="Rubik Mono One" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelRed}"/>
-                                <Button Text="EXPERIMENTAR TUTORIAL" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="0, 70, 0, 30" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorTutorialEvent"/>
+                                <HorizontalStackLayout Margin="0, 50, 0, 30">
+                                    <!--<Button Text="EXPERIMENTAR TUTORIAL - NÍVEL BASICO" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorBasicsTutorialEvent"/>-->
+                                    <Button Text="EXPERIMENTAR TUTORIAL - NÍVEL AVANÇADO" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0"  Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorAdvancedTutorialEvent"/>
+                                </HorizontalStackLayout>
                             </FlexLayout>
                         </Grid>
 

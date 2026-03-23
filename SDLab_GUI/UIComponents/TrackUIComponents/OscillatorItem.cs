@@ -92,7 +92,15 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             Margin = new Thickness(0, 10, 0, 0);
 
             //Adding Slider Controls to the main Control Group.
-            TrackItemControls[0].addSliderControl("Frequência:", enumBaseColor.YELLOW, frequencySliderData, frequencyChangeEvent);
+            if ((mainPageOBJ.FindByName("trackStackLayout") as VerticalStackLayout).Children.Count == 1)
+            {
+                TrackItemControls[0].addSliderControl("Frequência:", enumBaseColor.YELLOW, frequencySliderData, frequencyChangeEvent, "oscillatorFrequency_0");
+            }
+            else
+            {
+                TrackItemControls[0].addSliderControl("Frequência:", enumBaseColor.YELLOW, frequencySliderData, frequencyChangeEvent);
+            }
+
             TrackItemControls[0].addSliderControl("Ganho/Volume:", enumBaseColor.YELLOW, gainSliderData, gainChangeEvent);
 
             Children.Add(TrackTriangleMark);
