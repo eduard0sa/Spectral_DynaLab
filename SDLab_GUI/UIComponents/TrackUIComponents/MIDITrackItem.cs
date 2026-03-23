@@ -194,6 +194,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
             OpenSFXBTN.CornerRadius = 0;
             OpenSFXBTN.HeightRequest = 100;
             OpenSFXBTN.BackgroundColor = (Color)Application.Current.Resources["DefaultPastelRed"];
+            OpenSFXBTN.TextColor = Colors.Black;
             this.SetGrow(OpenSFXBTN, 1.0f);
 
             Children.Add(OpenSFXBTN);

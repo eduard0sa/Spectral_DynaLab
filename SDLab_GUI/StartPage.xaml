@@ -44,8 +44,8 @@
             <VerticalStackLayout>
                 <VerticalStackLayout VerticalOptions="Fill" x:Name="StartPageMainDashboard">
                     <HorizontalStackLayout Padding="0, 20, 0, 10" BackgroundColor="{StaticResource DarkPastelRed}">
-                        <Button Text="Novo Set" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorEnvironmentEvent"/>
-                        <Button x:Name="ShowEditorEnvironmentBTN" Text="Voltar ao Editor" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultManaGreen}" Clicked="ShowEditorEnvironmentEvent" IsVisible="false"/>
+                        <Button Text="Novo Set" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" TextColor="Black" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorEnvironmentEvent"/>
+                        <Button x:Name="ShowEditorEnvironmentBTN" Text="Voltar ao Editor" VerticalOptions="Fill" CornerRadius="2" Margin="30, 0, 0, 0" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" TextColor="Black" BackgroundColor="{StaticResource DefaultManaGreen}" Clicked="ShowEditorEnvironmentEvent" IsVisible="false"/>
                     </HorizontalStackLayout>
 
                     <VerticalStackLayout>
@@ -57,7 +57,7 @@
                                 <Label Padding="100, 0, 200, 0" Text="Experimenta o tutorial e cria a tua primeira música!" HorizontalTextAlignment="Center" FontSize="Large" FontFamily="Rubik Mono One" FontAttributes="Bold" TextColor="{StaticResource DefaultPastelRed}"/>
                                 <HorizontalStackLayout Margin="0, 50, 0, 30">
                                     <!--<Button Text="EXPERIMENTAR TUTORIAL - NÍVEL BASICO" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorBasicsTutorialEvent"/>-->
-                                    <Button Text="EXPERIMENTAR TUTORIAL - NÍVEL AVANÇADO" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0"  Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorAdvancedTutorialEvent"/>
+                                    <Button Text="EXPERIMENTAR TUTORIAL" VerticalOptions="Center" WidthRequest="500" HeightRequest="10" CornerRadius="2" Margin="20, 0, 0, 0"  Padding="30, 0, 30, 0" FontSize="Subtitle" FontAttributes="Bold" TextColor="Black" BackgroundColor="{StaticResource DefaultPastelRed}" Clicked="StartEditorAdvancedTutorialEvent"/>
                                 </HorizontalStackLayout>
                             </FlexLayout>
                         </Grid>

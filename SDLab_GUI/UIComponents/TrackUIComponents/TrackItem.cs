@@ -286,6 +286,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             sliderControlLabel.TextColor = Colors.Beige;
             sliderControlLabel.Text = controlLabel;
+            sliderControlLabel.TextColor = Colors.Beige;
 
             sliderControlSlider.WidthRequest = 200;
             sliderControlSlider.Focused += SliderAutoUnfocusEvent;
@@ -389,6 +390,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             pickerControlLabel.Text = controlLabel;
             pickerControlLabel.VerticalOptions = LayoutOptions.Center;
+            pickerControlLabel.TextColor = Colors.Beige;
 
             pickerControlPicker.WidthRequest = 250;
             pickerControlPicker.VerticalOptions = LayoutOptions.Center;
@@ -442,6 +444,7 @@ namespace SDLab_GUI.UIComponents.TrackUIComponents
 
             switchControlLabel.Text = controlLabel;
             switchControlLabel.VerticalOptions = LayoutOptions.Center;
+            switchControlLabel.TextColor = Colors.Beige;
 
             switchControlSwitch.WidthRequest = 50;
             switchControlSwitch.VerticalOptions = LayoutOptions.Center;

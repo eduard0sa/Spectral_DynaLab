@@ -84,17 +84,17 @@ namespace SDLab_GUI
 
         private void checkEditorConfigsFileExistance()
         {
-            if (!File.Exists(configsFilePath))
+            if (!File.Exists(editorConfigsFilePath))
             {
                 XmlDocument globalConfigs = new XmlDocument();
                 globalConfigs.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\r\n<EDITOR_CONFIGS>\r\n\t<GENERAL_SETTINGS>\r\n\t\t<DefaultGeneralVolume>100</DefaultGeneralVolume>\r\n\t</GENERAL_SETTINGS>\r\n\t\r\n\t<OSCILLATOR_SETTINGS>\r\n\t\t<DefaultFrequency>30</DefaultFrequency>\r\n\t\t<DefaultGain>0.50</DefaultGain>\r\n\t\t<DefaultWaveFormat>Sine</DefaultWaveFormat>\r\n\t</OSCILLATOR_SETTINGS>\r\n\r\n\t<FILE_TRACK_SETTINGS>\r\n\t\t<DefaultGain>0.50</DefaultGain>\r\n\t\t<DefaultRepeatMode>true</DefaultRepeatMode>\r\n\t\t<DefaultTempo>1.0</DefaultTempo>\r\n\t\t<DefaultPitch>1.0</DefaultPitch>\r\n\t\t<DefaultTimePitchCouplingMode>true</DefaultTimePitchCouplingMode>\r\n\t</FILE_TRACK_SETTINGS>\r\n\r\n\t<MIDI_TRACK_SETTINGS>\r\n\t\t<DefaultGain>0.50</DefaultGain>\r\n\t\t<DefaultRepeatMode>true</DefaultRepeatMode>\r\n\t\t<DefaultOscillatorBaseFrequency>262.63</DefaultOscillatorBaseFrequency>\r\n\t\t<DefaultOscillatorBaseGain>0.50</DefaultOscillatorBaseGain>\r\n\t\t<DefaultOscillatorWaveFormat>Sine</DefaultOscillatorWaveFormat>\r\n\t\t<DefaultFileTrackBaseTempo>1.0</DefaultFileTrackBaseTempo>\r\n\t\t<DefaultFileTrackBasePitch>1.0</DefaultFileTrackBasePitch>\r\n\t\t<DefaultFileTrackBaseTimePitchCouplingMode>true</DefaultFileTrackBaseTimePitchCouplingMode>\r\n\t</MIDI_TRACK_SETTINGS>\r\n\t\r\n\t<DSP_SETTINGS>\r\n\t\t<DISTORTION_SETTINGS>\r\n\t\t\t<DefaultDistortionDrive>10.0</DefaultDistortionDrive>\r\n\t\t\t<DefaultDistortionType>SoftClip</DefaultDistortionType>\r\n\t\t</DISTORTION_SETTINGS>\r\n\t\t\r\n\t\t<COMPRESSOR_SETTINGS>\r\n\t\t\t<DefaultThreshold>-10</DefaultThreshold>\r\n\t\t\t<DefaultRatio>2.0</DefaultRatio>\r\n\t\t\t<DefaultAttack>20.00</DefaultAttack>\r\n\t\t\t<DefaultRelease>500.00</DefaultRelease>\r\n\t\t</COMPRESSOR_SETTINGS>\r\n\t\t\r\n\t\t<REVERB_SETTINGS>\r\n\t\t\t<DefaultRoomSize>0.50</DefaultRoomSize>\r\n\t\t\t<DefaultDamping>0.50</DefaultDamping>\r\n\t\t\t<DefaultWetLevel>0.50</DefaultWetLevel>\r\n\t\t\t<DefaultDryLevel>1.0</DefaultDryLevel>\r\n\t\t\t<DefaultWidth>0.50</DefaultWidth>\r\n\t\t\t<DefaultFreezeMode>false</DefaultFreezeMode>\r\n\t\t</REVERB_SETTINGS>\r\n\r\n\t\t<CHORUS_SETTINGS>\r\n\t\t\t<DefaultRate>0.80</DefaultRate>\r\n\t\t\t<DefaultDepth>0.40</DefaultDepth>\r\n\t\t\t<DefaultDelay>25.00</DefaultDelay>\r\n\t\t\t<DefaultFeedback>0.00</DefaultFeedback>\r\n\t\t\t<DefaultMix>0.50</DefaultMix>\r\n\t\t</CHORUS_SETTINGS>\r\n\t</DSP_SETTINGS>\r\n</EDITOR_CONFIGS>");
 
-                if (!Directory.Exists(Path.GetDirectoryName(configsFilePath)))
+                if (!Directory.Exists(Path.GetDirectoryName(editorConfigsFilePath)))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(configsFilePath));
+                    Directory.CreateDirectory(Path.GetDirectoryName(editorConfigsFilePath));
                 }
 
-                globalConfigs.Save(configsFilePath);
+                globalConfigs.Save(editorConfigsFilePath);
             }
         }
 
