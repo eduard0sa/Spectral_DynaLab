@@ -4,7 +4,7 @@
 
 ## 🔊 A digital audio synthesizer software from and for enthusiasts!
 
-Spectral DynaLab was born as a side-project initiated by me (<a href="">eduard0sa</a>), from pure curiosity in unravelling the tech and math frameworks behind major audio production software, as well as one of a series of other projects implementing programming languages like C/C++ and C#.
+Spectral DynaLab was born as a side-project initiated by me (<a href="https://github.com/eduard0sa">eduard0sa</a>), from pure curiosity in unravelling the tech and math frameworks behind major audio production software, as well as one of a series of other projects implementing programming languages like C/C++ and C#.
 
 As a project born from a research environment, this software provides a wide set of tools enabling audio production and mixing with scientific-grade detail, featuring a complete and intuitive Graphical User Interface (GUI) that provides full control over every single parameter.
 
@@ -20,7 +20,6 @@ This application also aims to be a tech showcase, proving how programming can be
 </div>
 <br/>
 
----
 
 ## 🎯Features Overview
 
@@ -35,8 +34,6 @@ This application also aims to be a tech showcase, proving how programming can be
 
 <br/>
 
----
-
 ## 🏗️ Architecture Overview
 
 **Spectral DynaLab includes a variety of interconnected systems with different responsibilities:**
@@ -45,10 +42,23 @@ This application also aims to be a tech showcase, proving how programming can be
 - ***C/C++ <-> C# COMMUNICATION LAYER:*** Composed by two C++/CLI and C# DLLs that establish communication between the user interface and the ***AUDIO_ENGINE*** layer (THE TRAIN 🚅).
 - ***C# .NET MAUI GUI:*** The main application layer, running the Graphical User Interface in which the user interacts and uses all tools and features (THE EDITOR 📊).
 
-#### 📦 Third-Party Libraries
+### 📦 Third-Party Libraries
 This project uses:
 - JUCE (GPL v3) – https://juce.com
 - Rubber Band Library (GPL v2) – https://breakfastquay.com/rubberband/
 - Font Awesome Free (CC BY 4.0) – https://fontawesome.com
+<br/>
+<div align="center">
+  <img src="https://juce.com/wp-content/uploads/2026/03/JUCE-slice-min.svg" width="100px">
+  <img src="https://avatars.githubusercontent.com/u/10486849" width="100px" style="margin-left:20px;">
+  <img src="https://avatars.githubusercontent.com/u/1505683" width="100px" style="margin-left:20px;">
+</div>
 
-This project is distributed under the GPL v3 license to comply with these dependencies.
+## 🧩 Software Releases
+
+All official binaries are made available in the **Releases** page in this repository's homepage, packed in .zip files for easy distribution.
+
+<br/>
+<hr/>
+
+*This project is distributed under the GPL v3 license to comply with all it's dependencies. More copyright information in <a href="./LICENSE_NOTICE.md">LICENSE_NOTICE.md</a>.*
